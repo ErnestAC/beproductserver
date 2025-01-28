@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { listOfObjects } from "../mockdata.js";
 import { v4 as uuidv4 } from 'uuid';
 import { promises as fs } from 'fs';
 
@@ -53,7 +52,7 @@ route.get('/', async (req, res) => {
             return res.status(500).json({ error: 'Error reading product data from storage' });
         }
         
-        const result = limit ? listOfProducts.slice(0, Number(limit)) : listOfObjects;
+        const result = limit ? listOfProducts.slice(0, Number(limit)) : listOfProducts;
         console.log('Products: Products have been retrieved.')
         
         res.json({ result });
