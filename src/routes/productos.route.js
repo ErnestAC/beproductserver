@@ -2,8 +2,21 @@ import { Router } from "express";
 import { upload } from "../utils.js";
 import { listOfObjects } from "../mockdata.js";
 import { v4 as uuidv4 } from 'uuid';
+import { promises as fs } from 'fs';
+
+const productsFile = "./src/assets/products.json"
 
 const route = Router();
+
+async function appendToFile(dataToAppend, opuuid) {
+    // async append to file
+    try {
+        await fs.appendFile(productsFile, dataToAppend);
+        console.log(`Data for ${opuuid} appended successfully!`);
+    } catch (err) {
+        console.error('Error appending to file:', err);
+    }
+}
 
 // GET all products with limit
 route.get('/', (req, res) => {
@@ -23,7 +36,7 @@ route.get('/:pid', (req, res) => {
 });
 
 
-route.get('/:id/detalle', (req, res) => { 
+/* route.get('/:id/detalle', (req, res) => { 
     const { id } = req.params;
     res.json({
         id,
@@ -32,7 +45,7 @@ route.get('/:id/detalle', (req, res) => {
         precio: 800,
         descuento: false
     });
-});
+}); */
 
 
 // POST a new product
@@ -44,10 +57,11 @@ route.post('/',(req, res) => {
         return res.status(400).json({ message: 'Missing required fields for this operation'})
     }
 
-    console.log('Saved product ID: ', opuuid)
-    console.log('Named: ', product.title)
+    console.log('Working on: ', opuuid)
     
-    res.status(201).json({ message: `Product saved under ID#${opuuid}` })
+    appendToFile(JSON.stringify(product), opuuid)
+    
+    res.status(201).json({ message: `Finished operation - ${opuuid}` })
 })
 
 
