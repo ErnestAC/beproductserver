@@ -1,63 +1,73 @@
-import { Router } from "express"
-import { upload } from "../utils.js"
+import { Router } from "express";
+import { upload } from "../utils.js";
+import { listOfObjects } from "../mockdata.js";
+import { v4 as uuidv4 } from 'uuid';
 
-const route = Router()
+const route = Router();
 
+// GET all products with limit
 route.get('/', (req, res) => {
-    const { limit } = req.query
+    const { limit } = req.query;
+    const limitedList = limit ? listOfObjects.slice(0, Number(limit)) : listOfObjects;
+    res.json({ limitedList });
+});
 
-    const listaProductos = [];
-
-    res.json({resultados})
-})
-
+// GET product by pid
 route.get('/:pid', (req, res) => {
-    const { pid } = req.params
+    const pid = Number(req.params.pid); // Convert to number to match data coming from mock
+    const result = listOfObjects.find(({ pid: objectPid }) => objectPid === pid);
+    if (!result) { //when result is falsy is when it has no value
+        return res.status(404).json({ error: 'Item not found' });
+    }
+    res.json({ result });
+});
 
-    const listaProductos = [];
 
-    // busqueda por el pid en la lista de productos
-
-    res.json({ resultados})
-})
-
-route.get('/:id/detalle',(req, res) => {
-    const {  id } = req.params
-    console.log(req.params)
+route.get('/:id/detalle', (req, res) => { 
+    const { id } = req.params;
     res.json({
         id,
         nombre: 'Arroz',
         descripcion: 'El mejor arroz barato y rico',
         precio: 800,
         descuento: false
-    })
+    });
+});
+
+
+// POST a new product
+route.post('/',(req, res) => {
+    const product = req.body
+    const opuuid = uuidv4()
+
+    if(!product.title || !product.description || !product.code || !product.price || !product.stock || !product.category || !product.status){
+        return res.status(400).json({ message: 'Missing required fields for this operation'})
+    }
+
+    console.log('Saved product ID: ', opuuid)
+    console.log('Named: ', product.title)
+    
+    res.status(201).json({ message: `Product saved under ID#${opuuid}` })
 })
 
-route.post('/', upload.single('avatar') , (req, res) => {
-    const producto = req.body
-    console.log(req.file)
-    console.log(producto)
 
-    res.json({ mensaje: 'Se creo el producto correctamente'})
-})
+// PUT to update a product
+route.put('/:pid', upload.single('avatar'), (req, res) => {
+    const producto = req.body;
+    const { pid } = req.params;
 
-route.put('/:pid', upload.single('avatar') , (req, res) => {
-    const producto = req.body
-    const {pid} = req.params
-    // buscar el producto por el pid
-    // remplazar los campos de dicho producto con los recibidos por body
-    // guardar el producto actualizado
+    // Update logic here...
 
-    res.json({ mensaje: 'Se creo el producto correctamente'})
-})
+    res.json({ mensaje: 'Se actualizó el producto correctamente' });
+});
 
-route.delete('/:pid', upload.single('avatar') , (req, res) => {
-    const {pid} = req.params
-    // buscar el producto por el pid
-    // lo elimino
-    // actualizo la lista de productos
+// DELETE a product by pid
+route.delete('/:pid', (req, res) => {
+    const { pid } = req.params;
 
-    res.json({ mensaje: 'Se creo el producto correctamente'})
-})
+    // Delete logic here...
 
-export default route
+    res.json({ mensaje: 'Se eliminó el producto correctamente' });
+});
+
+export default route;

@@ -7,8 +7,8 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true })) 
 app.use('/static',express.static(__dirname + '/public')) // le indicamos a express que en dicha carpeta sirva todo lo estatico al cliente
-app.use('/alumnos/', AlumnosRoute)
-app.use('/api/productos/', ProductosRoute)
+
+app.use('/api/products/', ProductosRoute)
 
 app.listen(8080, ()=>{
     console.log('Servidor ON en puerto 8080')
