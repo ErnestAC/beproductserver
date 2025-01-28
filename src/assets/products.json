@@ -1,317 +1,381 @@
-    [
-    {
-        "title": "ARCo",
-        "handle": "V12 Diesel-Electric",
-        "imageURL": "../img/arco.png",
-        "description": "Cargo diesel-electric locomotive. 7.5 wide. Modular engine and cabs. Fully L-gauge compatible. 9V only.",
-        "stock": 3,
-        "code": 5,
-        "id": 1,
-        "price": 150,
-        "category": "prebuilt",
-        "pieces": 1901,
-        "motorizable": true,
-        "lighting": true,
-        "wheelArrangement": "Bo-Bo",
-        "thumbs": [
-        "frg",
-        "abdc",
-        "def",
-        "123"
-        ]
-    },
-    {
-        "title": "Siemens ARX",
-        "handle": "Electric @ 15kV",
-        "imageURL": "../img/siemens.png",
-        "description": "High-speed electric locomotive. Dual 9V motor compatible. 8+ wide. Monolythic cars with detailed engine rooms and cabs.",
-        "stock": 11,
-        "code": 5,
-        "id": 2,
-        "price": 170,
-        "category": "blueprint",
-        "pieces": 2150,
-        "motorizable": true,
-        "lighting": false,
-        "wheelArrangement": "Co-Co",
-        "thumbs": [
-        "frg",
-        "abdc",
-        "def",
-        "123"
-        ]
-    },
-    {
-        "title": "Alstom 1121",
-        "handle": "I16 Diesel-Electric",
-        "imageURL": "../img/alstom.png",
-        "description": "French style diesel-electric locomotive. Modular cabs and engines. 7.5 studs wide. PF/PU compatible.",
-        "stock": 10,
-        "code": 4,
-        "id": 3,
-        "price": 190,
-        "category": "user",
-        "pieces": 1440,
-        "motorizable": true,
-        "lighting": true,
-        "wheelArrangement": "Bo-Bo",
-        "thumbs": [
-        "frg",
-        "abdc",
-        "def",
-        "123"
-        ]
-    },
-    {
-        "title": "JRF C121",
-        "handle": "Electric @17kV/I12 Diesel-Electric",
-        "imageURL": "../img/jrf_all_dualend.png",
-        "description": "Dual duty electric/diesel-electric locomotive. Modular cab and engine. 7.5 studs wide. PF and 9V compatible.",
-        "stock": 6,
-        "code": 4,
-        "id": "5dda41a2-1a42-4061-bb15-a95b4032f7f4",
-        "price": 185,
-        "category": "blueprint",
-        "pieces": 877,
-        "motorizable": true,
-        "lighting": false,
-        "wheelArrangement": "Bo-Bo",
-        "thumbs": [
-        "frg",
-        "abdc",
-        "def",
-        "123"
-        ]
-    },
-    {
-        "title": "SKMWCo Shunter",
-        "handle": "Diesel-hydraulic",
-        "imageURL": "../img/shunt2d.png",
-        "description": "Shunt duty locomotive. Diesel-hydraulic classic shunter. 7 studs wide. Not motorizable, display only.",
-        "stock": 1,
-        "code": 1,
-        "id": 5,
-        "price": 145,
-        "category": "user",
-        "pieces": 176,
-        "motorizable": true,
-        "lighting": true,
-        "wheelArrangement": "Bo",
-        "thumbs": [
-        "frg",
-        "abdc",
-        "def",
-        "123"
-        ]
-    },
-    {
-        "title": "Toshiba EMU",
-        "handle": "Electric @ 28kV",
-        "imageURL": "../img/toshiba.png",
-        "description": "Passenger cars based on the 1960s classic Toshiba body. 7 wide. Not motorizable. Includes two cars.",
-        "stock": 6,
-        "code": 4,
-        "id": 6,
-        "price": 145,
-        "category": "prebuilt",
-        "pieces": 2017,
-        "motorizable": true,
-        "lighting": true,
-        "wheelArrangement": "Bo-Bo",
-        "thumbs": [
-        "frg",
-        "abdc",
-        "def",
-        "123"
-        ]
-    },
-    {
-        "title": "Siemens MEC",
-        "handle": "Electric @ multi",
-        "imageURL": "../img/metcar.png",
-        "description": "Passenger EMU. Two cars included. Motorizable only in 9v. 6.5 wide. Fully furnished interior. Seats 10 minifigs. Stands 15 mini figs.",
-        "stock": 9,
-        "code": 5,
-        "id": 7,
-        "price": 145,
-        "category": "prebuilt",
-        "pieces": 1190,
-        "motorizable": true,
-        "lighting": true,
-        "wheelArrangement": "Bo-Bo",
-        "thumbs": [
-        "frg",
-        "abdc",
-        "def",
-        "123"
-        ]
-    },
-    {
-        "title": "MRC Light rail EMU",
-        "handle": "Electric @ multi",
-        "imageURL": "../img/xlightrail.png",
-        "description": "Permanently coupled EMU. Motorizable only in 9v. 6.5 wide. Features a fully furnished interior.",
-        "stock": 0,
-        "code": 3,
-        "id": 8,
-        "price": 145,
-        "category": "blueprint",
-        "pieces": 692,
-        "motorizable": true,
-        "lighting": true,
-        "wheelArrangement": "Bo-Bo-Bo",
-        "thumbs": [
-        "frg",
-        "abdc",
-        "def",
-        "123"
-        ]
-    },
-    {
-        "title": "MRC Boxcar Shunter",
-        "handle": "Diesel-electric",
-        "imageURL": "../img/boxshunt.png",
-        "description": "Diesel electric shunt. Motorizable only in 9v. 7 stud wide. Features fully furnished cabs and engine bay.",
-        "stock": 6,
-        "code": 2,
-        "id": 9,
-        "price": 120,
-        "category": "blueprint",
-        "pieces": 267,
-        "motorizable": true,
-        "lighting": true,
-        "wheelArrangement": "Bo",
-        "thumbs": [
-        "frg",
-        "abdc",
-        "def",
-        "123"
-        ]
-    },
-    {
-        "title": "MRC Long-hood Shunter",
-        "handle": "Diesel-hydraulic",
-        "imageURL": "../img/shuntlh.png",
-        "description": "Diesel electric shunt. Motorizable only in 9v. 7 stud wide. Features fully furnished cabs and engine bay.",
-        "stock": 9,
-        "code": 2,
-        "id": 10,
-        "price": 145,
-        "category": "prebuilt",
-        "pieces": 201,
-        "motorizable": true,
-        "lighting": true,
-        "wheelArrangement": "Bo",
-        "thumbs": [
-        "frg",
-        "abdc",
-        "def",
-        "123"
-        ]
-    },
-    {
-        "title": "ODD R-1250",
-        "handle": "Diesel-hydraulic",
-        "imageURL": "../img/oddrail.png",
-        "description": "Diesel electric cargo duty locomotive. Motorizable only in 9v. 7 stud wide. Ocean lines livery. Features fully furnished cab.",
-        "stock": 3,
-        "code": 4,
-        "id": 11,
-        "price": 160,
-        "category": "prebuilt",
-        "pieces": 311,
-        "motorizable": true,
-        "lighting": false,
-        "wheelArrangement": "Bo-Bo",
-        "thumbs": [
-        "frg",
-        "abdc",
-        "def",
-        "123"
-        ]
-    },
-    {
-        "title": "ARCo HSP",
-        "handle": "Dual electric/Diesel-electric",
-        "imageURL": "../img/arco_hsp.png",
-        "description": "Dual duty electric/diesel-electric locomotive. Modular cab and engine. 7.5 studs wide. PF and 9V compatible. Features fully furnished cab.",
-        "stock": 3,
-        "code": 5,
-        "id": 12,
-        "price": 230,
-        "category": "special",
-        "pieces": 1991,
-        "motorizable": true,
-        "lighting": true,
-        "wheelArrangement": "Bo-Bo",
-        "thumbs": [
-        "frg",
-        "abdc",
-        "def",
-        "123"
-        ]
-    },
-    {
-        "title": "ARCo DDF",
-        "handle": "Diesel-electric",
-        "imageURL": "../img/arco_ddf.png",
-        "description": "Diesel electric cargo duty locomotive. Motorizable only in 9v. 7 stud wide. Redboy Transport Co. livery. Features fully furnished cab.",
-        "stock": 3,
-        "code": 3,
-        "id": 13,
-        "price": 145,
-        "category": "special",
-        "pieces": 584,
-        "motorizable": true,
-        "lighting": true,
-        "wheelArrangement": "Bo-Bo",
-        "thumbs": [
-        "frg",
-        "abdc",
-        "def",
-        "123"
-        ]
-    },
-    {
-        "title": "Alstom 1934",
-        "handle": "Diesel-electric",
-        "imageURL": "../img/alstom1934.png",
-        "description": "Diesel electric cargo duty locomotive. 8.5 stud wide. Trans Continental Lines livery. Features fully furnished cab, engine room and tanks. Motorizable only in 9v.",
-        "stock": 3,
-        "code": 5,
-        "id": 14,
-        "price": 180,
-        "category": "special",
-        "pieces": 1058,
-        "motorizable": true,
-        "lighting": true,
-        "wheelArrangement": "Co-Co",
-        "thumbs": [
-        "frg",
-        "abdc",
-        "def",
-        "123"
-        ]
-    },
-    {
-        "title": "Panoramic Pullman",
-        "handle": "Unpowered passenger car",
-        "imageURL": "../img/dbldkr.png",
-        "description": "Double deck passenger car with restaurant layout. Seats 10 minifigs. 6 studs wide. Unpowered. German ICE livery.",
-        "stock": 3,
-        "code": 1,
-        "id": "e8b28b29-3283-4446-aa99-87b25fbe32e3",
-        "price": 115,
-        "category": "user",
-        "pieces": 192,
-        "motorizable": false,
-        "lighting": false,
-        "wheelArrangement": "Unpowered 2-axle",
-        "thumbs": [
-        "frg",
-        "abdc",
-        "def",
-        "123"
-        ]
-    }
+[
+  {
+    "title": "ARCo",
+    "handle": "V12 Diesel-Electric",
+    "imageURL": "../img/arco.png",
+    "description": "Cargo diesel-electric locomotive. 7.5 wide. Modular engine and cabs. Fully L-gauge compatible. 9V only.",
+    "stock": 3,
+    "code": 5,
+    "id": 1,
+    "price": 150,
+    "category": "prebuilt",
+    "pieces": 1901,
+    "motorizable": true,
+    "lighting": true,
+    "wheelArrangement": "Bo-Bo",
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
     ]
+  },
+  {
+    "title": "Siemens ARX",
+    "handle": "Electric @ 15kV",
+    "imageURL": "../img/siemens.png",
+    "description": "High-speed electric locomotive. Dual 9V motor compatible. 8+ wide. Monolythic cars with detailed engine rooms and cabs.",
+    "stock": 11,
+    "code": 5,
+    "id": 2,
+    "price": 170,
+    "category": "blueprint",
+    "pieces": 2150,
+    "motorizable": true,
+    "lighting": false,
+    "wheelArrangement": "Co-Co",
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ]
+  },
+  {
+    "title": "Alstom 1121",
+    "handle": "I16 Diesel-Electric",
+    "imageURL": "../img/alstom.png",
+    "description": "French style diesel-electric locomotive. Modular cabs and engines. 7.5 studs wide. PF/PU compatible.",
+    "stock": 10,
+    "code": 4,
+    "id": 3,
+    "price": 190,
+    "category": "user",
+    "pieces": 1440,
+    "motorizable": true,
+    "lighting": true,
+    "wheelArrangement": "Bo-Bo",
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ]
+  },
+  {
+    "title": "JRF C121",
+    "handle": "Electric @17kV/I12 Diesel-Electric",
+    "imageURL": "../img/jrf_all_dualend.png",
+    "description": "Dual duty electric/diesel-electric locomotive. Modular cab and engine. 7.5 studs wide. PF and 9V compatible.",
+    "stock": 6,
+    "code": 4,
+    "id": "5dda41a2-1a42-4061-bb15-a95b4032f7f4",
+    "price": 185,
+    "category": "blueprint",
+    "pieces": 877,
+    "motorizable": true,
+    "lighting": false,
+    "wheelArrangement": "Bo-Bo",
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ]
+  },
+  {
+    "title": "SKMWCo Shunter",
+    "handle": "Diesel-hydraulic",
+    "imageURL": "../img/shunt2d.png",
+    "description": "Shunt duty locomotive. Diesel-hydraulic classic shunter. 7 studs wide. Not motorizable, display only.",
+    "stock": 1,
+    "code": 1,
+    "id": 5,
+    "price": 145,
+    "category": "user",
+    "pieces": 176,
+    "motorizable": true,
+    "lighting": true,
+    "wheelArrangement": "Bo",
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ]
+  },
+  {
+    "title": "Toshiba EMU",
+    "handle": "Electric @ 28kV",
+    "imageURL": "../img/toshiba.png",
+    "description": "Passenger cars based on the 1960s classic Toshiba body. 7 wide. Not motorizable. Includes two cars.",
+    "stock": 6,
+    "code": 4,
+    "id": 6,
+    "price": 145,
+    "category": "prebuilt",
+    "pieces": 2017,
+    "motorizable": true,
+    "lighting": true,
+    "wheelArrangement": "Bo-Bo",
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ]
+  },
+  {
+    "title": "Siemens MEC",
+    "handle": "Electric @ multi",
+    "imageURL": "../img/metcar.png",
+    "description": "Passenger EMU. Two cars included. Motorizable only in 9v. 6.5 wide. Fully furnished interior. Seats 10 minifigs. Stands 15 mini figs.",
+    "stock": 9,
+    "code": 5,
+    "id": 7,
+    "price": 145,
+    "category": "prebuilt",
+    "pieces": 1190,
+    "motorizable": true,
+    "lighting": true,
+    "wheelArrangement": "Bo-Bo",
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ]
+  },
+  {
+    "title": "MRC Light rail EMU",
+    "handle": "Electric @ multi",
+    "imageURL": "../img/xlightrail.png",
+    "description": "Permanently coupled EMU. Motorizable only in 9v. 6.5 wide. Features a fully furnished interior.",
+    "stock": 0,
+    "code": 3,
+    "id": 8,
+    "price": 145,
+    "category": "blueprint",
+    "pieces": 692,
+    "motorizable": true,
+    "lighting": true,
+    "wheelArrangement": "Bo-Bo-Bo",
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ]
+  },
+  {
+    "title": "MRC Boxcar Shunter",
+    "handle": "Diesel-electric",
+    "imageURL": "../img/boxshunt.png",
+    "description": "Diesel electric shunt. Motorizable only in 9v. 7 stud wide. Features fully furnished cabs and engine bay.",
+    "stock": 6,
+    "code": 2,
+    "id": 9,
+    "price": 120,
+    "category": "blueprint",
+    "pieces": 267,
+    "motorizable": true,
+    "lighting": true,
+    "wheelArrangement": "Bo",
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ]
+  },
+  {
+    "title": "MRC Long-hood Shunter",
+    "handle": "Diesel-hydraulic",
+    "imageURL": "../img/shuntlh.png",
+    "description": "Diesel electric shunt. Motorizable only in 9v. 7 stud wide. Features fully furnished cabs and engine bay.",
+    "stock": 9,
+    "code": 2,
+    "id": 10,
+    "price": 145,
+    "category": "prebuilt",
+    "pieces": 201,
+    "motorizable": true,
+    "lighting": true,
+    "wheelArrangement": "Bo",
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ]
+  },
+  {
+    "title": "ODD R-1250",
+    "handle": "Diesel-hydraulic",
+    "imageURL": "../img/oddrail.png",
+    "description": "Diesel electric cargo duty locomotive. Motorizable only in 9v. 7 stud wide. Ocean lines livery. Features fully furnished cab.",
+    "stock": 3,
+    "code": 4,
+    "id": 11,
+    "price": 160,
+    "category": "prebuilt",
+    "pieces": 311,
+    "motorizable": true,
+    "lighting": false,
+    "wheelArrangement": "Bo-Bo",
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ]
+  },
+  {
+    "title": "ARCo HSP",
+    "handle": "Dual electric/Diesel-electric",
+    "imageURL": "../img/arco_hsp.png",
+    "description": "Dual duty electric/diesel-electric locomotive. Modular cab and engine. 7.5 studs wide. PF and 9V compatible. Features fully furnished cab.",
+    "stock": 3,
+    "code": 5,
+    "id": 12,
+    "price": 230,
+    "category": "special",
+    "pieces": 1991,
+    "motorizable": true,
+    "lighting": true,
+    "wheelArrangement": "Bo-Bo",
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ]
+  },
+  {
+    "title": "ARCo DDF",
+    "handle": "Diesel-electric",
+    "imageURL": "../img/arco_ddf.png",
+    "description": "Diesel electric cargo duty locomotive. Motorizable only in 9v. 7 stud wide. Redboy Transport Co. livery. Features fully furnished cab.",
+    "stock": 3,
+    "code": 3,
+    "id": 13,
+    "price": 145,
+    "category": "special",
+    "pieces": 584,
+    "motorizable": true,
+    "lighting": true,
+    "wheelArrangement": "Bo-Bo",
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ]
+  },
+  {
+    "title": "Panoramic Pullman",
+    "handle": "Unpowered passenger car",
+    "imageURL": "../img/dbldkr.png",
+    "description": "Double deck passenger car with restaurant layout. Seats 10 minifigs. 6 studs wide. Unpowered. German ICE livery.",
+    "stock": 3,
+    "code": 1,
+    "id": "e8b28b29-3283-4446-aa99-87b25fbe32e3",
+    "price": 115,
+    "category": "user",
+    "pieces": 192,
+    "motorizable": false,
+    "lighting": false,
+    "wheelArrangement": "Unpowered 2-axle",
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ]
+  },
+  {
+    "title": "NewProd2",
+    "description": "Something something",
+    "code": "A1AA",
+    "price": 150,
+    "stock": 1,
+    "category": "blueprints",
+    "status": true,
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ],
+    "id": "2c306c35-6b79-40f8-8be3-3a9a7434a22a"
+  },
+  {
+    "title": "NewProd2",
+    "description": "Something something",
+    "code": "A1AA",
+    "price": 150,
+    "stock": 1,
+    "category": "blueprints",
+    "status": true,
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ],
+    "id": "29714154-cb77-4a89-8821-b28d3626275a"
+  },
+  {
+    "title": "NewProd2",
+    "description": "Something something",
+    "code": "A1AA",
+    "price": 150,
+    "stock": 1,
+    "category": "blueprints",
+    "status": true,
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ],
+    "id": "60b1a014-870b-47b6-8cd9-0457f4b88eaf"
+  },
+  {
+    "title": "NewProd2",
+    "description": "Something something",
+    "code": "A1AA",
+    "price": 150,
+    "stock": 1,
+    "category": "blueprints",
+    "status": true,
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ],
+    "id": "1f965eb0-35a0-4b12-985b-91852ca45672"
+  },
+  {
+    "title": "Updated name 3",
+    "handle": "Diesel-electric",
+    "imageURL": "../img/alstom1934.png",
+    "description": "Other text, updated by ID",
+    "stock": 1,
+    "code": 5,
+    "id": 14,
+    "price": 150,
+    "category": "blueprints",
+    "pieces": 1058,
+    "motorizable": true,
+    "lighting": true,
+    "wheelArrangement": "Co-Co",
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ]
+  }
+]
