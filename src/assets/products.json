@@ -6,7 +6,7 @@
     "description": "Cargo diesel-electric locomotive. 7.5 wide. Modular engine and cabs. Fully L-gauge compatible. 9V only.",
     "stock": 3,
     "code": 5,
-    "id": 1,
+    "pid": 1,
     "price": 150,
     "category": "prebuilt",
     "pieces": 1901,
@@ -27,7 +27,7 @@
     "description": "High-speed electric locomotive. Dual 9V motor compatible. 8+ wide. Monolythic cars with detailed engine rooms and cabs.",
     "stock": 11,
     "code": 5,
-    "id": 2,
+    "pid": 2,
     "price": 170,
     "category": "blueprint",
     "pieces": 2150,
@@ -48,7 +48,7 @@
     "description": "French style diesel-electric locomotive. Modular cabs and engines. 7.5 studs wide. PF/PU compatible.",
     "stock": 10,
     "code": 4,
-    "id": 3,
+    "pid": 3,
     "price": 190,
     "category": "user",
     "pieces": 1440,
@@ -69,7 +69,7 @@
     "description": "Dual duty electric/diesel-electric locomotive. Modular cab and engine. 7.5 studs wide. PF and 9V compatible.",
     "stock": 6,
     "code": 4,
-    "id": "5dda41a2-1a42-4061-bb15-a95b4032f7f4",
+    "pid": "5dda41a2-1a42-4061-bb15-a95b4032f7f4",
     "price": 185,
     "category": "blueprint",
     "pieces": 877,
@@ -90,7 +90,7 @@
     "description": "Shunt duty locomotive. Diesel-hydraulic classic shunter. 7 studs wide. Not motorizable, display only.",
     "stock": 1,
     "code": 1,
-    "id": 5,
+    "pid": 5,
     "price": 145,
     "category": "user",
     "pieces": 176,
@@ -111,7 +111,7 @@
     "description": "Passenger cars based on the 1960s classic Toshiba body. 7 wide. Not motorizable. Includes two cars.",
     "stock": 6,
     "code": 4,
-    "id": 6,
+    "pid": 6,
     "price": 145,
     "category": "prebuilt",
     "pieces": 2017,
@@ -132,7 +132,7 @@
     "description": "Passenger EMU. Two cars included. Motorizable only in 9v. 6.5 wide. Fully furnished interior. Seats 10 minifigs. Stands 15 mini figs.",
     "stock": 9,
     "code": 5,
-    "id": 7,
+    "pid": 7,
     "price": 145,
     "category": "prebuilt",
     "pieces": 1190,
@@ -153,7 +153,7 @@
     "description": "Permanently coupled EMU. Motorizable only in 9v. 6.5 wide. Features a fully furnished interior.",
     "stock": 0,
     "code": 3,
-    "id": 8,
+    "pid": 8,
     "price": 145,
     "category": "blueprint",
     "pieces": 692,
@@ -174,7 +174,7 @@
     "description": "Diesel electric shunt. Motorizable only in 9v. 7 stud wide. Features fully furnished cabs and engine bay.",
     "stock": 6,
     "code": 2,
-    "id": 9,
+    "pid": 9,
     "price": 120,
     "category": "blueprint",
     "pieces": 267,
@@ -195,7 +195,7 @@
     "description": "Diesel electric shunt. Motorizable only in 9v. 7 stud wide. Features fully furnished cabs and engine bay.",
     "stock": 9,
     "code": 2,
-    "id": 10,
+    "pid": 10,
     "price": 145,
     "category": "prebuilt",
     "pieces": 201,
@@ -216,7 +216,7 @@
     "description": "Diesel electric cargo duty locomotive. Motorizable only in 9v. 7 stud wide. Redboy Transport Co. livery. Features fully furnished cab.",
     "stock": 3,
     "code": 3,
-    "id": 13,
+    "pid": 13,
     "price": 145,
     "category": "special",
     "pieces": 584,
@@ -237,7 +237,7 @@
     "description": "Double deck passenger car with restaurant layout. Seats 10 minifigs. 6 studs wide. Unpowered. German ICE livery.",
     "stock": 3,
     "code": 1,
-    "id": "e8b28b29-3283-4446-aa99-87b25fbe32e3",
+    "pid": "e8b28b29-3283-4446-aa99-87b25fbe32e3",
     "price": 115,
     "category": "user",
     "pieces": 192,
@@ -265,7 +265,7 @@
       "def",
       "123"
     ],
-    "id": "2c306c35-6b79-40f8-8be3-3a9a7434a22a"
+    "pid": "2c306c35-6b79-40f8-8be3-3a9a7434a22a"
   },
   {
     "title": "NewProd2",
@@ -281,7 +281,7 @@
       "def",
       "123"
     ],
-    "id": "29714154-cb77-4a89-8821-b28d3626275a"
+    "pid": "29714154-cb77-4a89-8821-b28d3626275a"
   },
   {
     "title": "NewProd2",
@@ -297,7 +297,7 @@
       "def",
       "123"
     ],
-    "id": "60b1a014-870b-47b6-8cd9-0457f4b88eaf"
+    "pid": "60b1a014-870b-47b6-8cd9-0457f4b88eaf"
   },
   {
     "title": "NewProd2",
@@ -313,7 +313,7 @@
       "def",
       "123"
     ],
-    "id": "1f965eb0-35a0-4b12-985b-91852ca45672"
+    "pid": "1f965eb0-35a0-4b12-985b-91852ca45672"
   },
   {
     "title": "Updated name 4",
@@ -322,7 +322,7 @@
     "description": "Other text, updated by ID",
     "stock": 1,
     "code": 5,
-    "id": 14,
+    "pid": 14,
     "price": 150,
     "category": "blueprints",
     "pieces": 1058,
@@ -343,7 +343,7 @@
     "description": "Other text, updated by ID",
     "stock": 1,
     "code": 5,
-    "id": "7e63cecb-6a94-49c1-9152-24074f9a7314",
+    "pid": "7e63cecb-6a94-49c1-9152-24074f9a7314",
     "price": 150,
     "category": "blueprints",
     "pieces": 1058,

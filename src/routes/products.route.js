@@ -21,7 +21,7 @@ async function getAllProducts(){
 
 // helper funct to remove an object by its id from an array
 function removeById(array, idToRemove) {
-    return array.filter(item => item.id !== idToRemove && item.status !== false);
+    return array.filter(item => item.pid !== idToRemove && item.status !== false);
 }
 
 // helper function to write an updated array to disk
@@ -59,8 +59,8 @@ route.get('/', async (req, res) => {
 });
 
 // GET product by pid but asyncly
-route.get('/:id', async (req, res) => { 
-    const id = req.params.id;
+route.get('/:pid', async (req, res) => { 
+    const pid = req.params.pid;
     
     try {
         let listOfProducts = await getAllProducts(); 
@@ -68,10 +68,10 @@ route.get('/:id', async (req, res) => {
             return res.status(500).json({ error: 'Error reading the product data' });
         }
         
-        const result = listOfProducts.find(({ id: objectId }) => objectId == id);
+        const result = listOfProducts.find(({ pid: objectId }) => objectId == pid);
         console.log(result)
         if (!result) { // if result is false, i found nothing
-            return res.status(404).json({ error: `ID # ${id} not found` });
+            return res.status(404).json({ error: `ID # ${pid} not found` });
         }
         
         res.json({ result });
@@ -93,7 +93,7 @@ route.post('/', (req, res) => {
             existingData.push(newProduct);
             // Write the updated data
             writeProductsStorage(productsFile, existingData)
-            console.log(`Products: Product with id ${newProduct.id} added successfully!`);
+            console.log(`Products: Product with id ${newProduct.pid} added successfully!`);
         } catch (err) {
             console.error('Error saving data:', err);
         }
@@ -115,13 +115,13 @@ route.post('/', (req, res) => {
 });
 
 // PUT Update product by pid asyncly
-route.put('/:id', async (req, res) => { 
-    const id = req.params.id;
+route.put('/:pid', async (req, res) => { 
+    const pid = req.params.pid;
     const productUpdate = req.body
     
     function updateProduct(targetObject, sourceObject) {
         for (const key in sourceObject) {
-            if (key !== 'id' && targetObject.hasOwnProperty(key)) { //checking both objects have the same keys (properties) and updating source > target and I exclude the Id field as I DO NOT WANT TO TOUCH IT.
+            if (key !== 'pid' && targetObject.hasOwnProperty(key)) { //checking both objects have the same keys (properties) and updating source > target and I exclude the Id field as I DO NOT WANT TO TOUCH IT.
                 targetObject[key] = sourceObject[key];
             }
         }
@@ -133,16 +133,16 @@ route.put('/:id', async (req, res) => {
             return res.status(500).json({ error: 'Error reading the product data' });
         }
         
-        const product = listOfProducts.find(({ id: objectId }) => objectId == id);
+        const product = listOfProducts.find(({ pid: objectId }) => objectId == pid);
 
         if (!product) { // check if the id is found first
-            return res.status(404).json({ error: `ID # ${id} not found` });
+            return res.status(404).json({ error: `ID # ${pid} not found` });
         } else {
             updateProduct(product,productUpdate) // I update the product I got from the above search before I replace the one in the listofproducts array.
-            listOfProducts = removeById(listOfProducts, product.id) // remove the original object
+            listOfProducts = removeById(listOfProducts, product.pid) // remove the original object
             listOfProducts.push(product) // add the updated object to the array
             writeProductsStorage(productsFile,listOfProducts)
-            console.log(`Products: Updated data for ID# ${product.id} `)
+            console.log(`Products: Updated data for ID# ${product.pid} `)
         }
         const result=product
         res.json({ result }); // return the updated product list
@@ -154,8 +154,8 @@ route.put('/:id', async (req, res) => {
 
 // Delete data by ID
 
-route.delete('/:id', async (req, res) => { 
-    const id = req.params.id;
+route.delete('/:pid', async (req, res) => { 
+    const pid = req.params.pid;
     const killFlag = req.body.killFlag
     
 
@@ -165,14 +165,14 @@ route.delete('/:id', async (req, res) => {
             return res.status(500).json({ error: 'Error reading the product data' });
         }
         
-        const product = listOfProducts.find(({ id: objectId }) => objectId == id);
+        const product = listOfProducts.find(({ pid: objectId }) => objectId == pid);
 
         if (!product || !product.status) { // check if the id is found first, if not; end.
-            return res.status(404).json({ error: `ID # ${id} not found` });
+            return res.status(404).json({ error: `ID # ${pid} not found` });
         } else {
             // mark it deleted by updating status to false
             product.status=false
-            listOfProducts = removeById(listOfProducts, product.id) // remove the original object
+            listOfProducts = removeById(listOfProducts, product.pid) // remove the original object
             if(!killFlag){
                 listOfProducts.push(product) // add the updated object to the array
                 console.log(`killFlag has been set to true. I have a license to kill now.`)
@@ -180,34 +180,14 @@ route.delete('/:id', async (req, res) => {
             }
             writeProductsStorage(productsFile,listOfProducts)
             
-            console.log(`Products: Data for ID#${product.id} ${killFlag ? "" : "marked"} as deleted`)
+            console.log(`Products: Data for ID#${product.pid} ${killFlag ? "" : "marked"} as deleted`)
         }
-        const result=`Data for ID#${product.id} ${killFlag ? "" : "marked"} as deleted`
+        const result=`Data for ID#${product.pid} ${killFlag ? "" : "marked"} as deleted`
         res.json({ result }); // return the updated product list
     } catch (err) {
         console.error('Something broke', err);
         res.status(500).json({ error: 'Server error' });
     }
 });
-
-/* route.delete('/:id/kill', async (req, res) => {
-    const id = req.params.id;
-
-    try {
-        let listOfProducts = await getAllProducts(); 
-        listOfProducts = removeById(listOfProducts, id)
-        if (await writeProductsStorage(productsFile,listOfProducts)){
-            console.log(`Object ${id} has been deleted.`)
-            const result={"message":`Object with ${id} has been deleted.`}
-        } else { 
-            const result={"message":`Deletion of object with ${id} has failed.`}
-        }
-        
-
-        res.json({ result });
-    } catch (err) {
-        res.status(500).json({ error: 'Server error, could not delete' });
-    }
-}); */
 
 export default route;
