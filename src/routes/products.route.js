@@ -6,9 +6,6 @@ const productsFile = "./src/assets/products.json";
 
 const route = Router();
 
-
-
-
 // helper funct to read from file
 async function getAllProducts(){
     let existingData = [];
@@ -24,13 +21,13 @@ async function getAllProducts(){
 
 // helper funct to remove an object by its id from an array
 function removeById(array, idToRemove) {
-    return array.filter(item => item.id !== idToRemove);
+    return array.filter(item => item.id !== idToRemove && item.status !== false);
 }
 
-// helper function to write the updated array to disk
-async function writeProductsStorage(productsFile, existingData){
+// helper function to write an updated array to disk
+async function writeProductsStorage(productsFile, jsonDataToWrite){
     try {
-        await fs.writeFile(productsFile, JSON.stringify(existingData, null, 2)); // write json to file
+        await fs.writeFile(productsFile, JSON.stringify(jsonDataToWrite, null, 2)); // write json to file
         console.log("Data writen to file")
         return true;
     } catch (err) {
@@ -53,7 +50,7 @@ route.get('/', async (req, res) => {
         }
         
         const result = limit ? listOfProducts.slice(0, Number(limit)) : listOfProducts;
-        console.log('Products: Products have been retrieved.')
+        console.log(`Products: Products have been retrieved. ${limit ? `Limited to ${limit} objects` : "No limit passed."}`)
         
         res.json({ result });
     } catch (err) {
@@ -147,12 +144,70 @@ route.put('/:id', async (req, res) => {
             writeProductsStorage(productsFile,listOfProducts)
             console.log(`Products: Updated data for ID# ${product.id} `)
         }
-        
-        res.json({ listOfProducts }); // return the updated product list
+        const result=product
+        res.json({ result }); // return the updated product list
     } catch (err) {
         console.error('Something broke', err);
         res.status(500).json({ error: 'Server error' });
     }
 });
+
+// Delete data by ID
+
+route.delete('/:id', async (req, res) => { 
+    const id = req.params.id;
+    const killFlag = req.body.killFlag
+    
+
+    try {
+        let listOfProducts = await getAllProducts(); // read everything from file and load it to be modified
+        if (!listOfProducts) { // false list means failed or nothing read, report error and end
+            return res.status(500).json({ error: 'Error reading the product data' });
+        }
+        
+        const product = listOfProducts.find(({ id: objectId }) => objectId == id);
+
+        if (!product || !product.status) { // check if the id is found first, if not; end.
+            return res.status(404).json({ error: `ID # ${id} not found` });
+        } else {
+            // mark it deleted by updating status to false
+            product.status=false
+            listOfProducts = removeById(listOfProducts, product.id) // remove the original object
+            if(!killFlag){
+                listOfProducts.push(product) // add the updated object to the array
+                console.log(`killFlag has been set to true. I have a license to kill now.`)
+            
+            }
+            writeProductsStorage(productsFile,listOfProducts)
+            
+            console.log(`Products: Data for ID#${product.id} ${killFlag ? "" : "marked"} as deleted`)
+        }
+        const result=`Data for ID#${product.id} ${killFlag ? "" : "marked"} as deleted`
+        res.json({ result }); // return the updated product list
+    } catch (err) {
+        console.error('Something broke', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+/* route.delete('/:id/kill', async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        let listOfProducts = await getAllProducts(); 
+        listOfProducts = removeById(listOfProducts, id)
+        if (await writeProductsStorage(productsFile,listOfProducts)){
+            console.log(`Object ${id} has been deleted.`)
+            const result={"message":`Object with ${id} has been deleted.`}
+        } else { 
+            const result={"message":`Deletion of object with ${id} has failed.`}
+        }
+        
+
+        res.json({ result });
+    } catch (err) {
+        res.status(500).json({ error: 'Server error, could not delete' });
+    }
+}); */
 
 export default route;

@@ -210,48 +210,6 @@
     ]
   },
   {
-    "title": "ODD R-1250",
-    "handle": "Diesel-hydraulic",
-    "imageURL": "../img/oddrail.png",
-    "description": "Diesel electric cargo duty locomotive. Motorizable only in 9v. 7 stud wide. Ocean lines livery. Features fully furnished cab.",
-    "stock": 3,
-    "code": 4,
-    "id": 11,
-    "price": 160,
-    "category": "prebuilt",
-    "pieces": 311,
-    "motorizable": true,
-    "lighting": false,
-    "wheelArrangement": "Bo-Bo",
-    "thumbs": [
-      "frg",
-      "abdc",
-      "def",
-      "123"
-    ]
-  },
-  {
-    "title": "ARCo HSP",
-    "handle": "Dual electric/Diesel-electric",
-    "imageURL": "../img/arco_hsp.png",
-    "description": "Dual duty electric/diesel-electric locomotive. Modular cab and engine. 7.5 studs wide. PF and 9V compatible. Features fully furnished cab.",
-    "stock": 3,
-    "code": 5,
-    "id": 12,
-    "price": 230,
-    "category": "special",
-    "pieces": 1991,
-    "motorizable": true,
-    "lighting": true,
-    "wheelArrangement": "Bo-Bo",
-    "thumbs": [
-      "frg",
-      "abdc",
-      "def",
-      "123"
-    ]
-  },
-  {
     "title": "ARCo DDF",
     "handle": "Diesel-electric",
     "imageURL": "../img/arco_ddf.png",
@@ -358,7 +316,7 @@
     "id": "1f965eb0-35a0-4b12-985b-91852ca45672"
   },
   {
-    "title": "Updated name 3",
+    "title": "Updated name 4",
     "handle": "Diesel-electric",
     "imageURL": "../img/alstom1934.png",
     "description": "Other text, updated by ID",
@@ -377,5 +335,27 @@
       "def",
       "123"
     ]
+  },
+  {
+    "title": "Updated name 4",
+    "handle": "Diesel-electric",
+    "imageURL": "../img/alstom1934.png",
+    "description": "Other text, updated by ID",
+    "stock": 1,
+    "code": 5,
+    "id": "7e63cecb-6a94-49c1-9152-24074f9a7314",
+    "price": 150,
+    "category": "blueprints",
+    "pieces": 1058,
+    "motorizable": true,
+    "lighting": true,
+    "wheelArrangement": "Co-Co",
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ],
+    "status": false
   }
 ]
