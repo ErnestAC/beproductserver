@@ -1,5 +1,5 @@
 import express from 'express'
-import AlumnosRoute from './routes/alumnos.route.js'
+
 import ProductosRoute from './routes/productos.route.js'
 import { __dirname } from './utils.js'
 const app = express()

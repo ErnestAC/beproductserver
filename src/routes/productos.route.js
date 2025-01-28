@@ -1,87 +1,103 @@
 import { Router } from "express";
-import { upload } from "../utils.js";
 import { listOfObjects } from "../mockdata.js";
 import { v4 as uuidv4 } from 'uuid';
 import { promises as fs } from 'fs';
 
-const productsFile = "./src/assets/products.json"
+const productsFile = "./src/assets/products.json";
 
 const route = Router();
 
-async function appendToFile(dataToAppend, opuuid) {
-    // async append to file
+
+// funct to read
+async function readFromFileDB(){
+    let existingData = [];
     try {
-        await fs.appendFile(productsFile, dataToAppend);
-        console.log(`Data for ${opuuid} appended successfully!`);
+        const fileData = await fs.readFile(productsFile, 'utf-8');
+        existingData = JSON.parse(fileData); // parse json
+        return existingData
+    } catch (err) {
+        console.error('Error reading or parsing the file:', err);
+        return null;
+    }
+}
+
+// Function to read, append, and rewrite the data to the file
+async function appendToFile(newProduct) {
+    try {
+        let existingData = await readFromFileDB(); // wait for me reading the file
+        // Add the new product to the list in memory
+        existingData.push(newProduct);
+        // Write the updated data
+        await fs.writeFile(productsFile, JSON.stringify(existingData, null, 2)); // write json to file
+        console.log(`Product with id ${newProduct.id} appended successfully!`);
     } catch (err) {
         console.error('Error appending to file:', err);
     }
 }
 
-// GET all products with limit
-route.get('/', (req, res) => {
+// GET all products with limit async
+route.get('/', async (req, res) => {
     const { limit } = req.query;
-    const limitedList = limit ? listOfObjects.slice(0, Number(limit)) : listOfObjects;
-    res.json({ limitedList });
-});
 
-// GET product by pid
-route.get('/:pid', (req, res) => {
-    const pid = Number(req.params.pid); // Convert to number to match data coming from mock
-    const result = listOfObjects.find(({ pid: objectPid }) => objectPid === pid);
-    if (!result) { //when result is falsy is when it has no value
-        return res.status(404).json({ error: 'Item not found' });
+    try {
+        let listOfProducts = await readFromFileDB(); 
+        if (!listOfProducts) { // check for errors
+            return res.status(500).json({ error: 'Error reading the product data' });
+        }
+        
+        const result = limit ? listOfProducts.slice(0, Number(limit)) : listOfObjects;
+        console.log(result)
+        if (!result) {
+            return res.status(404).json({ error: `ID # ${id} not found` });
+        }
+        
+        res.json({ result });
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
     }
-    res.json({ result });
 });
 
-
-/* route.get('/:id/detalle', (req, res) => { 
-    const { id } = req.params;
-    res.json({
-        id,
-        nombre: 'Arroz',
-        descripcion: 'El mejor arroz barato y rico',
-        precio: 800,
-        descuento: false
-    });
-}); */
-
+// GET product by pid but asyncly
+route.get('/:id', async (req, res) => { // Make this async
+    const id = req.params.id;
+    
+    try {
+        let listOfProducts = await readFromFileDB(); 
+        if (!listOfProducts) { // check for errors
+            return res.status(500).json({ error: 'Error reading the product data' });
+        }
+        
+        const result = listOfProducts.find(({ id: objectId }) => objectId == id);
+        console.log(result)
+        if (!result) {
+            return res.status(404).json({ error: `ID # ${id} not found` });
+        }
+        
+        res.json({ result });
+    } catch (err) {
+        console.error('Something broke', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
 
 // POST a new product
-route.post('/',(req, res) => {
-    const product = req.body
-    const opuuid = uuidv4()
+route.post('/', (req, res) => {
+    const product = req.body;
+    const opuuid = uuidv4();
 
-    if(!product.title || !product.description || !product.code || !product.price || !product.stock || !product.category || !product.status){
-        return res.status(400).json({ message: 'Missing required fields for this operation'})
+    if (!product.title || !product.description || !product.code || !product.price || !product.stock || !product.category || !product.status) {
+        return res.status(400).json({ message: 'Missing required fields for this operation' });
     }
 
-    console.log('Working on: ', opuuid)
-    
-    appendToFile(JSON.stringify(product), opuuid)
-    
-    res.status(201).json({ message: `Finished operation - ${opuuid}` })
-})
+    console.log('Working on: ', opuuid);
 
+    // Create a new product object with a unique ID
+    const newProduct = { ...product, id: opuuid };
 
-// PUT to update a product
-route.put('/:pid', upload.single('avatar'), (req, res) => {
-    const producto = req.body;
-    const { pid } = req.params;
+    // Append to file
+    appendToFile(newProduct);
 
-    // Update logic here...
-
-    res.json({ mensaje: 'Se actualizó el producto correctamente' });
-});
-
-// DELETE a product by pid
-route.delete('/:pid', (req, res) => {
-    const { pid } = req.params;
-
-    // Delete logic here...
-
-    res.json({ mensaje: 'Se eliminó el producto correctamente' });
+    res.status(201).json({ message: `Finished operation - ${opuuid}` });
 });
 
 export default route;
