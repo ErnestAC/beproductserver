@@ -18,13 +18,15 @@ route.get("/:cid", async (req, res) => {
 });
 
 route.post("/:cid/product/:pid", async (req, res) => {
-    
     const { cid, pid } = req.params;
-
     const cart = await cartManager.addProductToCart(cid,pid)
-
     res.json(cart);    
 });
+
+route.post("/", async (req, res) => {
+    const result = await cartManager.addCart()
+    res.json(result);
+})
 
 export default route;
 

@@ -1,6 +1,5 @@
 import fs from "fs/promises"; // Use promises API for modern async file operations
 import { v4 as uuidv4 } from "uuid";
-import path from "path";
 
 export class CartManager {
     constructor(filePath = "./src/data/carts.json") {
@@ -9,45 +8,45 @@ export class CartManager {
     }
 
   // Helper method to read data from the file
-  async getAllCarts() {
-    try {
-        const fileData = await fs.readFile(this.cartsFilePath, "utf-8");
-        return JSON.parse(fileData); // Parse and return JSON
-    } catch (err) {
-        if (err.code === "ENOENT") {
-            // If the file does not exist, return an empty array
-            console.warn(`File not found: ${this.cartsFilePath}. Returning an empty array.`);
-            return [];
+    async getAllCarts() {
+        try {
+            const fileData = await fs.readFile(this.cartsFilePath, "utf-8");
+            return JSON.parse(fileData); // Parse and return JSON
+        } catch (err) {
+            if (err.code === "ENOENT") {
+                // If the file does not exist, return an empty array
+                console.warn(`File not found: ${this.cartsFilePath}. Returning an empty array.`);
+                return [];
+            }
+        console.error("Error reading or parsing the file:", err);
+        throw err; // Re-throw the error to allow further handling if needed
         }
-      console.error("Error reading or parsing the file:", err);
-      throw err; // Re-throw the error to allow further handling if needed
     }
-  }
 
-  // Method to save data back to the file
-  async saveCarts(data) {
-    try {
-      const jsonData = JSON.stringify(data, null, 2); // Beautify JSON with 2 spaces
-      await fs.writeFile(this.cartsFilePath, jsonData, "utf-8");
-    } catch (err) {
-      console.error("Error writing to the file:", err);
-      throw err; // Re-throw for further handling
+// Method to save data back to the file
+    async saveCarts(data) {
+        try {
+            const jsonData = JSON.stringify(data, null, 2); // save json with pretty format
+            await fs.writeFile(this.cartsFilePath, jsonData, "utf-8");
+        } catch (err) {
+            console.error("Error writing to the file:", err);
+        throw err;
+        }
     }
-  }
 
-  // Method to add a new cart
-async addCart(cartData) {
-    const carts = await this.getAllCarts();
-    const newCart = {
-        id: uuidv4(), // Generate a unique ID
-        ...cartData, // Spread the provided cart data
-    };
-    carts.push(newCart); // Add the new cart to the array
-    await this.saveCarts(carts); // Save the updated carts back to the file
-    return newCart;
-}
+    // Method to add a new cart
+    async addCart() {
+        const carts = await this.getAllCarts();
+        const newCart = {
+            cid: uuidv4(), // Generate a unique ID
+            products: [], // Assign an empty list to products
+        };
+        carts.push(newCart); // Add the new cart to the array
+        await this.saveCarts(carts); // Save the updated carts back to the file
+        return newCart;
+    }
 
-// add product to cart
+    // add product to cart
     async addProductToCart(cid, pid) {
         // Read all carts from the file
         let carts = await this.getAllCarts(); 
@@ -55,7 +54,7 @@ async addCart(cartData) {
         // Find the cart by cid
         let cart = carts.find(cart => cart.cid === cid);
         if (!cart) {
-            throw new Error(`Cart with ID ${cid} not found`);
+            throw Error(`Cart with ID ${cid} not found`);
         }
         const productInCart = cart.products.find(product => product.pid === pid); // is already in the cart?
         if (productInCart) {
@@ -65,7 +64,7 @@ async addCart(cartData) {
         }
 
         // Write updated carts back to the file
-        await fs.writeFile(filePath, JSON.stringify(carts, null, 2), "utf-8");
+        await fs.writeFile("./src/data/carts.json", JSON.stringify(carts, null, 2), "utf-8");
 
         return cart;  // Return updated cart
     }
