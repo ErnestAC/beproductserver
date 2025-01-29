@@ -316,7 +316,7 @@
     "pid": "1f965eb0-35a0-4b12-985b-91852ca45672"
   },
   {
-    "title": "Updated name 4",
+    "title": "Somehting else",
     "handle": "Diesel-electric",
     "imageURL": "../img/alstom1934.png",
     "description": "Other text, updated by ID",
@@ -562,12 +562,12 @@
     "description": "Other text, updated by ID",
     "stock": 1,
     "code": 5,
-    "pid": 104,
+    "pid": 1024,
     "price": 150,
     "category": "blueprints",
     "pieces": 1901,
     "motorizable": true,
-    "lighting": true,
+    "status": true,
     "wheelArrangement": "Bo-Bo",
     "thumbs": [
       "frg",
@@ -577,12 +577,29 @@
     ]
   },
   {
-    "title": "New object name 122",
+    "title": "NewProd",
+    "description": "Something something",
+    "code": "A1AA",
+    "price": 150,
+    "stock": 1,
+    "category": "blueprints",
+    "status": true,
+    "thumbs": [
+      "xyz",
+      "abc",
+      "def",
+      "123"
+    ],
+    "pid": "b1b736d0-7e9f-44b6-9e7b-d815f9ece6af"
+  },
+  {
+    "title": "Somehting else",
     "handle": "Diesel-electric",
     "imageURL": "../img/alstom1934.png",
     "description": "Other text, updated by ID",
     "stock": 1,
     "code": 5,
+    "pid": 14,
     "price": 150,
     "category": "blueprints",
     "pieces": 1058,
@@ -594,8 +611,6 @@
       "abdc",
       "def",
       "123"
-    ],
-    "status": false,
-    "pid": "56"
+    ]
   }
 ]

@@ -46,7 +46,9 @@ export class ProductManager {
         try {
             const fileData = await fs.readFile(productsFile, 'utf-8');
             allProducts = JSON.parse(fileData); // parse json
-            //filter based on if there is a limit or not passed
+            //filter results by only those that are still not marked deleted (status=true)
+            allProducts = allProducts.filter(obj => obj.status === true || obj.status === undefined); // i am accepting records that do not have the staus flag too so i can update them as they get called
+            //is a limit or not passed?
             if(limit){
                 allProducts = allProducts.slice(0, Number(limit));
             }
