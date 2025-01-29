@@ -1,23 +1,11 @@
 import { Router } from "express";
 import { v4 as uuidv4 } from 'uuid';
 import { promises as fs } from 'fs';
+import {productManager} from "../managers/product.managers.js";
 
 const productsFile = "./src/data/products.json";
 
 const route = Router();
-
-// helper funct to read from file
-async function getAllProducts(){
-    let existingData = [];
-    try {
-        const fileData = await fs.readFile(productsFile, 'utf-8');
-        existingData = JSON.parse(fileData); // parse json
-        return existingData
-    } catch (err) {
-        console.error('Error reading or parsing the file:', err);
-        return null;
-    }
-}
 
 // helper funct to remove an object by its id from an array
 function removeById(array, idToRemove) {
@@ -36,39 +24,35 @@ async function writeProductsStorage(productsFile, jsonDataToWrite){
     }
 }
 
-
-
 // GET all products with limit async
 route.get('/', async (req, res) => {
     const { limit } = req.query;
 
     try {
-        let listOfProducts = await getAllProducts(); 
+        let listOfProducts = await productManager.getAllProducts(); 
+        console.log(listOfProducts);
         if (!listOfProducts) { // check for errors
             console.log('Products: Error reading product data from storage.')
             return res.status(500).json({ error: 'Error reading product data from storage' });
         }
-        
         const result = limit ? listOfProducts.slice(0, Number(limit)) : listOfProducts;
         console.log(`Products: Products have been retrieved. ${limit ? `Limited to ${limit} objects` : "No limit passed."}`)
-        
         res.json({ result });
     } catch (err) {
         res.status(500).json({ error: 'Server error' });
     }
 });
 
-// GET product by pid but asyncly
 route.get('/:pid', async (req, res) => { 
     const pid = req.params.pid;
     
     try {
-        let listOfProducts = await getAllProducts(); 
-        if (!listOfProducts) { // false list of prods means something failed
+        let selectedProduct = await productManager.getProductById(pid); 
+        if (!selectedProduct) { // false list of prods means something failed
             return res.status(500).json({ error: 'Error reading the product data' });
         }
         
-        const result = listOfProducts.find(({ pid: objectId }) => objectId == pid);
+        const result = selectedProduct
         console.log(result)
         if (!result) { // if result is false, i found nothing
             return res.status(404).json({ error: `ID # ${pid} not found` });
@@ -88,7 +72,7 @@ route.post('/', (req, res) => {
 
     async function addProduct(newProduct) {
         try {
-            let existingData = await getAllProducts(); // wait for me reading the file
+            let existingData = await productManager.getAllProducts(); // wait for me reading the file
             // Add the new product to the list in memory
             existingData.push(newProduct);
             // Write the updated data
@@ -128,7 +112,7 @@ route.put('/:pid', async (req, res) => {
     }
 
     try {
-        let listOfProducts = await getAllProducts(); 
+        let listOfProducts = await productManager.getAllProducts(); 
         if (!listOfProducts) { // false list of prods means something failed
             return res.status(500).json({ error: 'Error reading the product data' });
         }
@@ -160,7 +144,7 @@ route.delete('/:pid', async (req, res) => {
     
 
     try {
-        let listOfProducts = await getAllProducts(); // read everything from file and load it to be modified
+        let listOfProducts = await productManager.getAllProducts(); // read everything from file and load it to be modified
         if (!listOfProducts) { // false list means failed or nothing read, report error and end
             return res.status(500).json({ error: 'Error reading the product data' });
         }
