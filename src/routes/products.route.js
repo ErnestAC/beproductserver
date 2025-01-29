@@ -12,31 +12,18 @@ function removeById(array, idToRemove) {
     return array.filter(item => item.pid !== idToRemove && item.status !== false);
 }
 
-// helper function to write an updated array to disk
-async function writeProductsStorage(productsFile, jsonDataToWrite){
-    try {
-        await fs.writeFile(productsFile, JSON.stringify(jsonDataToWrite, null, 2)); // write json to file
-        console.log("Data writen to file")
-        return true;
-    } catch (err) {
-        console.log("Error: Data not writen to file", err)
-        return false;
-    }
-}
 
 // GET all products with limit async
 route.get('/', async (req, res) => {
     const { limit } = req.query;
 
     try {
-        let listOfProducts = await productManager.getAllProducts(); 
-        console.log(listOfProducts);
-        if (!listOfProducts) { // check for errors
+        let listOfProducts = await productManager.getAllProducts(limit); 
+        if (!listOfProducts) { // check for errors, if no response say there is a big issue
             console.log('Products: Error reading product data from storage.')
             return res.status(500).json({ error: 'Error reading product data from storage' });
         }
-        const result = limit ? listOfProducts.slice(0, Number(limit)) : listOfProducts;
-        console.log(`Products: Products have been retrieved. ${limit ? `Limited to ${limit} objects` : "No limit passed."}`)
+        const result = listOfProducts;
         res.json({ result });
     } catch (err) {
         res.status(500).json({ error: 'Server error' });
@@ -48,16 +35,10 @@ route.get('/:pid', async (req, res) => {
     
     try {
         let selectedProduct = await productManager.getProductById(pid); 
-        if (!selectedProduct) { // false list of prods means something failed
-            return res.status(500).json({ error: 'Error reading the product data' });
+        if (selectedProduct === null) { // null means i got nothing back
+            return res.status(404).json({ error: `No hits with this ID: ${pid}` });
         }
-        
         const result = selectedProduct
-        console.log(result)
-        if (!result) { // if result is false, i found nothing
-            return res.status(404).json({ error: `ID # ${pid} not found` });
-        }
-        
         res.json({ result });
     } catch (err) {
         console.error('Something broke', err);
@@ -65,38 +46,24 @@ route.get('/:pid', async (req, res) => {
     }
 });
 
-// POST a new product
-route.post('/', (req, res) => {
+route.post('/', async (req, res) => {
     const product = req.body;
-    const opuuid = uuidv4();
-
-    async function addProduct(newProduct) {
-        try {
-            let existingData = await productManager.getAllProducts(); // wait for me reading the file
-            // Add the new product to the list in memory
-            existingData.push(newProduct);
-            // Write the updated data
-            writeProductsStorage(productsFile, existingData)
-            console.log(`Products: Product with id ${newProduct.pid} added successfully!`);
-        } catch (err) {
-            console.error('Error saving data:', err);
-        }
-    }
+    let result = null
 
     if (!product.title || !product.description || !product.code || !product.price || !product.stock || !product.category || !product.status) {
         return res.status(400).json({ message: 'Missing required fields for this operation' });
     }
-
-    console.log('Products: Working on: ', opuuid);
-
-    // Create a new product object with a unique ID
-    const newProduct = { ...product, id: opuuid };
-
-    // Append to file
-    addProduct(newProduct);
-
-    res.status(201).json({ message: `Finished operation - ${opuuid}` });
+    try {
+        result = await productManager.addProduct(product);
+        res.status(201).json(result);
+    } catch(error) {
+        res.status(500).json({ message: `Server error ${error}` });
+        console.log(error);
+    }
+    
 });
+
+
 
 // PUT Update product by pid asyncly
 route.put('/:pid', async (req, res) => { 
