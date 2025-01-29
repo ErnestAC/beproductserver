@@ -23,7 +23,7 @@ export class CartManager {
         }
     }
 
-// Method to save data back to the file
+    // Method to save data back to the file
     async saveCarts(data) {
         try {
             const jsonData = JSON.stringify(data, null, 2); // save json with pretty format
@@ -69,24 +69,24 @@ export class CartManager {
         return cart;  // Return updated cart
     }
 
-  // Method to get a cart by its ID
-async getCartById(cartId) {
-    const carts = await this.getAllCarts();
-    let result = carts.find(cart => cart.cid === cartId) || null; // Return the cart or null if not found
-    return result
-}
+    // Method to get a cart by its ID
+    async getCartById(cartId) {
+        const carts = await this.getAllCarts();
+        let result = carts.find(cart => cart.cid === cartId) || null; // Return the cart or null if not found
+        return result
+    }
 
   // Method to delete a cart by its ID
-async deleteCartById(cartId) {
-    const carts = await this.getAllCarts();
-    const updatedCarts = carts.filter(cart => cart.id !== cartId);
-    if (updatedCarts.length === carts.length) {
-        console.warn(`Cart with ID ${cartId} not found.`);
-        return false; // Indicate no cart was deleted
+    async deleteCartById(cartId) {
+        const carts = await this.getAllCarts();
+        const updatedCarts = carts.filter(cart => cart.id !== cartId);
+        if (updatedCarts.length === carts.length) {
+            console.warn(`Cart with ID ${cartId} not found.`);
+            return false; // Indicate no cart was deleted
+        }
+        await this.saveCarts(updatedCarts); // Save the updated carts back to the file
+        return true; // Indicate success
     }
-    await this.saveCarts(updatedCarts); // Save the updated carts back to the file
-    return true; // Indicate success
-}
 }
 
 export const cartManager = new CartManager();
