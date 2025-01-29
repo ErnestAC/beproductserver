@@ -24,7 +24,7 @@ export class ProductManager {
     async addProduct(newProduct) {
         const opuuid = uuidv4()
         let result = false
-            // Create a new product object with a unique ID
+        // Create a new product object with a unique ID
         newProduct = { ...newProduct, pid: opuuid };
         try {
             let existingData = await productManager.getAllProducts(); // wait for me reading the file
@@ -46,8 +46,8 @@ export class ProductManager {
         try {
             const fileData = await fs.readFile(productsFile, 'utf-8');
             allProducts = JSON.parse(fileData); // parse json
-            //filter results by only those that are still not marked deleted (status=true)
-            allProducts = allProducts.filter(obj => obj.status === true || obj.status === undefined); // i am accepting records that do not have the staus flag too so i can update them as they get called
+            //filter results by only those that are still not marked deleted (active=true)
+            allProducts = allProducts.filter(obj => obj.active === true || obj.active === undefined); // i am accepting records that do not have the staus flag too so i can update them as they get called
             //is a limit or not passed?
             if(limit){
                 allProducts = allProducts.slice(0, Number(limit));
@@ -95,7 +95,7 @@ export class ProductManager {
 
     // helper funct to remove an object by its id from an array
     removeById(array, idToRemove) {
-        return array.filter(item => item.pid !== idToRemove && item.status !== false);
+        return array.filter(item => item.pid !== idToRemove);
     }
 
     async updateProduct(pid, productUpdate){
@@ -107,7 +107,7 @@ export class ProductManager {
         }
         console.log(`Updating product ${pid}.`);
         this.updateProductHelper(product,productUpdate) // use my helper to merge both objects
-        listOfProducts = this.removeById(listOfProducts,pid) // remove old entry
+        listOfProducts = this.removeById(listOfProducts, product.pid) // remove old entry
         listOfProducts.push(product) // push updated new entry
         if (!await this.writeProductsStorage(productsFile,listOfProducts)){
             console.log(`Failed writing ID # ${pid} to storage.`);
@@ -119,21 +119,22 @@ export class ProductManager {
     async deleteProduct(pid, killFlag=false){
         let listOfProducts = await this.getAllProducts();
         const productToDelete = listOfProducts.find(({ pid: productId }) => productId == pid)
-        console.log("Attempting to remove", productToDelete)
-        if(!productToDelete || !productToDelete.status){
+        if(!productToDelete){
             console.log(`ID # ${pid} not found. Nothing deleted.`);
             return null
         }
+        console.log("Attempting to remove", productToDelete)
         listOfProducts = this.removeById(listOfProducts, pid)
-        productToDelete.status = false // mark the object deleted
+        productToDelete.active = false // mark the object deleted
         if(!killFlag){ // if the flag to kill is not set, i'll update status. otherwise i'll delete from the file.
             listOfProducts.push(productToDelete) // add the updated object to the array
+            console.log(`Re-adding inactivated (deleted) product with ID ${pid} to the array.`)
         } else {
             console.log(`killFlag has been set to true. I have a license to kill now.`)
-            console.log(`Skipping re-adding ${pid} to the array.`)
+            console.log(`Skipping re-adding product with ID ${pid} to the array.`)
         }
         if (!await this.writeProductsStorage(productsFile,listOfProducts)){
-            console.log(`Failed deleting ID # ${pid} from storage.`);
+            console.log(`Failed deleting ID ${pid} from storage.`);
             return null
         }
         return true
