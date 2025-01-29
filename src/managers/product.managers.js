@@ -1,4 +1,4 @@
-import fs from "fs/promises"; // Use promises API for modern async file operations
+import fs from "fs/promises"; // Use promises 
 import { v4 as uuidv4 } from "uuid";
 
 const productsFile = "./src/data/products.json"
@@ -10,10 +10,10 @@ export class ProductManager {
     }
 
     // helper function to write an updated array to disk
-    async writeProductsStorage(productsFile, jsonDataToWrite){
+    async writeProductsStorage(productsFile, DataToWrite){
         try {
-            await fs.writeFile(productsFile, JSON.stringify(jsonDataToWrite, null, 2)); // write json to file
-            console.log("Data writen to file")
+            await fs.writeFile(productsFile, JSON.stringify(DataToWrite, null, 2)); // write json to file
+            console.log("Products: Data writen to file")
             return true;
         } catch (err) {
             console.log("Error: Data not writen to file", err)
@@ -83,6 +83,60 @@ export class ProductManager {
         }
     }
     
+    updateProductHelper(targetObject, sourceObject) {
+        for (const key in sourceObject) {
+            if (key !== 'pid' && targetObject.hasOwnProperty(key)) { //checking both objects have the same keys (properties) and updating source > target and I exclude the Id field as I DO NOT WANT TO TOUCH IT.
+                targetObject[key] = sourceObject[key];
+            }
+        }
+    }
+
+    // helper funct to remove an object by its id from an array
+    removeById(array, idToRemove) {
+        return array.filter(item => item.pid !== idToRemove && item.status !== false);
+    }
+
+    async updateProduct(pid, productUpdate){
+        let listOfProducts = await this.getAllProducts(); 
+        const product = listOfProducts.find(({ pid: objectId }) => objectId == pid)
+        if(!product){
+            console.log(`Nothing found for ID # ${pid}.`);
+            return null
+        }
+        console.log(`Updating product ${pid}.`);
+        this.updateProductHelper(product,productUpdate) // use my helper to merge both objects
+        listOfProducts = this.removeById(listOfProducts,pid) // remove old entry
+        listOfProducts.push(product) // push updated new entry
+        if (!await this.writeProductsStorage(productsFile,listOfProducts)){
+            console.log(`Failed writing ID # ${pid} to storage.`);
+            return null
+        }
+        return product
+    }
+
+    async deleteProduct(pid, killFlag=false){
+        let listOfProducts = await this.getAllProducts();
+        const productToDelete = listOfProducts.find(({ pid: productId }) => productId == pid)
+        console.log("Attempting to remove", productToDelete)
+        if(!productToDelete || !productToDelete.status){
+            console.log(`ID # ${pid} not found. Nothing deleted.`);
+            return null
+        }
+        listOfProducts = this.removeById(listOfProducts, pid)
+        productToDelete.status = false // mark the object deleted
+        if(!killFlag){ // if the flag to kill is not set, i'll update status. otherwise i'll delete from the file.
+            listOfProducts.push(productToDelete) // add the updated object to the array
+        } else {
+            console.log(`killFlag has been set to true. I have a license to kill now.`)
+            console.log(`Skipping re-adding ${pid} to the array.`)
+        }
+        if (!await this.writeProductsStorage(productsFile,listOfProducts)){
+            console.log(`Failed deleting ID # ${pid} from storage.`);
+            return null
+        }
+        return true
+    }
+
 }
 
 export const productManager = new ProductManager();

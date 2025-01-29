@@ -1,14 +1,14 @@
 [
   {
-    "title": "ARCo",
+    "title": "Updated name 4",
     "handle": "V12 Diesel-Electric",
     "imageURL": "../img/arco.png",
-    "description": "Cargo diesel-electric locomotive. 7.5 wide. Modular engine and cabs. Fully L-gauge compatible. 9V only.",
-    "stock": 3,
+    "description": "Other text, updated by ID",
+    "stock": 1,
     "code": 5,
     "pid": 104,
     "price": 150,
-    "category": "prebuilt",
+    "category": "blueprints",
     "pieces": 1901,
     "motorizable": true,
     "lighting": true,
@@ -535,6 +535,48 @@
     "pid": "ba4379e4-7600-40d4-b651-072b0086dea0"
   },
   {
+    "title": "Updated name 4",
+    "handle": "V12 Diesel-Electric",
+    "imageURL": "../img/arco.png",
+    "description": "Other text, updated by ID",
+    "stock": 1,
+    "code": 5,
+    "pid": 104,
+    "price": 150,
+    "category": "blueprints",
+    "pieces": 1901,
+    "motorizable": true,
+    "lighting": true,
+    "wheelArrangement": "Bo-Bo",
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ]
+  },
+  {
+    "title": "Updated name 4",
+    "handle": "V12 Diesel-Electric",
+    "imageURL": "../img/arco.png",
+    "description": "Other text, updated by ID",
+    "stock": 1,
+    "code": 5,
+    "pid": 104,
+    "price": 150,
+    "category": "blueprints",
+    "pieces": 1901,
+    "motorizable": true,
+    "lighting": true,
+    "wheelArrangement": "Bo-Bo",
+    "thumbs": [
+      "frg",
+      "abdc",
+      "def",
+      "123"
+    ]
+  },
+  {
     "title": "New object name 122",
     "handle": "Diesel-electric",
     "imageURL": "../img/alstom1934.png",
@@ -553,7 +595,7 @@
       "def",
       "123"
     ],
-    "status": "true",
-    "pid": "a0b5173c-4ac0-4e71-a8e7-07033c9f8bcf"
+    "status": false,
+    "pid": "56"
   }
 ]

@@ -64,39 +64,21 @@ route.post('/', async (req, res) => {
 });
 
 
-
 // PUT Update product by pid asyncly
 route.put('/:pid', async (req, res) => { 
     const pid = req.params.pid;
     const productUpdate = req.body
-    
-    function updateProduct(targetObject, sourceObject) {
-        for (const key in sourceObject) {
-            if (key !== 'pid' && targetObject.hasOwnProperty(key)) { //checking both objects have the same keys (properties) and updating source > target and I exclude the Id field as I DO NOT WANT TO TOUCH IT.
-                targetObject[key] = sourceObject[key];
-            }
-        }
+    //verify that not EVERY updatable field is missing
+    if (!productUpdate.title && !productUpdate.description && !productUpdate.code && !productUpdate.price && !productUpdate.stock && !productUpdate.category && !productUpdate.status) {
+        return res.status(400).json({ message: 'Missing required fields for this operation' });
     }
-
     try {
-        let listOfProducts = await productManager.getAllProducts(); 
-        if (!listOfProducts) { // false list of prods means something failed
-            return res.status(500).json({ error: 'Error reading the product data' });
-        }
-        
-        const product = listOfProducts.find(({ pid: objectId }) => objectId == pid);
-
-        if (!product) { // check if the id is found first
-            return res.status(404).json({ error: `ID # ${pid} not found` });
+        const result = await productManager.updateProduct(pid,productUpdate)
+        if(result){
+            res.json({ result }); // return the updated product
         } else {
-            updateProduct(product,productUpdate) // I update the product I got from the above search before I replace the one in the listofproducts array.
-            listOfProducts = removeById(listOfProducts, product.pid) // remove the original object
-            listOfProducts.push(product) // add the updated object to the array
-            writeProductsStorage(productsFile,listOfProducts)
-            console.log(`Products: Updated data for ID# ${product.pid} `)
+            res.json("Error updating, posible invalid ID.")
         }
-        const result=product
-        res.json({ result }); // return the updated product list
     } catch (err) {
         console.error('Something broke', err);
         res.status(500).json({ error: 'Server error' });
@@ -108,32 +90,16 @@ route.put('/:pid', async (req, res) => {
 route.delete('/:pid', async (req, res) => { 
     const pid = req.params.pid;
     const killFlag = req.body.killFlag
-    
+    let result = ""
 
     try {
-        let listOfProducts = await productManager.getAllProducts(); // read everything from file and load it to be modified
-        if (!listOfProducts) { // false list means failed or nothing read, report error and end
-            return res.status(500).json({ error: 'Error reading the product data' });
+        result=await productManager.deleteProduct(pid, killFlag)
+        if(result){
+            res.status(200).json({ "message":"data deleted" });
+        } else {
+            res.status(400).json({ "message":"data not deleted" });
         }
         
-        const product = listOfProducts.find(({ pid: objectId }) => objectId == pid);
-
-        if (!product || !product.status) { // check if the id is found first, if not; end.
-            return res.status(404).json({ error: `ID # ${pid} not found` });
-        } else {
-            // mark it deleted by updating status to false
-            product.status=false
-            listOfProducts = removeById(listOfProducts, product.pid) // remove the original object
-            if(!killFlag){
-                listOfProducts.push(product) // add the updated object to the array
-                console.log(`killFlag has been set to true. I have a license to kill now.`)
-            }
-            writeProductsStorage(productsFile,listOfProducts)
-            
-            console.log(`Products: Data for ID#${product.pid} ${killFlag ? "" : "marked as "}deleted`)
-        }
-        const result=`Data for ID#${product.pid} ${killFlag ? "" : "marked as "}deleted.`
-        res.json({ result }); // return the updated product list
     } catch (err) {
         console.error('Something broke', err);
         res.status(500).json({ error: 'Server error' });
