@@ -1,0 +1,57 @@
+[
+  {
+    "cid": "9",
+    "products": [
+      {
+        "pid": "2240a509-5505-452f-86ac-455ed5464765",
+        "quantity": 4
+      },
+      {
+        "pid": "95",
+        "quantity": 11
+      },
+      {
+        "pid": "9511",
+        "quantity": 1
+      },
+      {
+        "pid": "951121",
+        "quantity": 1
+      },
+      {
+        "pid": "9511211221",
+        "quantity": 1
+      },
+      {
+        "pid": "95112112212112",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "cid": "159fec19-9b67-4e1f-8ffc-65c3447064aa",
+    "products": [
+      {
+        "pid": "904027b4-9100-4fcd-8aab-3128604faf09",
+        "quantity": 3
+      },
+      {
+        "pid": "2240a509-5505-452f-86ac-455ed5464765",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "pid": "7db3161c-feba-4975-a7dc-363e1b774125",
+    "products": [
+      {
+        "pid": "2240a509-5505-452f-86ac-455ed5464765",
+        "quantity": 2
+      },
+      {
+        "pid": "957003eb-99f1-4b72-8dc1-591361e8dd70",
+        "quantity": 6
+      }
+    ]
+  }
+]

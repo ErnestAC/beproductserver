@@ -6,7 +6,7 @@
     "description": "Cargo diesel-electric locomotive. 7.5 wide. Modular engine and cabs. Fully L-gauge compatible. 9V only.",
     "stock": 3,
     "code": 5,
-    "pid": 1,
+    "pid": 104,
     "price": 150,
     "category": "prebuilt",
     "pieces": 1901,
@@ -356,6 +356,6 @@
       "def",
       "123"
     ],
-    "status": false
+    "status": true
   }
 ]

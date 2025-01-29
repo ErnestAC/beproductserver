@@ -2,7 +2,7 @@ import { Router } from "express";
 import { v4 as uuidv4 } from 'uuid';
 import { promises as fs } from 'fs';
 
-const productsFile = "./src/assets/products.json";
+const productsFile = "./src/data/products.json";
 
 const route = Router();
 
@@ -176,13 +176,12 @@ route.delete('/:pid', async (req, res) => {
             if(!killFlag){
                 listOfProducts.push(product) // add the updated object to the array
                 console.log(`killFlag has been set to true. I have a license to kill now.`)
-            
             }
             writeProductsStorage(productsFile,listOfProducts)
             
-            console.log(`Products: Data for ID#${product.pid} ${killFlag ? "" : "marked"} as deleted`)
+            console.log(`Products: Data for ID#${product.pid} ${killFlag ? "" : "marked as "}deleted`)
         }
-        const result=`Data for ID#${product.pid} ${killFlag ? "" : "marked"} as deleted`
+        const result=`Data for ID#${product.pid} ${killFlag ? "" : "marked as "}deleted.`
         res.json({ result }); // return the updated product list
     } catch (err) {
         console.error('Something broke', err);
