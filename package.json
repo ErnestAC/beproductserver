@@ -13,6 +13,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bulma": "^1.0.3",
     "express": "4.21.2",
     "express-handlebars": "^8.0.1",
     "handlebars": "^4.7.8",
