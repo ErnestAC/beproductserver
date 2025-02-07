@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Product</title>
+    <link rel="stylesheet" href="/static/styles.css"> <!-- Optional: Add styles -->
+</head>
+<body>
+    <h1>Delete a Product</h1>
+
+    <form id="deleteForm">
+        <label for="pid">Product ID:</label>
+        <input type="text" id="pid" name="pid" required>
+
+        <label for="killFlag">
+            <input type="checkbox" id="killFlag" name="killFlag">
+            Permanently delete (cannot be undone)
+        </label>
+
+        <button type="submit">Delete Product</button>
+    </form>
+
+    <p id="resultMessage"></p>
+
+    <script>
+        document.getElementById("deleteForm").addEventListener("submit", async function(event) {
+            event.preventDefault(); 
+
+            const pid = document.getElementById("pid").value;
+            const killFlag = document.getElementById("killFlag").checked; 
+
+            try {
+                const response = await fetch(`/api/products/${pid}`, {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ killFlag }) 
+                });
+
+                const data = await response.json();
+                document.getElementById("resultMessage").textContent = data.message;
+
+                if (response.ok) {
+                    document.getElementById("deleteForm").reset(); 
+                }
+            } catch (error) {
+                console.error("Error deleting product:", error);
+                document.getElementById("resultMessage").textContent = "Failed to delete product.";
+            }
+        });
+    </script>
+
+    <a href="/api/products">View Products</a>
+</body>
+</html>

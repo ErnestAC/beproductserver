@@ -52,6 +52,10 @@ app.post('/add-product', async (req, res) => {
     }
 });
 
+app.get("/delete-product", (req, res) => {
+    res.render("deleteProduct");
+});
+
 // Start the server
 app.listen(8080, () => {
     console.log('Server started on port 8080');

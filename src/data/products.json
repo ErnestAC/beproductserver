@@ -364,7 +364,7 @@
     "description": "Other text, updated by ID",
     "stock": 1,
     "code": 5,
-    "pid": 14,
+    "pid": "7d2fa8a4-9e05-479d-a49a-560b9d52e40c",
     "price": 150,
     "category": "blueprints",
     "pieces": 1058,
@@ -385,7 +385,7 @@
     "description": "Other text, updated by ID",
     "stock": 1,
     "code": 5,
-    "pid": 104,
+    "pid": "7d2fa8a4-9e05-479d-a49a-560b9d52e40b",
     "price": 150,
     "category": "blueprints",
     "pieces": 12344,
@@ -429,6 +429,7 @@
     "stock": "3",
     "category": "111",
     "status": "on",
-    "pid": "7d2fa8a4-9e05-479d-a49a-560b9d52e40a"
+    "pid": "7d2fa8a4-9e05-479d-a49a-560b9d52e40a1",
+    "active": false
   }
 ]
