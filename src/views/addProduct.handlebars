@@ -8,13 +8,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
-    <h2 class="subtitle">Add a New Product</h>
+    <h2 class="subtitle">Add a New Product</h2>
     <form class="content" action="/add-product" method="POST">
         <label for="title">Title:</label>
-        <input placeholder="Title" class="input is-small" type="text" id="title" name="title" required><br>
+        <input placeholder="Title" class="input is-dark is-small" type="text" id="title" name="title" required><br>
 
         <label for="description">Description:</label>
-        <textarea  placeholder="Description"  class="input is-small" id="description" name="description" required></textarea><br>
+        <textarea placeholder="Description" class="input is-small" id="description" name="description" required></textarea><br>
 
         <label for="code">Code:</label>
         <input placeholder="ABC-DEC" class="input is-small" type="text" id="code" name="code" required><br>
@@ -26,10 +26,10 @@
         <input placeholder="Stock" class="input is-small" type="number" id="stock" name="stock" required><br>
 
         <label for="category">Category:</label>
-        <input placeholder="Stock" class="input is-small" type="text" id="category" name="category" required><br>
+        <input placeholder="Category" class="input is-small" type="text" id="category" name="category" required><br>
 
-        <label for="status">Status:</label>
-        <input class="check" type="checkbox" id="status" name="status"><br>
+        <!-- Hidden status input field, always set to true -->
+        <input type="hidden" name="status" value="true">
 
         <button class="button is-small" type="submit">Add Product</button>
     </form>

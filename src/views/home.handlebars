@@ -8,16 +8,21 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
-    <h2 class="subtitle">Product List</h2>
-    <div class="content">
+    <h2 class="title section">Product List - Static view</h2>
+    <div class="section" id="productList">
         {{#if products.length}}
-            <ul>
+            <ul >
                 {{#each products}}
-                    <li>
-                        <strong>{{this.title}}</strong> - ${{this.price}}
-                        <p>{{this.description}}</p>
-                        <small>Stock: {{this.stock}}</small>
-                    </li>
+                    <div class="other-bar">
+                        <li>
+                                <h4 class="card section"><strong>PID:</strong> {{this.pid}}</h4>
+                                <strong>{{this.title}} - ${{this.price}}</strong>
+                                <p><strong>Stock:</strong> {{this.stock}}</p>
+                                <p><strong>Motorizable:</strong> {{#if this.motorizable}} Yes {{else}} No {{/if}}</p>
+                                <p><strong>Lighting:</strong> {{#if this.lighting}} Yes {{else}} No {{/if}}</p>
+                                <hr>
+                        </li>
+                    </div>
                 {{/each}}
             </ul>
         {{else}}

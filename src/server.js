@@ -12,11 +12,11 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server); // WebSocket server
 
-// Function to notify all clients of product updates
+// Function to notify all connected users of product updates
 export const notifyProductChange = async () => {
     try {
-        const products = await productManager.getAllProducts(); // Fetch all products
-        io.emit('updateProducts', products); // Emit updated products to all connected clients
+        const products = await productManager.getAllProducts(); // Fetch all products reusing fucntion from before
+        io.emit('updateProducts', products); // Emit updated products to all connected clients, everybody gets the complete list
     } catch (err) {
         console.error('Error notifying product change:', err);
     }
@@ -50,7 +50,7 @@ app.get('/add-product', (req, res) => {
 // : Handle the form submission and add the new product
 app.post('/add-product', async (req, res) => {
     const product = req.body;
-  
+    
     if (!product.title || !product.description || !product.code || !product.price || !product.stock || !product.category || product.status === undefined) {
         return res.status(400).json({ message: 'Missing required fields for this operation' });
     }
@@ -96,10 +96,10 @@ app.get('/realtimeproducts', async (req, res) => {
 // Handle WebSocket connections
 io.on("connection", (socket) => {
     console.log("Client connected to WebSocket. Session ID:", socket.id);
-
+    
     // Send the initial product list when a new client connects
     socket.emit('updateProducts', productManager.getAllProducts());
-
+    
     socket.on("requestProducts", async () => {
         const products = await productManager.getAllProducts();
         socket.emit("updateProducts", products);
