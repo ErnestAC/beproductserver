@@ -6,7 +6,7 @@
         url("../fonts/RobotoCondensed-Regular.ttf");
 }
 
-.div {
+div {
   color: white !important;
 }
 
@@ -17,6 +17,31 @@ body {
   background-repeat:repeat-x; /* Prevents tiling */
   background-attachment: fixed; /* Keeps it fixed while scrolling */
   background-color:rgba(0, 10, 10, 0.999) !important; /* Fallback color */
+  color: white !important;
+}
+
+p {
+  color:white;
+}
+
+h1{
+  color: white !important;
+}
+h2{
+  color: white !important;
+  font-size: 1.5rem !important;
+}
+h3{
+  color: white !important;
+  font-size: 1rem !important;
+}
+h4{
+  color: rgba(10, 110, 110, 0.999) !important;
+  font-size: 1rem !important;
+}
+h5{
+  color: white !important;
+  font-size: 1rem !important;
 }
 
 .App {
