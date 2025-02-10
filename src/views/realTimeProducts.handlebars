@@ -14,7 +14,7 @@
             console.log("Received updated products:", products);  // Debugging log
             const productList = document.getElementById('productList');
             productList.innerHTML = products.map(product => `
-                <div class="section other-bar">
+                <div class="other-bar">
                     <li>
                         <h4 class="card section"><strong>PID:</strong> ${product.pid}</h4>
                         <strong>${product.title} - ${product.price}</strong>
@@ -29,12 +29,12 @@
     </script>
 </head>
 <body>
-    <h2 class="title section">Real-Time Product List</h2>
+    <h2 class="title section">Real Time Product List</h2>
     <ul class="section" id="productList">
         <!-- Handlebars will render this part initially from the server -->
         {{#each products}}
             <div class="other-bar">
-                <li>
+                <li class="card-columns">
                         <h4 class="card section"><strong>PID:</strong> {{this.pid}}</h4>
                         <strong>{{this.title}} - ${{this.price}}</strong>
                         <p><strong>Stock:</strong> {{this.stock}}</p>

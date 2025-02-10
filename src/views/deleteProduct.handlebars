@@ -11,18 +11,21 @@
 
 </head>
 <body>
-    <h1 class="subtitle">Delete a Product</h1>
+    <h2 class="title section">Delete a Product</h2>
 
-    <form class="" id="deleteForm">
+    <form class="section" id="deleteForm">
         <label for="pid">Product ID:</label>
         <input type="text" id="pid" name="pid" required>
 
         <label for="killFlag">
             <input type="checkbox" id="killFlag" name="killFlag">
-            Permanently delete (cannot be undone)
+            Hard delete (cannot be undone)
         </label>
 
-        <button class="button" type="submit">Delete Product</button>
+        <br>
+        <br>
+        
+        <button class="button is-small" type="submit">Delete Product</button>
     </form>
 
     <p id="resultMessage"></p>
@@ -54,6 +57,11 @@
         });
     </script>
 
-    <a href="/api/products">View Products</a>
+    <div class="section">
+        <a href="/">View Products - Static</a> 
+        <b>|</b>
+        <a href="/realtimeproducts">View Products - Real-time</a>
+    </div>
+    
 </body>
 </html>

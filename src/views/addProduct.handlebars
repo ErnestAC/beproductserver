@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,30 +8,34 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
-    <h2 class="subtitle">Add a New Product</h2>
+    <h2 class="title section">Add a New Product</h2>
     <form class="content" action="/add-product" method="POST">
-        <label for="title">Title:</label>
-        <input placeholder="Title" class="input is-dark is-small" type="text" id="title" name="title" required><br>
+        <div class="section">
+            <label for="title">Title:</label>
+            <input placeholder="Title" class="is-dark is-small" type="text" id="title" name="title" required><br>
 
-        <label for="description">Description:</label>
-        <textarea placeholder="Description" class="input is-small" id="description" name="description" required></textarea><br>
+            <label for="description">Description:</label>
+            <textarea placeholder="Description" class="is-small" id="description" name="description" required></textarea><br>
 
-        <label for="code">Code:</label>
-        <input placeholder="ABC-DEC" class="input is-small" type="text" id="code" name="code" required><br>
+            <label for="code">Code:</label>
+            <input placeholder="ABC-DEC" class="is-small" type="text" id="code" name="code" required><br>
 
-        <label for="price">Price:</label>
-        <input placeholder="Price" class="input is-small is-dark" type="number" id="price" name="price" required><br>
+            <label for="price">Price:</label>
+            <input placeholder="Price" class="is-small is-dark" type="number" id="price" name="price" required><br>
 
-        <label for="stock">Current stock:</label>
-        <input placeholder="Stock" class="input is-small" type="number" id="stock" name="stock" required><br>
+            <label for="stock">Current stock:</label>
+            <input placeholder="Stock" class="is-small" type="number" id="stock" name="stock" required><br>
 
-        <label for="category">Category:</label>
-        <input placeholder="Category" class="input is-small" type="text" id="category" name="category" required><br>
+            <label for="category">Category:</label>
+            <input placeholder="Category" class="is-small" type="text" id="category" name="category" required><br>
 
-        <!-- Hidden status input field, always set to true -->
-        <input type="hidden" name="status" value="true">
+            <!-- Hidden status input field, always set to true -->
+            <input type="hidden" name="status" value="true">
 
-        <button class="button is-small" type="submit">Add Product</button>
+            <br>
+
+            <button class="button is-small" type="submit">Add Product</button>
+        </div>
     </form>
 </body>
 </html>

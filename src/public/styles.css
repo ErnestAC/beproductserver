@@ -476,10 +476,11 @@ a:active {
   left: 0;
 }
 
-.cart-columns{
+.card-columns{
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
+  width:25rem !important;
 }
 
 .navbar-burger span {
@@ -493,13 +494,13 @@ a:active {
 :focus,
 :focus-visible {
   outline: none !important;  /* Removes default blue outline */
-  color: white !important;   /* Makes text color white */
+  color: white;   /* Makes text color white */
   border-color: white !important; /* Changes border color if applicable */
 }
 
 .button:focus,
 .button:focus-visible {
-  color: white !important;
+  color: rgb(68, 68, 68) !important;
   border-color: white !important;
 }
 
@@ -526,4 +527,9 @@ textarea:focus {
   font-size: 1.5rem;
   color: #999;
   cursor: pointer;
+}
+
+input, textarea{
+  width: 100%;
+  font-size: 0.7rem;
 }
