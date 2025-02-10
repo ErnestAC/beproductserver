@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Products</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('updateProducts', (products) => {
+            console.log("Received updated products:", products);  // Debugging log
+            const productList = document.getElementById('productList');
+            productList.innerHTML = products.map(product => `
+                <div class="section other-bar">
+                    <li>
+                        <h4>PID: ${product.pid}</h4>
+                        <h5>${product.title} - ${this.price}</h5>
+                        <p><strong>Stock:</strong> ${product.stock}</p>
+                        <p><strong>Motorizable:</strong> ${product.motorizable ? "Yes" : "No"}</p>
+                        <p><strong>Lighting:</strong> ${product.lighting ? "Yes" : "No"}</p>
+                        <hr>
+                    </li>
+                </div>
+            `).join('');
+        });
+    </script>
+</head>
+<body>
+    <h2 class="title section">Real-Time Product List</h2>
+    <ul id="productList">
+        <!-- Handlebars will render this part initially from the server -->
+        {{#each products}}
+            <div class="section other-bar">
+                <li>
+                        <h4>PID: {{this.pid}}</h4>
+                        <h5>{{this.title}} - ${{this.price}}</h5>
+                        <p><strong>Stock:</strong> {{this.stock}}</p>
+                        <p><strong>Motorizable:</strong> {{#if this.motorizable}} Yes {{else}} No {{/if}}</p>
+                        <p><strong>Lighting:</strong> {{#if this.lighting}} Yes {{else}} No {{/if}}</p>
+                        <hr>
+                </li>
+            </div>
+        {{/each}}
+    </ul>
+</body>
+</html>

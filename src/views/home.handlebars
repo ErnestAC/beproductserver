@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <meta name="color-scheme" content="dark">
+</head>
+<body>
+    <h2 class="subtitle">Product List</h2>
+    <div class="content">
+        {{#if products.length}}
+            <ul>
+                {{#each products}}
+                    <li>
+                        <strong>{{this.title}}</strong> - ${{this.price}}
+                        <p>{{this.description}}</p>
+                        <small>Stock: {{this.stock}}</small>
+                    </li>
+                {{/each}}
+            </ul>
+        {{else}}
+            <p>No products available.</p>
+        {{/if}}
+    </div>
+</body>
+</html>

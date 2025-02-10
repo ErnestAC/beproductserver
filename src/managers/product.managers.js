@@ -1,5 +1,6 @@
 import fs from "fs/promises"; // Use promises for file operations
 import { v4 as uuidv4 } from "uuid";
+import { notifyProductChange } from "../server.js"; // Import WebSocket notification function
 
 const productsFile = "./src/data/products.json";
 
@@ -13,6 +14,10 @@ export class ProductManager {
         try {
             await fs.writeFile(this.productsFilePath, JSON.stringify(dataToWrite, null, 2));
             console.log("Products: Data written to file successfully.");
+            
+            // Notify clients of the change
+            notifyProductChange();
+            
             return true;
         } catch (err) {
             console.error("Error: Failed to write data to file", err);
@@ -35,7 +40,11 @@ export class ProductManager {
             const success = await this.writeProductsStorage(existingData);
             if (!success) return null;
 
-            console.log(`Products: Product with ID ${newProduct.pid} added successfully!`);
+            console.log(`Products: Product with PID ${newProduct.pid} added successfully!`);
+            
+            // Notify clients of the product change
+            notifyProductChange();
+
             return newProduct;
         } catch (err) {
             console.error("Error saving product:", err);
@@ -60,14 +69,14 @@ export class ProductManager {
         }
     }
 
-    // Fetch a single product by ID
+    // Fetch a single product by PID
     async getProductById(pid) {
         try {
             const products = await this.getAllProducts();
             const result = products.find(({ pid: objectId }) => objectId === pid);
             return result || null;
         } catch (err) {
-            console.error("Error fetching product by ID:", err);
+            console.error("Error fetching product by PID:", err);
             return null;
         }
     }
@@ -87,7 +96,7 @@ export class ProductManager {
         const productIndex = listOfProducts.findIndex(({ pid: objectId }) => objectId === pid);
 
         if (productIndex === -1) {
-            console.log(`Nothing found for ID #${pid}.`);
+            console.log(`Nothing found for PID #${pid}.`);
             return null;
         }
 
@@ -95,9 +104,15 @@ export class ProductManager {
         const success = await this.writeProductsStorage(listOfProducts);
 
         if (!success) {
-            console.log(`Failed to update ID #${pid}.`);
+            console.log(`Failed to update PID #${pid}.`);
             return null;
         }
+
+        console.log(`Updated product PID ${pid}.`);
+
+        // Notify clients of the product change
+        notifyProductChange();
+
         return listOfProducts[productIndex];
     }
 
@@ -107,19 +122,25 @@ export class ProductManager {
         const productIndex = listOfProducts.findIndex(({ pid: productId }) => productId === pid);
 
         if (productIndex === -1) {
-            console.log(`ID #${pid} not found. Nothing deleted.`);
+            console.log(`PID #${pid} not found. Nothing deleted.`);
             return null;
         }
 
         if (killFlag) {
             listOfProducts.splice(productIndex, 1);
-            console.log(`Permanently deleted product ID ${pid}.`);
+            console.log(`Permanently deleted product PID ${pid}.`);
         } else {
             listOfProducts[productIndex].active = false;
-            console.log(`Soft deleted product ID ${pid}.`);
+            console.log(`Soft deleted product PID ${pid}.`);
         }
 
         const success = await this.writeProductsStorage(listOfProducts);
+        
+        // Notify clients of the product change
+        if (success) {
+            notifyProductChange();  // Emit updated product list
+        }
+
         return success ? true : null;
     }
 }

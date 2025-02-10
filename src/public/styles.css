@@ -301,9 +301,9 @@ a:active {
 }
 
 .sort-bar, .other-bar {
-  display: flex;
+  display:contents;
   flex-direction: rows;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   flex-wrap: wrap;
 }
