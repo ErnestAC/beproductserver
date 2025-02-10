@@ -1,363 +1,5 @@
 [
   {
-    "title": "ARCo",
-    "handle": "V12 Diesel-Electric",
-    "imageURL": "../img/arco.png",
-    "description": "Other text, updated by ID",
-    "stock": 1,
-    "code": 5,
-    "pid": 1014,
-    "price": 150,
-    "category": "blueprints",
-    "pieces": 12344,
-    "active": true,
-    "lighting": true,
-    "wheelArrangement": "Bo-Bo",
-    "thumbs": [
-      "frg",
-      "abdc",
-      "def",
-      "123"
-    ]
-  },
-  {
-    "title": "Siemens ARX",
-    "handle": "Electric @ 15kV",
-    "imageURL": "../img/siemens.png",
-    "description": "High-speed electric locomotive. Dual 9V motor compatible. 8+ wide. Monolythic cars with detailed engine rooms and cabs.",
-    "stock": 11,
-    "code": 5,
-    "pid": 2,
-    "price": 170,
-    "category": "blueprint",
-    "pieces": 2150,
-    "active": true,
-    "lighting": false,
-    "wheelArrangement": "Co-Co",
-    "thumbs": [
-      "frg",
-      "abdc",
-      "def",
-      "123"
-    ]
-  },
-  {
-    "title": "Alstom 1121",
-    "handle": "I16 Diesel-Electric",
-    "imageURL": "../img/alstom.png",
-    "description": "French style diesel-electric locomotive. Modular cabs and engines. 7.5 studs wide. PF/PU compatible.",
-    "stock": 10,
-    "code": 4,
-    "pid": 3,
-    "price": 190,
-    "category": "user",
-    "pieces": 1440,
-    "active": true,
-    "lighting": true,
-    "wheelArrangement": "Bo-Bo",
-    "thumbs": [
-      "frg",
-      "abdc",
-      "def",
-      "123"
-    ]
-  },
-  {
-    "title": "JRF C121",
-    "handle": "Electric @17kV/I12 Diesel-Electric",
-    "imageURL": "../img/jrf_all_dualend.png",
-    "description": "Dual duty electric/diesel-electric locomotive. Modular cab and engine. 7.5 studs wide. PF and 9V compatible.",
-    "stock": 6,
-    "code": 4,
-    "pid": "5dda41a2-1a42-4061-bb15-a95b4032f7f4",
-    "price": 185,
-    "category": "blueprint",
-    "pieces": 877,
-    "active": true,
-    "lighting": false,
-    "wheelArrangement": "Bo-Bo",
-    "thumbs": [
-      "frg",
-      "abdc",
-      "def",
-      "123"
-    ]
-  },
-  {
-    "title": "SKMWCo Shunter",
-    "handle": "Diesel-hydraulic",
-    "imageURL": "../img/shunt2d.png",
-    "description": "Shunt duty locomotive. Diesel-hydraulic classic shunter. 7 studs wide. Not active, display only.",
-    "stock": 1,
-    "code": 1,
-    "pid": 5,
-    "price": 145,
-    "category": "user",
-    "pieces": 176,
-    "active": true,
-    "lighting": true,
-    "wheelArrangement": "Bo",
-    "thumbs": [
-      "frg",
-      "abdc",
-      "def",
-      "123"
-    ]
-  },
-  {
-    "title": "Toshiba EMU",
-    "handle": "Electric @ 28kV",
-    "imageURL": "../img/toshiba.png",
-    "description": "Passenger cars based on the 1960s classic Toshiba body. 7 wide. Not active. Includes two cars.",
-    "stock": 6,
-    "code": 4,
-    "pid": 6,
-    "price": 145,
-    "category": "prebuilt",
-    "pieces": 2017,
-    "active": true,
-    "lighting": true,
-    "wheelArrangement": "Bo-Bo",
-    "thumbs": [
-      "frg",
-      "abdc",
-      "def",
-      "123"
-    ]
-  },
-  {
-    "title": "Siemens MEC",
-    "handle": "Electric @ multi",
-    "imageURL": "../img/metcar.png",
-    "description": "Passenger EMU. Two cars included. active only in 9v. 6.5 wide. Fully furnished interior. Seats 10 minifigs. Stands 15 mini figs.",
-    "stock": 9,
-    "code": 5,
-    "pid": 7,
-    "price": 145,
-    "category": "prebuilt",
-    "pieces": 1190,
-    "active": true,
-    "lighting": true,
-    "wheelArrangement": "Bo-Bo",
-    "thumbs": [
-      "frg",
-      "abdc",
-      "def",
-      "123"
-    ]
-  },
-  {
-    "title": "MRC Light rail EMU",
-    "handle": "Electric @ multi",
-    "imageURL": "../img/xlightrail.png",
-    "description": "Permanently coupled EMU. active only in 9v. 6.5 wide. Features a fully furnished interior.",
-    "stock": 0,
-    "code": 3,
-    "pid": 8,
-    "price": 145,
-    "category": "blueprint",
-    "pieces": 692,
-    "active": true,
-    "lighting": true,
-    "wheelArrangement": "Bo-Bo-Bo",
-    "thumbs": [
-      "frg",
-      "abdc",
-      "def",
-      "123"
-    ]
-  },
-  {
-    "title": "MRC Boxcar Shunter",
-    "handle": "Diesel-electric",
-    "imageURL": "../img/boxshunt.png",
-    "description": "Diesel electric shunt. active only in 9v. 7 stud wide. Features fully furnished cabs and engine bay.",
-    "stock": 6,
-    "code": 2,
-    "pid": 9,
-    "price": 120,
-    "category": "blueprint",
-    "pieces": 267,
-    "active": true,
-    "lighting": true,
-    "wheelArrangement": "Bo",
-    "thumbs": [
-      "frg",
-      "abdc",
-      "def",
-      "123"
-    ]
-  },
-  {
-    "title": "MRC Long-hood Shunter",
-    "handle": "Diesel-hydraulic",
-    "imageURL": "../img/shuntlh.png",
-    "description": "Diesel electric shunt. active only in 9v. 7 stud wide. Features fully furnished cabs and engine bay.",
-    "stock": 9,
-    "code": 2,
-    "pid": 10,
-    "price": 145,
-    "category": "prebuilt",
-    "pieces": 201,
-    "active": true,
-    "lighting": true,
-    "wheelArrangement": "Bo",
-    "thumbs": [
-      "frg",
-      "abdc",
-      "def",
-      "123"
-    ]
-  },
-  {
-    "title": "ARCo DDF",
-    "handle": "Diesel-electric",
-    "imageURL": "../img/arco_ddf.png",
-    "description": "Diesel electric cargo duty locomotive. active only in 9v. 7 stud wide. Redboy Transport Co. livery. Features fully furnished cab.",
-    "stock": 3,
-    "code": 3,
-    "pid": 13,
-    "price": 145,
-    "category": "special",
-    "pieces": 584,
-    "active": true,
-    "lighting": true,
-    "wheelArrangement": "Bo-Bo",
-    "thumbs": [
-      "frg",
-      "abdc",
-      "def",
-      "123"
-    ]
-  },
-  {
-    "title": "NewProd2",
-    "description": "Something something",
-    "code": "A1AA",
-    "price": 150,
-    "stock": 1,
-    "category": "blueprints",
-    "status": true,
-    "thumbs": [
-      "frg",
-      "abdc",
-      "def",
-      "123"
-    ],
-    "pid": "2c306c35-6b79-40f8-8be3-3a9a7434a22a"
-  },
-  {
-    "title": "NewProd2",
-    "description": "Something something",
-    "code": "A1AA",
-    "price": 150,
-    "stock": 1,
-    "category": "blueprints",
-    "status": true,
-    "thumbs": [
-      "frg",
-      "abdc",
-      "def",
-      "123"
-    ],
-    "pid": "29714154-cb77-4a89-8821-b28d3626275a"
-  },
-  {
-    "title": "NewProd2",
-    "description": "Something something",
-    "code": "A1AA",
-    "price": 150,
-    "stock": 1,
-    "category": "blueprints",
-    "status": true,
-    "thumbs": [
-      "frg",
-      "abdc",
-      "def",
-      "123"
-    ],
-    "pid": "60b1a014-870b-47b6-8cd9-0457f4b88eaf"
-  },
-  {
-    "title": "NewProd2",
-    "description": "Something something",
-    "code": "A1AA",
-    "price": 150,
-    "stock": 1,
-    "category": "blueprints",
-    "status": true,
-    "thumbs": [
-      "frg",
-      "abdc",
-      "def",
-      "123"
-    ],
-    "pid": "1f965eb0-35a0-4b12-985b-91852ca45672"
-  },
-  {
-    "title": "Somehting else ofr id14",
-    "handle": "Diesel-electric",
-    "imageURL": "../img/alstom1934.png",
-    "description": "Other text, updated by ID",
-    "stock": 1,
-    "code": 5,
-    "pid": 14,
-    "price": 150,
-    "category": "blueprints",
-    "pieces": 11058,
-    "active": true,
-    "lighting": true,
-    "wheelArrangement": "Co-Co",
-    "thumbs": [
-      "frg",
-      "abdc",
-      "def",
-      "123"
-    ]
-  },
-  {
-    "title": "Updated name 4",
-    "handle": "V12 Diesel-Electric",
-    "imageURL": "../img/arco.png",
-    "description": "Other text, updated by ID",
-    "stock": 1,
-    "code": 5,
-    "pid": 1504,
-    "price": 150,
-    "category": "blueprints",
-    "pieces": 1901,
-    "active": true,
-    "lighting": true,
-    "wheelArrangement": "Bo-Bo",
-    "thumbs": [
-      "frg",
-      "abdc",
-      "def",
-      "123"
-    ]
-  },
-  {
-    "title": "Somehting else",
-    "handle": "Diesel-electric",
-    "imageURL": "../img/alstom1934.png",
-    "description": "Other text, updated by ID",
-    "stock": 1,
-    "code": 5,
-    "pid": 1454,
-    "price": 150,
-    "category": "blueprints",
-    "pieces": 1058,
-    "active": true,
-    "lighting": true,
-    "wheelArrangement": "Co-Co",
-    "thumbs": [
-      "frg",
-      "abdc",
-      "def",
-      "123"
-    ]
-  },
-  {
     "title": "Somehting else ofr id14",
     "handle": "Diesel-electric",
     "imageURL": "../img/alstom1934.png",
@@ -410,7 +52,7 @@
     "price": 150,
     "category": "blueprints",
     "pieces": 10258,
-    "active": false,
+    "active": true,
     "lighting": true,
     "wheelArrangement": "Co-Co",
     "thumbs": [
@@ -420,5 +62,424 @@
       "123"
     ],
     "status": true
+  },
+  {
+    "title": "111ssss",
+    "description": "122222",
+    "code": "ssadasdasd",
+    "price": "324343",
+    "stock": "21",
+    "category": "22",
+    "status": "on",
+    "pid": "c73d1121-975c-4db8-9618-f7db619eeda1"
+  },
+  {
+    "title": "Starlight Express",
+    "handle": "Electric",
+    "imageURL": "../img/starlight_express.png",
+    "description": "High-speed electric passenger train. Features illuminated windows and advanced braking system.",
+    "stock": 12,
+    "code": 5,
+    "pid": "c73d1121-975c-4db8-9618-f7db619eeda1",
+    "price": 265,
+    "category": "passenger",
+    "pieces": 732,
+    "active": true,
+    "lighting": true,
+    "wheelArrangement": "2-Co-Co-2",
+    "thumbs": [
+      "xyz",
+      "acdf",
+      "asd",
+      "qw"
+    ]
+  },
+  {
+    "title": "Iron Beast",
+    "handle": "Diesel-electric",
+    "imageURL": "../img/iron_beast.png",
+    "description": "Heavy-duty diesel-electric locomotive for industrial applications. Equipped with reinforced steel plating.",
+    "stock": 7,
+    "code": 8,
+    "pid": "f8b9e3de-bf33-4fd0-b0be-ec27a388e7a9",
+    "price": 375,
+    "category": "freight",
+    "pieces": 1040,
+    "active": true,
+    "lighting": false,
+    "wheelArrangement": "Co-Co",
+    "thumbs": [
+      "lmn",
+      "opq",
+      "rst",
+      "xyz"
+    ]
+  },
+  {
+    "title": "Rapid Rocket",
+    "handle": "Electric",
+    "imageURL": "../img/rapid_rocket.png",
+    "description": "High-speed electric train for cross-country travel. Features aerodynamic design and advanced communication systems.",
+    "stock": 20,
+    "code": 12,
+    "pid": "62de7c13-15c4-426d-bb99-345c30b80cc6",
+    "price": 489,
+    "category": "passenger",
+    "pieces": 920,
+    "active": true,
+    "lighting": true,
+    "wheelArrangement": "Bo-Bo",
+    "thumbs": [
+      "abcf",
+      "ghij",
+      "klmn",
+      "xyz"
+    ]
+  },
+  {
+    "title": "Lumberjack",
+    "handle": "Steam",
+    "imageURL": "../img/lumberjack.png",
+    "description": "Vintage steam locomotive used for hauling logs. Features realistic sound effects and smoke stack.",
+    "stock": 5,
+    "code": 9,
+    "pid": "36f8cfe7-850e-4195-81c3-15f0c2f3b220",
+    "price": 210,
+    "category": "special",
+    "pieces": 450,
+    "active": true,
+    "lighting": false,
+    "wheelArrangement": "2-8-2",
+    "thumbs": [
+      "ijk",
+      "efg",
+      "hij",
+      "123"
+    ]
+  },
+  {
+    "title": "Night Hawk",
+    "handle": "Electric",
+    "imageURL": "../img/night_hawk.png",
+    "description": "Electric train designed for night-time operations. Features bright headlights and internal cabin lighting.",
+    "stock": 8,
+    "code": 15,
+    "pid": "92f45f27-9cd1-41e5-95ad-2f703db84621",
+    "price": 315,
+    "category": "passenger",
+    "pieces": 600,
+    "active": true,
+    "lighting": true,
+    "wheelArrangement": "Co-Co",
+    "thumbs": [
+      "abc",
+      "def",
+      "ghi",
+      "jkl"
+    ]
+  },
+  {
+    "title": "Steel Runner",
+    "handle": "Diesel",
+    "imageURL": "../img/steel_runner.png",
+    "description": "Powerful diesel locomotive. Built for endurance with a sleek, modern design.",
+    "stock": 3,
+    "code": 6,
+    "pid": "b04fe953-c59d-40c5-9184-cf3b217b9a11",
+    "price": 410,
+    "category": "freight",
+    "pieces": 870,
+    "active": true,
+    "lighting": false,
+    "wheelArrangement": "6-axle",
+    "thumbs": [
+      "rst",
+      "uvw",
+      "xyz",
+      "abc"
+    ]
+  },
+  {
+    "title": "Mountain Climber",
+    "handle": "Steam",
+    "imageURL": "../img/mountain_climber.png",
+    "description": "Heavy-duty steam locomotive designed for mountain routes. Features enhanced traction and rugged build.",
+    "stock": 10,
+    "code": 7,
+    "pid": "af2d3a66-b07e-4b87-bd7b-8c55ad02215f",
+    "price": 520,
+    "category": "special",
+    "pieces": 1030,
+    "active": true,
+    "lighting": false,
+    "wheelArrangement": "4-8-4",
+    "thumbs": [
+      "aaa",
+      "bbb",
+      "ccc",
+      "ddd"
+    ]
+  },
+  {
+    "title": "Skyline Express",
+    "handle": "Electric",
+    "imageURL": "../img/skyline_express.png",
+    "description": "Electric high-speed train designed for urban transportation. Features luxury seating and panoramic windows.",
+    "stock": 15,
+    "code": 13,
+    "pid": "e2c7d697-dde7-4c52-b8c5-25b625d24ac6",
+    "price": 575,
+    "category": "passenger",
+    "pieces": 1045,
+    "active": true,
+    "lighting": true,
+    "wheelArrangement": "2-Bo-Bo-2",
+    "thumbs": [
+      "efg",
+      "hij",
+      "klm",
+      "opq"
+    ]
+  },
+  {
+    "title": "Sunset Rider",
+    "handle": "Diesel-electric",
+    "imageURL": "../img/sunset_rider.png",
+    "description": "Diesel-electric hybrid passenger train. Features luxury cabins with ambient lighting for a comfortable ride.",
+    "stock": 6,
+    "code": 10,
+    "pid": "d97ea836-6fef-4e68-bb5b-d694ca7b9d92",
+    "price": 495,
+    "category": "passenger",
+    "pieces": 600,
+    "active": true,
+    "lighting": true,
+    "wheelArrangement": "Co-Co",
+    "thumbs": [
+      "wxyz",
+      "abc",
+      "def",
+      "ghij"
+    ]
+  },
+  {
+    "title": "Thunderbolt",
+    "handle": "Electric",
+    "imageURL": "../img/thunderbolt.png",
+    "description": "Electric train designed for high-speed operations. Features reinforced body and modern aerodynamic design.",
+    "stock": 25,
+    "code": 14,
+    "pid": "ab5b6cd7-256b-47c6-8051-d92a6ae6189f",
+    "price": 430,
+    "category": "passenger",
+    "pieces": 950,
+    "active": true,
+    "lighting": true,
+    "wheelArrangement": "Bo-Bo",
+    "thumbs": [
+      "abcd",
+      "efgh",
+      "ijkl",
+      "mnop"
+    ]
+  },
+  {
+    "title": "Phoenix Flame",
+    "handle": "Steam",
+    "imageURL": "../img/phoenix_flame.png",
+    "description": "Vintage steam locomotive, perfect for historical train enthusiasts. Features firebox heating and smoke stack.",
+    "stock": 4,
+    "code": 16,
+    "pid": "8f8c8b7f-735e-40d0-8be7-b9460e47dfc8",
+    "price": 290,
+    "category": "special",
+    "pieces": 650,
+    "active": true,
+    "lighting": false,
+    "wheelArrangement": "2-6-0",
+    "thumbs": [
+      "123",
+      "abc",
+      "xyz",
+      "def"
+    ]
+  },
+  {
+    "title": "Silver Bullet",
+    "handle": "Electric",
+    "imageURL": "../img/silver_bullet.png",
+    "description": "Sleek, high-speed electric train built for intercity travel. Equipped with luxurious seats and climate control.",
+    "stock": 11,
+    "code": 17,
+    "pid": "52b6b658-07ed-4b2a-83b7-b5a9b6017c24",
+    "price": 620,
+    "category": "passenger",
+    "pieces": 1240,
+    "active": true,
+    "lighting": true,
+    "wheelArrangement": "Bo-Bo",
+    "thumbs": [
+      "asd",
+      "fgh",
+      "jkl",
+      "mno"
+    ]
+  },
+  {
+    "title": "Magma Express",
+    "handle": "Diesel",
+    "imageURL": "../img/magma_express.png",
+    "description": "Powerful diesel locomotive for hauling cargo on tough routes. Features reinforced frame and low fuel consumption.",
+    "stock": 3,
+    "code": 18,
+    "pid": "c0d33c8f-14c9-49d0-b3ca-800ab265b939",
+    "price": 490,
+    "category": "freight",
+    "pieces": 850,
+    "active": true,
+    "lighting": false,
+    "wheelArrangement": "Co-Co",
+    "thumbs": [
+      "zxc",
+      "vbn",
+      "asd",
+      "qwe"
+    ]
+  },
+  {
+    "title": "Shadow Rider",
+    "handle": "Electric",
+    "imageURL": "../img/shadow_rider.png",
+    "description": "An electric train designed for stealth operations with dark-colored exteriors and low-noise systems.",
+    "stock": 6,
+    "code": 19,
+    "pid": "41ecf0d4-e029-45ef-8b5f-e66b7b8b3814",
+    "price": 575,
+    "category": "passenger",
+    "pieces": 1080,
+    "active": true,
+    "lighting": true,
+    "wheelArrangement": "2-Co-Co-2",
+    "thumbs": [
+      "poiu",
+      "lkjh",
+      "mnbv",
+      "asdf"
+    ]
+  },
+  {
+    "title": "Forest Guard",
+    "handle": "Diesel-electric",
+    "imageURL": "../img/forest_guard.png",
+    "description": "Diesel-electric hybrid locomotive designed for forest maintenance. Equipped with extended range fuel tanks.",
+    "stock": 4,
+    "code": 20,
+    "pid": "79d4628d-d1fa-4871-9e3d-b933b46b76e0",
+    "price": 460,
+    "category": "freight",
+    "pieces": 780,
+    "active": true,
+    "lighting": true,
+    "wheelArrangement": "Bo-Bo",
+    "thumbs": [
+      "zxcv",
+      "lkj",
+      "rtyu",
+      "vbnm"
+    ]
+  },
+  {
+    "title": "Blue Horizon",
+    "handle": "Electric",
+    "imageURL": "../img/blue_horizon.png",
+    "description": "Electric high-speed train designed for luxury intercity travel. Features spacious cabins and high-end amenities.",
+    "stock": 8,
+    "code": 21,
+    "pid": "5d7e9f29-cf7b-487f-b8a3-e15fd8857a67",
+    "price": 680,
+    "category": "passenger",
+    "pieces": 1420,
+    "active": true,
+    "lighting": true,
+    "wheelArrangement": "Co-Co",
+    "thumbs": [
+      "bgh",
+      "fhj",
+      "iol",
+      "mnk"
+    ]
+  },
+  {
+    "title": "Thunderstrike",
+    "handle": "Electric",
+    "imageURL": "../img/thunderstrike.png",
+    "description": "A high-power electric locomotive designed for both passenger and freight services.",
+    "stock": 10,
+    "code": 22,
+    "pid": "f9864891-55f1-47a7-bf58-c63a9bc9b759",
+    "price": 520,
+    "category": "passenger",
+    "pieces": 1120,
+    "active": true,
+    "lighting": true,
+    "wheelArrangement": "Bo-Bo",
+    "thumbs": [
+      "qwert",
+      "zxcv",
+      "asdf",
+      "ghj"
+    ]
+  },
+  {
+    "title": "Desert Phantom",
+    "handle": "Diesel",
+    "imageURL": "../img/desert_phantom.png",
+    "description": "Diesel locomotive designed for desert landscapes, with extreme temperature tolerance and sand filtration systems.",
+    "stock": 3,
+    "code": 23,
+    "pid": "d80d12c8-84e4-4c35-8b3d-7ec212784dbe",
+    "price": 450,
+    "category": "freight",
+    "pieces": 900,
+    "active": true,
+    "lighting": false,
+    "wheelArrangement": "2-8-2",
+    "thumbs": [
+      "abcd",
+      "efgh",
+      "ijkl",
+      "mnop"
+    ]
+  },
+  {
+    "title": "Eagle Eye",
+    "handle": "Electric",
+    "imageURL": "../img/eagle_eye.png",
+    "description": "Electric train with advanced AI technology for automated operation in high-density networks.",
+    "stock": 12,
+    "code": 24,
+    "pid": "503e2122-51c1-4093-9537-2838e5b63116",
+    "price": 550,
+    "category": "passenger",
+    "pieces": 1020,
+    "active": true,
+    "lighting": true,
+    "wheelArrangement": "Co-Co",
+    "thumbs": [
+      "vfrt",
+      "ghy",
+      "ujm",
+      "zxcv"
+    ]
+  },
+  {
+    "title": "12",
+    "description": "32434",
+    "code": "fsddsf",
+    "price": "2342342",
+    "stock": "11",
+    "category": "dfsdfsf",
+    "status": "on",
+    "pid": "ce848a0a-45d8-4eae-820f-12dbcdce6b92"
   }
 ]

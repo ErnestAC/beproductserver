@@ -95,7 +95,7 @@ app.get('/realtimeproducts', async (req, res) => {
 
 // Handle WebSocket connections
 io.on("connection", (socket) => {
-    console.log("Client connected to WebSocket");
+    console.log("Client connected to WebSocket. Session ID:", socket.id);
 
     // Send the initial product list when a new client connects
     socket.emit('updateProducts', productManager.getAllProducts());
