@@ -1,6 +1,7 @@
 
 # BEPRODUCTSERVER
 
+## Entrega I
 Routes
 /api/products/
 
@@ -15,3 +16,10 @@ DELETE /api/products/pid - marca como eliminado o elimina un registro, usa el pa
 POST /api/carts/ - crea un nuevo carrito con un id unico
 GET /api/carts/cid - lista los contenidos del carrito por ID (cid)
 POST /api/carts/cid/product/pid - agrega el producto con el pid pasado o incrementa su cantidad en el carrito con cid pasado
+
+## Nuevas adiciones - Entrega II
+
+GET / vista estatica de todo el inventario (home.handlebars)
+GET /realtimeproducts vista dinamica de todo el contenido del inventario usando websockets (realTimeProducts.handlebars)
+GET /add-product, interfaz simple para agregar productos (addProduct.hadnlebars) - Usa los endpoints que ya creamos en la entrega enterior
+GET /delete-product, interfaz simple para eliminar productos por ID. (deleteProducts.handlebars) - Usa los endpoints que ya creamos en la entrega enterior

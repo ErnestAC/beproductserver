@@ -11,7 +11,7 @@
         const socket = io();
 
         socket.on('updateProducts', (products) => {
-            console.log("Received updated products:", products);  // Debugging log
+            
             const productList = document.getElementById('productList');
             productList.innerHTML = products.map(product => `
                 <div class="other-bar">
@@ -31,7 +31,7 @@
 <body>
     <h2 class="title section">Real Time Product List</h2>
     <ul class="section" id="productList">
-        <!-- Handlebars will render this part initially from the server -->
+        
         {{#each products}}
             <div class="other-bar">
                 <li class="card-columns">

@@ -491,5 +491,16 @@
     "category": "fgh",
     "status": "true",
     "pid": "41861842-8823-4334-bcb9-cffa7acd27ba"
+  },
+  {
+    "title": "Fake data",
+    "description": "No description yet",
+    "code": "ABC-CDE",
+    "price": "21",
+    "stock": "1",
+    "category": "Dghs",
+    "status": "true",
+    "pid": "a834de86-e96a-4696-a083-1271d5eba992",
+    "active": false
   }
 ]

@@ -12,7 +12,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server); // WebSocket server
 
-// Function to notify all connected users of product updates
+// notify all connected users of product updates
 export const notifyProductChange = async () => {
     try {
         const products = await productManager.getAllProducts(); // Fetch all products reusing fucntion from before
@@ -22,32 +22,31 @@ export const notifyProductChange = async () => {
     }
 };
 
-// Home view route
+// home view route
 import homeRoute from './routes/home.route.js';
 app.use('/', homeRoute);
 
-// Set the correct path for views directory under 'src/views'
+// set the correct path for views directory under 'src/views'
 app.set('views', path.join(__dirname, 'views'));
 
 // Set Handlebars as the view engine
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 
-// Middleware for serving static files
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/static', express.static(path.join(__dirname, 'public')));
 
-// Routes for API
 app.use('/api/products/', ProductsRoute);
 app.use('/api/carts/', CartsRoute);
 
-// : Route for displaying the Add Product form
+
 app.get('/add-product', (req, res) => {
     res.render('addProduct');  
 });
 
-// : Handle the form submission and add the new product
+
 app.post('/add-product', async (req, res) => {
     const product = req.body;
     
@@ -68,7 +67,7 @@ app.post('/add-product', async (req, res) => {
     }
 });
 
-// : Delete Product Page
+// Delete Product Page
 app.get("/delete-product", (req, res) => {
     res.render("deleteProduct");
 });
