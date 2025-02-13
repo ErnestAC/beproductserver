@@ -72,8 +72,12 @@
     "products": [
       {
         "pid": "95112112212112",
-        "quantity": 4
+        "quantity": 5
       }
     ]
+  },
+  {
+    "cid": "29105707-d649-486a-ac14-bff18a33a83d",
+    "products": []
   }
 ]
