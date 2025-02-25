@@ -493,14 +493,23 @@
     "pid": "41861842-8823-4334-bcb9-cffa7acd27ba"
   },
   {
-    "title": "Fake data",
-    "description": "No description yet",
-    "code": "ABC-CDE",
-    "price": "21",
+    "title": "Abc",
+    "description": "DEf",
+    "code": "abc-def",
+    "price": "11",
     "stock": "1",
-    "category": "Dghs",
-    "status": "true",
-    "pid": "a834de86-e96a-4696-a083-1271d5eba992",
-    "active": false
+    "category": "Train",
+    "status": "false",
+    "pid": "3a49d60c-0fb3-4ca2-a26a-83e6659514b1"
+  },
+  {
+    "title": "Abc",
+    "description": "DEf",
+    "code": "abc-def",
+    "price": "11",
+    "stock": "1",
+    "category": "Train",
+    "status": "false",
+    "pid": "01dc4d45-b375-4a0f-b7bf-8340d7c55403"
   }
 ]

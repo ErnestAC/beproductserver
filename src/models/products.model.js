@@ -1,23 +1,25 @@
 import { Schema, model } from "mongoose";
 
-new Schema ({
-    title: sting,
-    handle: string,
-    imageURL: string,
-    description: string,
-    stock: number,
-    code: number,
+const productCollection = "products";
+
+const productSchema = new Schema({
+    title: String,
+    handle: String,
+    imageURL: String,
+    description: String,
+    stock: Number,
+    code: String, // Change to String
     pid: {
         type: String,
-        unque: true
+        unique: true
     },
-    price: number,
-    category: string,
-    pieces: number,
-    active: boolean,
-    lighting: boolean,
-    wheelArrangement: string,
-    thumbs: list,
-})
+    price: Number,
+    category: String,
+    pieces: Number,
+    active: Boolean,
+    lighting: Boolean,
+    wheelArrangement: String,
+    thumbs: [String],
+});
 
 export const ProductModel = model(productCollection, productSchema);

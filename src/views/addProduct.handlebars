@@ -12,29 +12,30 @@
     <form class="content" action="/add-product" method="POST">
         <div class="section">
             <label for="title">Title:</label>
-            <input placeholder="Title" class="is-dark is-small" type="text" id="title" name="title" required><br>
+            <input placeholder="Title" class="input is-dark is-small" type="text" id="title" name="title" required><br><br>
 
             <label for="description">Description:</label>
-            <textarea placeholder="Description" class="is-small" id="description" name="description" required></textarea><br>
+            <textarea placeholder="Description" class="textarea is-small" id="description" name="description" required></textarea><br><br>
 
             <label for="code">Code:</label>
-            <input placeholder="ABC-DEC" class="is-small" type="text" id="code" name="code" required><br>
+            <input placeholder="ABC-DEC" class="input is-small" type="text" id="code" name="code" required><br><br>
 
             <label for="price">Price:</label>
-            <input placeholder="Price" class="is-small is-dark" type="number" id="price" name="price" required><br>
+            <input placeholder="Price" class="input is-small is-dark" type="number" id="price" name="price" min="0" required><br><br>
 
-            <label for="stock">Current stock:</label>
-            <input placeholder="Stock" class="is-small" type="number" id="stock" name="stock" required><br>
+            <label for="stock">Current Stock:</label>
+            <input placeholder="Stock" class="input is-small" type="number" id="stock" name="stock" min="0" required><br><br>
 
             <label for="category">Category:</label>
-            <input placeholder="Category" class="is-small" type="text" id="category" name="category" required><br>
+            <input placeholder="Category" class="input is-small" type="text" id="category" name="category" required><br><br>
 
-            <!-- Hidden status input field, always set to true -->
-            <input type="hidden" name="status" value="true">
+            <label for="status">Status:</label>
+            <select class="input is-small" id="status" name="status" required>
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+            </select><br><br>
 
-            <br>
-
-            <button class="button is-small" type="submit">Add Product</button>
+            <button class="button is-primary is-small" type="submit">Add Product</button>
         </div>
     </form>
 </body>
