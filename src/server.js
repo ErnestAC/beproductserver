@@ -147,7 +147,7 @@ app.get('/realtimecarts', async (req, res) => {
     res.render('realTimeCarts', { carts });
 });
 
-connectDB();
+
 
 const PORT = 8080;
 server.listen(PORT, () => {
