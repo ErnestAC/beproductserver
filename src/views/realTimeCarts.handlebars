@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <title>Real-Time Carts</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('updateCarts', (carts) => {
+            const cartList = document.getElementById('cartList');
+            cartList.innerHTML = carts.map(cart => `
+                <div class="box">
+                    <h4 class="title is-4">Cart ID: ${cart.cid}</h4>
+                    <ul>
+                        ${cart.products.map(product => `
+                            <li>
+                                <strong>PID:</strong> ${product.pid} - 
+                                <strong>Quantity:</strong> ${product.quantity}
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            `).join('');
+        });
+    </script>
+</head>
+<body>
+    <h2 class="title section">Real-Time Cart List</h2>
+    <div class="section" id="cartList">
+        {{#each carts}}
+            <div class="box">
+                <h4 class="title is-4">Cart ID: {{this.cid}}</h4>
+                <ul>
+                    {{#each this.products}}
+                        <li>
+                            <strong>PID:</strong> {{this.pid}} - 
+                            <strong>Quantity:</strong> {{this.quantity}}
+                        </li>
+                    {{/each}}
+                </ul>
+            </div>
+        {{/each}}
+    </div>
+</body>
+</html>

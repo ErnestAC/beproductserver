@@ -8,7 +8,8 @@ import { __dirname } from './utils.js';
 import ProductsRoute from './routes/products.route.js';
 import CartsRoute from './routes/carts.route.js';
 import homeRoute from './routes/home.route.js';
-import { productManager } from './managers/product.managers.js';
+import { productManager } from './managers/product.manager.js';
+import { cartManager } from './managers/cart.manager.js';
 import { connectDB } from './helpers/mongo.helpers.js';
 
 const app = express();
@@ -23,6 +24,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 
+// Notify product change to all clients
 export const notifyProductChange = async () => {
     try {
         const products = await productManager.getAllProducts();
@@ -32,9 +34,21 @@ export const notifyProductChange = async () => {
     }
 };
 
+// Notify cart change to all clients
+export const notifyCartChange = async () => {
+    try {
+        const carts = await cartManager.getAllCarts();
+        io.emit('updateCarts', carts);
+    } catch (err) {
+        console.error('Error notifying cart change:', err);
+    }
+};
+
+// Socket.io connection handling
 io.on("connection", async (socket) => {
     console.log("Client connected:", socket.id);
 
+    // Send current products on connection
     try {
         const products = await productManager.getAllProducts();
         socket.emit('updateProducts', products);
@@ -42,6 +56,15 @@ io.on("connection", async (socket) => {
         console.error('Error sending product list:', err);
     }
 
+    // Send current carts on connection
+    try {
+        const carts = await cartManager.getAllCarts();
+        socket.emit('updateCarts', carts);
+    } catch (err) {
+        console.error('Error sending cart list:', err);
+    }
+
+    // Handle product requests
     socket.on("requestProducts", async () => {
         try {
             const products = await productManager.getAllProducts();
@@ -50,8 +73,23 @@ io.on("connection", async (socket) => {
             console.error('Error fetching products:', err);
         }
     });
+
+    // Handle cart requests
+    socket.on("requestCarts", async () => {
+        try {
+            const carts = await cartManager.getAllCarts();
+            socket.emit("updateCarts", carts);
+        } catch (err) {
+            console.error('Error fetching carts:', err);
+        }
+    });
+
+    socket.on("disconnect", () => {
+        console.log("Client disconnected:", socket.id);
+    });
 });
 
+// Routes
 app.use('/', homeRoute);
 app.use('/api/products', ProductsRoute);
 app.use('/api/carts', CartsRoute);
@@ -101,6 +139,12 @@ app.post('/delete-product/:pid', async (req, res) => {
 app.get('/realtimeproducts', async (req, res) => {
     const products = await productManager.getAllProducts();
     res.render('realTimeProducts', { products });
+});
+
+// New route for real-time carts
+app.get('/realtimecarts', async (req, res) => {
+    const carts = await cartManager.getAllCarts();
+    res.render('realTimeCarts', { carts });
 });
 
 connectDB();

@@ -2,7 +2,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { notifyProductChange } from "../server.js";
 import { connectDB } from "../helpers/mongo.helpers.js";
-import { ProductModel } from "../models/products.model.js";
+import { ProductModel } from "../models/product.model.js";
 
 export class ProductManager {
     constructor() {

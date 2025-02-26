@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { productManager } from "../managers/product.managers.js";
+import { productManager } from "../managers/product.manager.js";
 import { notifyProductChange } from "../server.js"; // Import notify function
 
 const router = Router();

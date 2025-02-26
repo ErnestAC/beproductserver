@@ -1,8 +1,10 @@
 import { Router } from "express";
-import {CartManager} from '../managers/cart.managers.js'
+import {CartManager} from '../managers/cart.manager.js'
 
 const cartManager = new CartManager();
 const route = Router();
+
+
 
 route.get("/:cid", async (req, res) => {
     let result = "";
@@ -27,6 +29,11 @@ route.post("/", async (req, res) => {
     const result = await cartManager.addCart()
     res.json(result);
 })
+
+route.get('/realtimecarts', async (req, res) => {
+    const carts = await CartManager.getAllCarts();
+    res.render('realTimeCarts', { carts });
+});
 
 export default route;
 
