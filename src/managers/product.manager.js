@@ -2,6 +2,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { connectDB } from "../helpers/mongo.helpers.js";
 import { ProductModel } from "../models/product.model.js";
+import { notifyProductChange } from "../server.js";
 
 export class ProductManager {
     async initialize() {
@@ -26,6 +27,8 @@ export class ProductManager {
             const product = new ProductModel(newProduct);
             await product.save();
             console.log(`Products: Product with PID ${newProduct.pid} added successfully!`);
+            console.log("Product added, notifying clients");
+            notifyProductChange();
             return product.toObject();
         } catch (err) {
             console.error("Error saving product:", err);
@@ -72,6 +75,8 @@ export class ProductManager {
 
             if (updatedProduct) {
                 console.log(`Updated product PID ${pid}.`);
+                console.log("Product updated, notifying clients");
+                notifyProductChange();
                 return updatedProduct;
             } else {
                 console.log(`Nothing found for PID #${pid} or no changes made.`);
@@ -90,6 +95,8 @@ export class ProductManager {
 
                 if (deleteResult.deletedCount > 0) {
                     console.log(`Permanently deleted product PID ${pid}.`);
+                    console.log("Product deleted, notifying clients");
+                    notifyProductChange();
                     return true;
                 } else {
                     console.log(`PID #${pid} not found. Nothing deleted.`);
@@ -104,6 +111,8 @@ export class ProductManager {
 
                 if (updateResult) {
                     console.log(`Soft deleted product PID ${pid}.`);
+                    console.log("Product deleted, notifying clients");
+                    notifyProductChange();
                     return true;
                 } else {
                     console.log(`PID #${pid} not found. Nothing deleted.`);

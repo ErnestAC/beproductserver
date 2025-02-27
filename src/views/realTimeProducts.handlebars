@@ -11,7 +11,6 @@
         const socket = io();
 
         socket.on('updateProducts', (products) => {
-            
             const productList = document.getElementById('productList');
             productList.innerHTML = products.map(product => `
                 <div class="other-bar">
@@ -32,18 +31,6 @@
     <h2 class="title section">Real Time Product List</h2>
     <ul class="section" id="productList">
         
-        {{#each products}}
-            <div class="other-bar">
-                <li class="card-columns">
-                        <h4 class="card section"><strong>PID:</strong> {{this.pid}}</h4>
-                        <strong>{{this.title}} - ${{this.price}}</strong>
-                        <p><strong>Stock:</strong> {{this.stock}}</p>
-                        <p><strong>Motorizable:</strong> {{#if this.motorizable}} Yes {{else}} No {{/if}}</p>
-                        <p><strong>Lighting:</strong> {{#if this.lighting}} Yes {{else}} No {{/if}}</p>
-                        <hr>
-                </li>
-            </div>
-        {{/each}}
     </ul>
 </body>
 </html>

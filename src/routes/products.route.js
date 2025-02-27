@@ -5,6 +5,22 @@ import { notifyProductChange } from "../server.js";
 
 const router = Router();
 
+// POST route to add a new product
+router.post('/', async (req, res) => {
+    try {
+        const product = await productManager.addProduct(req.body);
+        if (product) {
+            notifyProductChange();
+            res.status(201).json({ result: product });
+        } else {
+            res.status(400).json({ message: "Invalid product data" });
+        }
+    } catch (err) {
+        console.error("Error adding product:", err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 // GET all products with limit
 router.get('/', async (req, res) => {
     const { limit } = req.query;

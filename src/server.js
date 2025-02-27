@@ -30,7 +30,9 @@ app.set('view engine', 'handlebars');
 export const notifyProductChange = async () => {
     try {
         const products = await productManager.getAllProducts();
+        console.log("Emitting updateProducts event with products:", products);
         io.emit('updateProducts', products);
+        console.log("updateProducts event emitted."); // Add this line
     } catch (err) {
         console.error('Error notifying product change:', err);
     }
