@@ -12,30 +12,44 @@
 
         socket.on('updateProducts', (products) => {
             const productList = document.getElementById('productList');
-            productList.innerHTML = products.map(product => `
-                <div class="other-bar">
-                    <li class="box">
-                        <div class="section">
-                            <div class="make-it-semi-back make-it-rounded card-title-container ">
-                                <strong>PID:</strong> ${product.pid}
-                            </div>
-                            <div class="section">
-                                <strong>${product.title} - ${product.price}</strong>
-                                <p><strong>Stock:</strong> ${product.stock}</p>
-                                <p><strong>Motorizable:</strong> ${product.motorizable ? "Yes" : "No"}</p>
-                                <div><strong>Lighting:</strong> ${product.lighting ? "Yes" : "No"}</div>
-                            </div>
-                        </div>
-                    </li>
-                </div>
-            `).join('');
+            const productCount = document.getElementById('productCount');
+
+            productList.innerHTML = `
+                <table class="table is-striped is-hoverable is-fullwidth make-it-rounded-top make-it-semi-back">
+                    <thead>
+                        <tr>
+                            <th>PID</th>
+                            <th>Title</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Motorizable</th>
+                            <th>Lighting</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${products.map(product => `
+                            <tr>
+                                <td>${product.pid}</td>
+                                <td>${product.title}</td>
+                                <td>${product.price}</td>
+                                <td>${product.stock}</td>
+                                <td>${product.motorizable ? "Yes" : "No"}</td>
+                                <td>${product.lighting ? "Yes" : "No"}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+
+            productCount.textContent = `Total Products: ${products.length}`;
         });
     </script>
 </head>
 <body>
-    <h2 class="subtitle section make-it-white">Real Time Product List</h2>
-    <ul class="section" id="productList">
-        
-    </ul>
+    <div class="subtitle section make-it-white">Real Time Product List</div>
+    <section class="section">
+        <div class="content make-it-dark make-it-rounded-top make-it-semi-back general-page-footer" id="productCount" class="subtitle"></div>
+        <div id="productList"></div>
+    </section>
 </body>
 </html>

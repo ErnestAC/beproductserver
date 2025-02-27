@@ -1,4 +1,3 @@
-// cart.route.js
 import { Router } from "express";
 import { cartManager } from "../managers/cart.manager.js";
 import { notifyCartChange } from "../server.js";
@@ -41,7 +40,7 @@ router.post('/', async (req, res) => {
 });
 
 // POST add product to cart
-router.post('/:cid/products/:pid', async (req, res) => {
+router.post('/:cid/product/:pid', async (req, res) => {
     const { cid, pid } = req.params;
     try {
         const updatedCart = await cartManager.addProductToCart(cid, pid);

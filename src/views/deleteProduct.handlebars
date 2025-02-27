@@ -1,23 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <title>Delete Product</title>
     <meta name="color-scheme" content="dark">
-
 </head>
 <body>
-    <h2 class="title section">Delete a Product</h2>
+    <h2 class="subtitle section make-it-white">Delete a Product</h2>
 
     <form class="section" id="deleteForm">
-        <label for="pid">Product ID:</label>
+        <label class="make-it-white" for="pid">Product ID:</label>
         <input type="text" id="pid" name="pid" required>
 
-        <label for="killFlag">
+        <label for="killFlag" class="make-it-white">
             <input type="checkbox" id="killFlag" name="killFlag">
             Hard delete (cannot be undone)
         </label>
@@ -28,7 +25,7 @@
         <button class="button is-small" type="submit">Delete Product</button>
     </form>
 
-    <p id="resultMessage"></p>
+    <p id="resultMessage">{{resultMessage}}</p>
 
     <script>
         document.getElementById("deleteForm").addEventListener("submit", async function(event) {
@@ -57,7 +54,7 @@
         });
     </script>
 
-    <div class="section">
+    <div class="section make-it-semi-back is-small">
         <a href="/">View Products - Static</a> 
         <b>|</b>
         <a href="/realtimeproducts">View Products - Real-time</a>

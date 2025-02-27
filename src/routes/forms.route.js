@@ -1,4 +1,3 @@
-// forms.route.js
 import { Router } from "express";
 import { productManager } from "../managers/product.manager.js";
 import { notifyProductChange } from "../server.js";

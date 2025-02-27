@@ -1,4 +1,3 @@
-// server.js
 import express from 'express';
 import { engine } from 'express-handlebars';
 import { Server } from 'socket.io';
@@ -13,6 +12,7 @@ import FormsRoute from './routes/forms.route.js';
 import { productManager } from './managers/product.manager.js';
 import { cartManager } from './managers/cart.manager.js';
 import { connectDB } from './helpers/mongo.helpers.js';
+import Handlebars from 'handlebars';
 
 const app = express();
 const server = http.createServer(app);
@@ -26,13 +26,18 @@ app.set('views', path.join(__dirname, 'views'));
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 
+// Register the eq helper to handle equality comparison in Handlebars
+Handlebars.registerHelper('eq', function (a, b) {
+  return a === b;
+});
+
 // Notify product change to all clients
 export const notifyProductChange = async () => {
     try {
         const products = await productManager.getAllProducts();
         console.log("Emitting updateProducts event with products:", products);
         io.emit('updateProducts', products);
-        console.log("updateProducts event emitted."); // Add this line
+        console.log("updateProducts event emitted.");
     } catch (err) {
         console.error('Error notifying product change:', err);
     }
@@ -125,4 +130,5 @@ app.get('/realtimecarts', async (req, res) => {
 const PORT = 8080;
 server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+    console.log(`http://localhost:${PORT}`);
 });

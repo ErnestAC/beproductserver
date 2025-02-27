@@ -9,29 +9,66 @@
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-    <h2 class="subtitle section make-it-white">Product List - Static view</h2>
-    <ul class="section" id="productList">
-        {{#if products.length}}
-            {{#each products}}
-                <div class="other-bar">
-                    <li class="box">
-                        <div class="section">
-                            <div class="make-it-semi-back make-it-rounded card-title-container">
-                                <strong>PID:</strong> {{this.pid}}
-                            </div>
-                            <div class="section">
-                                <strong>{{this.title}} - ${{this.price}}</strong>
-                                <p><strong>Stock:</strong> {{this.stock}}</p>
-                                <p><strong>Motorizable:</strong> {{#if this.motorizable}} Yes {{else}} No {{/if}}</p>
-                                <div><strong>Lighting:</strong> {{#if this.lighting}} Yes {{else}} No {{/if}}</div>
+    <h2 class="subtitle section make-it-left make-it-white-back make-it-dark">Product List - Static view</h2>
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline is-centered">
+                {{#if products.length}}
+                    {{#each products}}
+                        <div class="column is-12-mobile is-4-desktop">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="content">
+                                        <strong>PID:</strong> {{this.pid}}
+                                    </div>
+                                    <div class="content">
+                                        <strong>{{this.title}} - ${{this.price}}</strong>
+                                        <p><strong>Stock:</strong> {{this.stock}}</p>
+                                        <p><strong>Motorizable:</strong> {{#if this.motorizable}} Yes {{else}} No {{/if}}</p>
+                                        <p><strong>Lighting:</strong> {{#if this.lighting}} Yes {{else}} No {{/if}}</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </li>
+                    {{/each}}
+                {{else}}
+                    <p class="has-text-centered">No products available.</p>
+                {{/if}}
+            </div>
+            <div class="pagination is-centered" role="navigation" aria-label="pagination">
+                <a class="pagination-previous" href="?page={{previousPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" {{#if isFirstPage}}disabled{{/if}}>Previous</a>
+                <a class="pagination-next" href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" {{#if isLastPage}}disabled{{/if}}>Next</a>
+                <ul class="pagination-list">
+                    {{#each pages}}
+                        <li>
+                            <a class="pagination-link" href="?page={{this}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" {{#if (eq this @root.page)}}aria-current="page"{{/if}}>{{this}}</a>
+                        </li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="field is-grouped is-grouped-centered">
+                <div class="control">
+                    <label class="label make-it-white">Sort By</label>
+                    <div class="select">
+                        <select id="sortSelect" onchange="location = this.value;">
+                            <option value="?page=1&limit={{limit}}&sort=title&sortOrder={{sortOrder}}" {{#if (eq sort 'title')}}selected{{/if}}>Title</option>
+                            <option value="?page=1&limit={{limit}}&sort=price&sortOrder={{sortOrder}}" {{#if (eq sort 'price')}}selected{{/if}}>Price</option>
+                            <option value="?page=1&limit={{limit}}&sort=stock&sortOrder={{sortOrder}}" {{#if (eq sort 'stock')}}selected{{/if}}>Stock</option>
+                        </select>
+                    </div>
                 </div>
-            {{/each}}
-        {{else}}
-            <p>No products available.</p>
-        {{/if}}
-    </ul>
+                <div class="control">
+                    <label class="label make-it-white">Items Per Page</label>
+                    <div class="select">
+                        <select id="limitSelect" onchange="location = this.value;">
+                            <option value="?page=1&limit=10&sort={{sort}}&sortOrder={{sortOrder}}" {{#if (eq limit '10')}}selected{{/if}}>10</option>
+                            <option value="?page=1&limit=20&sort={{sort}}&sortOrder={{sortOrder}}" {{#if (eq limit '20')}}selected{{/if}}>20</option>
+                            <option value="?page=1&limit=30&sort={{sort}}&sortOrder={{sortOrder}}" {{#if (eq limit '30')}}selected{{/if}}>30</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </body>
 </html>

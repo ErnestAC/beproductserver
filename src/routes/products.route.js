@@ -1,11 +1,9 @@
-// products.route.js
 import { Router } from "express";
 import { productManager } from "../managers/product.manager.js";
 import { notifyProductChange } from "../server.js";
 
 const router = Router();
 
-// POST route to add a new product
 router.post('/', async (req, res) => {
     try {
         const product = await productManager.addProduct(req.body);
@@ -21,18 +19,29 @@ router.post('/', async (req, res) => {
     }
 });
 
-// GET all products with limit
 router.get('/', async (req, res) => {
-    const { limit } = req.query;
+    const { limit = 10, page = 1, sort = 'title', sortOrder = 'asc' } = req.query;
+    const skip = (page - 1) * limit;
+
     try {
-        const listOfProducts = await productManager.getAllProducts(limit);
-        res.json({ result: listOfProducts });
+        const sortDirection = sortOrder === 'desc' ? -1 : 1;
+
+        // Fetch products from the database and send them to the Handlebars template
+        const listOfProducts = await productManager.getAllProducts({
+            limit: Number(limit),
+            skip: Number(skip),
+            sort: sort,
+            sortDirection: sortDirection
+        });
+
+        // Render the products in Handlebars template
+        res.render('products', { products: listOfProducts });
     } catch (err) {
+        console.error("Error fetching products:", err);
         res.status(500).json({ error: 'Server error' });
     }
 });
 
-// GET single product by pid
 router.get('/:pid', async (req, res) => {
     const { pid } = req.params;
     try {
@@ -46,7 +55,6 @@ router.get('/:pid', async (req, res) => {
     }
 });
 
-// PUT to update product by pid
 router.put('/:pid', async (req, res) => {
     const { pid } = req.params;
     const productUpdate = req.body;
@@ -63,7 +71,6 @@ router.put('/:pid', async (req, res) => {
     }
 });
 
-// DELETE product by ID (soft or hard delete)
 router.delete('/:pid', async (req, res) => {
     const { pid } = req.params;
     const { killFlag } = req.body;

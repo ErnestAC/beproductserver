@@ -1,4 +1,3 @@
-// product.manager.js
 import { v4 as uuidv4 } from "uuid";
 import { connectDB } from "../helpers/mongo.helpers.js";
 import { ProductModel } from "../models/product.model.js";
@@ -8,7 +7,6 @@ export class ProductManager {
     async initialize() {
         try {
             await connectDB();
-            console.log("ProductManager: Database connection initialized.");
         } catch (error) {
             console.error("ProductManager: Database connection failed:", error);
             throw error;
@@ -26,8 +24,6 @@ export class ProductManager {
         try {
             const product = new ProductModel(newProduct);
             await product.save();
-            console.log(`Products: Product with PID ${newProduct.pid} added successfully!`);
-            console.log("Product added, notifying clients");
             notifyProductChange();
             return product.toObject();
         } catch (err) {
@@ -36,16 +32,21 @@ export class ProductManager {
         }
     }
 
-    async getAllProducts(limit = null) {
+    async getAllProducts({ limit = 10, skip = 0, sort = 'title', sortDirection = 1 } = {}) {
         try {
-            let query = { active: true };
-            let products = ProductModel.find(query);
+            const query = { active: true };
 
-            if (limit) {
-                products = products.limit(Number(limit));
-            }
+            const sortCriteria = {};
+            sortCriteria[sort] = sortDirection;
 
-            return await products.lean();
+            // Return plain JavaScript objects using .lean()
+            const products = await ProductModel.find(query)
+                .sort(sortCriteria)
+                .skip(skip)
+                .limit(Number(limit))
+                .lean();  // This ensures we get plain objects
+
+            return products;
         } catch (err) {
             console.error("Error fetching products:", err);
             return [];
@@ -54,6 +55,7 @@ export class ProductManager {
 
     async getProductById(pid) {
         try {
+            // .lean() is already in use, returning plain object
             return await ProductModel.findOne({ pid: pid, active: true }).lean();
         } catch (err) {
             console.error("Error fetching product by PID:", err);
@@ -74,12 +76,9 @@ export class ProductManager {
             ).lean();
 
             if (updatedProduct) {
-                console.log(`Updated product PID ${pid}.`);
-                console.log("Product updated, notifying clients");
                 notifyProductChange();
                 return updatedProduct;
             } else {
-                console.log(`Nothing found for PID #${pid} or no changes made.`);
                 return null;
             }
         } catch (err) {
@@ -94,12 +93,9 @@ export class ProductManager {
                 const deleteResult = await ProductModel.deleteOne({ pid: pid });
 
                 if (deleteResult.deletedCount > 0) {
-                    console.log(`Permanently deleted product PID ${pid}.`);
-                    console.log("Product deleted, notifying clients");
                     notifyProductChange();
                     return true;
                 } else {
-                    console.log(`PID #${pid} not found. Nothing deleted.`);
                     return null;
                 }
             } else {
@@ -110,12 +106,9 @@ export class ProductManager {
                 );
 
                 if (updateResult) {
-                    console.log(`Soft deleted product PID ${pid}.`);
-                    console.log("Product deleted, notifying clients");
                     notifyProductChange();
                     return true;
                 } else {
-                    console.log(`PID #${pid} not found. Nothing deleted.`);
                     return null;
                 }
             }

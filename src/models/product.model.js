@@ -20,6 +20,10 @@ const productSchema = new Schema({
     lighting: Boolean,
     wheelArrangement: String,
     thumbs: [String],
-});
+}, { timestamps: true });
+
+// Add indexes for common sorting fields (e.g., price, stock)
+productSchema.index({ price: 1 });
+productSchema.index({ stock: 1 });
 
 export const ProductModel = model(productCollection, productSchema);

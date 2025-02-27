@@ -1,7 +1,7 @@
-// cart.manager.js
 import { v4 as uuidv4 } from "uuid";
 import { Cart } from "../models/cart.model.js";
 import { notifyCartChange } from "../server.js";
+import { productManager } from "../managers/product.manager.js";
 
 export class CartManager {
     // Get all carts
@@ -33,14 +33,24 @@ export class CartManager {
     // Add product to a cart
     async addProductToCart(cid, pid) {
         try {
-            const cart = await Cart.findOne({ cid });
+            // Check if the product exists and has stock
+            const product = await productManager.getProductById(pid);
+            if (!product) {
+                throw Error(`Product with ID ${pid} not found`);
+            }
+            if (product.stock <= 0) {
+                throw Error(`Product with ID ${pid} is out of stock`);
+            }
 
+            // Check if the cart exists
+            const cart = await Cart.findOne({ cid });
             if (!cart) {
                 throw Error(`Cart with ID ${cid} not found`);
             }
 
+            // Check if product is already in the cart
             const productInCart = cart.products.find(
-                (product) => product.pid === pid
+                (item) => item.pid === pid
             );
 
             if (productInCart) {
