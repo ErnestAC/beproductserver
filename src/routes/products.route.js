@@ -4,6 +4,7 @@ import { notifyProductChange } from "../server.js";
 
 const router = Router();
 
+// Add a new product
 router.post('/', async (req, res) => {
     try {
         const product = await productManager.addProduct(req.body);
@@ -19,29 +20,40 @@ router.post('/', async (req, res) => {
     }
 });
 
+// Get products with pagination, filtering, and sorting
 router.get('/', async (req, res) => {
-    const { limit = 10, page = 1, sort = 'title', sortOrder = 'asc' } = req.query;
+    const { limit = 10, page = 1, sort = 'title', sortOrder = 'asc', filterBy = '' } = req.query;
     const skip = (page - 1) * limit;
 
     try {
         const sortDirection = sortOrder === 'desc' ? -1 : 1;
 
-        // Fetch products from the database and send them to the Handlebars template
-        const listOfProducts = await productManager.getAllProducts({
+        // Fetch products with filters and sorting applied
+        let products = await productManager.getAllProducts({
             limit: Number(limit),
             skip: Number(skip),
             sort: sort,
             sortDirection: sortDirection
         });
 
-        // Render the products in Handlebars template
-        res.render('products', { products: listOfProducts });
+        // Apply filtering if a filter is provided
+        if (filterBy) {
+            products = products.filter(product => {
+                return Object.values(product).some(value =>
+                    String(value).toLowerCase().includes(filterBy.toLowerCase())
+                );
+            });
+        }
+
+        // Return products as JSON
+        res.json({ products });
     } catch (err) {
         console.error("Error fetching products:", err);
         res.status(500).json({ error: 'Server error' });
     }
 });
 
+// Get a single product by ID
 router.get('/:pid', async (req, res) => {
     const { pid } = req.params;
     try {
@@ -55,6 +67,7 @@ router.get('/:pid', async (req, res) => {
     }
 });
 
+// Update a product by ID
 router.put('/:pid', async (req, res) => {
     const { pid } = req.params;
     const productUpdate = req.body;
@@ -71,6 +84,7 @@ router.put('/:pid', async (req, res) => {
     }
 });
 
+// Delete a product by ID
 router.delete('/:pid', async (req, res) => {
     const { pid } = req.params;
     const { killFlag } = req.body;
