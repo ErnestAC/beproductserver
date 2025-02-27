@@ -1,14 +1,13 @@
 // products.route.js
 import { Router } from "express";
 import { productManager } from "../managers/product.manager.js";
-import { notifyProductChange } from "../server.js"; // Import notify function
+import { notifyProductChange } from "../server.js";
 
 const router = Router();
 
 // GET all products with limit
 router.get('/', async (req, res) => {
     const { limit } = req.query;
-
     try {
         const listOfProducts = await productManager.getAllProducts(limit);
         res.json({ result: listOfProducts });
@@ -20,7 +19,6 @@ router.get('/', async (req, res) => {
 // GET single product by pid
 router.get('/:pid', async (req, res) => {
     const { pid } = req.params;
-
     try {
         const selectedProduct = await productManager.getProductById(pid);
         if (!selectedProduct) {
@@ -32,33 +30,10 @@ router.get('/:pid', async (req, res) => {
     }
 });
 
-// Render the Add Product form (for Handlebars)
-router.get('/add-product', (req, res) => {
-    res.render('addProduct');
-});
-
-// Handle form submission and add a new product
-router.post('/add-product', async (req, res) => {
-    const product = req.body;
-
-    try {
-        const result = await productManager.addProduct(product);
-        if (result) {
-            notifyProductChange();
-            res.redirect('/api/products');
-        } else {
-            res.status(500).json({ message: "Error adding product" });
-        }
-    } catch (error) {
-        res.status(500).json({ message: `Server error ${error}` });
-    }
-});
-
 // PUT to update product by pid
 router.put('/:pid', async (req, res) => {
     const { pid } = req.params;
     const productUpdate = req.body;
-
     try {
         const result = await productManager.updateProduct(pid, productUpdate);
         if (result) {
@@ -76,7 +51,6 @@ router.put('/:pid', async (req, res) => {
 router.delete('/:pid', async (req, res) => {
     const { pid } = req.params;
     const { killFlag } = req.body;
-
     try {
         const result = await productManager.deleteProduct(pid, killFlag);
         if (result) {
@@ -87,28 +61,6 @@ router.delete('/:pid', async (req, res) => {
         }
     } catch (err) {
         res.status(500).json({ error: 'Server error' });
-    }
-});
-
-// Render the Delete Product page (for Handlebars)
-router.get('/delete-product', (req, res) => {
-    res.render('deleteProduct');
-});
-
-// Handle form submission to delete a product
-router.post('/delete-product/:pid', async (req, res) => {
-    const { pid } = req.params;
-
-    try {
-        const result = await productManager.deleteProduct(pid);
-        if (result) {
-            notifyProductChange();
-            res.redirect('/api/products');
-        } else {
-            res.status(500).json({ message: "Failed to delete product" });
-        }
-    } catch (error) {
-        res.status(500).json({ message: `Server error ${error}` });
     }
 });
 

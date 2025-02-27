@@ -9,6 +9,7 @@ import { __dirname } from './utils.js';
 import ProductsRoute from './routes/products.route.js';
 import CartsRoute from './routes/carts.route.js';
 import homeRoute from './routes/home.route.js';
+import FormsRoute from './routes/forms.route.js';
 import { productManager } from './managers/product.manager.js';
 import { cartManager } from './managers/cart.manager.js';
 import { connectDB } from './helpers/mongo.helpers.js';
@@ -92,18 +93,31 @@ io.on("connection", async (socket) => {
 
 // Routes
 app.use('/', homeRoute);
+
+// Use the formsRouter
+app.use('/forms', FormsRoute);
+
 app.use('/api/products', ProductsRoute);
 app.use('/api/carts', CartsRoute);
 
 app.get('/realtimeproducts', async (req, res) => {
-    const products = await productManager.getAllProducts();
-    res.render('realTimeProducts', { products });
+    try {
+        const products = await productManager.getAllProducts();
+        res.render('realTimeProducts', { products });
+    } catch (error) {
+        console.error("Error in realtimeproducts:", error);
+        res.status(500).send("Error rendering realtime products");
+    }
 });
 
-// New route for real-time carts
 app.get('/realtimecarts', async (req, res) => {
-    const carts = await cartManager.getAllCarts();
-    res.render('realTimeCarts', { carts });
+    try {
+        const carts = await cartManager.getAllCarts();
+        res.render('realTimeCarts', { carts });
+    } catch (error) {
+        console.error("Error in realtimecarts:", error);
+        res.status(500).send("Error rendering realtime carts");
+    }
 });
 
 const PORT = 8080;

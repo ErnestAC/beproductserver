@@ -4,7 +4,6 @@ import { connectDB } from "../helpers/mongo.helpers.js";
 import { ProductModel } from "../models/product.model.js";
 
 export class ProductManager {
-
     async initialize() {
         try {
             await connectDB();
@@ -17,7 +16,7 @@ export class ProductManager {
 
     async addProduct(newProduct) {
         if (!newProduct.title || !newProduct.description || !newProduct.code || !newProduct.price || !newProduct.stock || !newProduct.category || newProduct.status === undefined) {
-            return null; // handle missing fields within manager
+            return null;
         }
         const opuuid = uuidv4();
         newProduct.pid = opuuid;
@@ -120,7 +119,6 @@ export class ProductManager {
 
 export const productManager = new ProductManager();
 
-
-productManager.initialize().catch(error => {
+productManager.initialize().catch((error) => {
     console.error("ProductManager initialization failed:", error);
 });
