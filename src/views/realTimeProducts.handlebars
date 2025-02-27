@@ -14,13 +14,18 @@
             const productList = document.getElementById('productList');
             productList.innerHTML = products.map(product => `
                 <div class="other-bar">
-                    <li>
-                        <h4 class="card section"><strong>PID:</strong> ${product.pid}</h4>
-                        <strong>${product.title} - ${product.price}</strong>
-                        <p><strong>Stock:</strong> ${product.stock}</p>
-                        <p><strong>Motorizable:</strong> ${product.motorizable ? "Yes" : "No"}</p>
-                        <p><strong>Lighting:</strong> ${product.lighting ? "Yes" : "No"}</p>
-                        <hr>
+                    <li class="box">
+                        <div class="section">
+                            <div class="make-it-semi-back make-it-rounded card-title-container ">
+                                <strong>PID:</strong> ${product.pid}
+                            </div>
+                            <div class="section">
+                                <strong>${product.title} - ${product.price}</strong>
+                                <p><strong>Stock:</strong> ${product.stock}</p>
+                                <p><strong>Motorizable:</strong> ${product.motorizable ? "Yes" : "No"}</p>
+                                <div><strong>Lighting:</strong> ${product.lighting ? "Yes" : "No"}</div>
+                            </div>
+                        </div>
                     </li>
                 </div>
             `).join('');
@@ -28,7 +33,7 @@
     </script>
 </head>
 <body>
-    <h2 class="title section">Real Time Product List</h2>
+    <h2 class="subtitle section make-it-white">Real Time Product List</h2>
     <ul class="section" id="productList">
         
     </ul>

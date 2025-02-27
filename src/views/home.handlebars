@@ -6,28 +6,32 @@
     <title>Product List</title>
     <meta name="color-scheme" content="dark">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-    <h2 class="title section">Product List - Static view</h2>
-    <div class="section" id="productList">
+    <h2 class="subtitle section make-it-white">Product List - Static view</h2>
+    <ul class="section" id="productList">
         {{#if products.length}}
-            <ul >
-                {{#each products}}
-                    <div class="other-bar">
-                        <li class="card-columns">
-                                <h4 class="card section"><strong>PID:</strong> {{this.pid}}</h4>
+            {{#each products}}
+                <div class="other-bar">
+                    <li class="box">
+                        <div class="section">
+                            <div class="make-it-semi-back make-it-rounded card-title-container">
+                                <strong>PID:</strong> {{this.pid}}
+                            </div>
+                            <div class="section">
                                 <strong>{{this.title}} - ${{this.price}}</strong>
                                 <p><strong>Stock:</strong> {{this.stock}}</p>
                                 <p><strong>Motorizable:</strong> {{#if this.motorizable}} Yes {{else}} No {{/if}}</p>
-                                <p><strong>Lighting:</strong> {{#if this.lighting}} Yes {{else}} No {{/if}}</p>
-                                <hr>
-                        </li>
-                    </div>
-                {{/each}}
-            </ul>
+                                <div><strong>Lighting:</strong> {{#if this.lighting}} Yes {{else}} No {{/if}}</div>
+                            </div>
+                        </div>
+                    </li>
+                </div>
+            {{/each}}
         {{else}}
             <p>No products available.</p>
         {{/if}}
-    </div>
+    </ul>
 </body>
 </html>
