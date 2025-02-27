@@ -1,3 +1,4 @@
+// server.js
 import express from 'express';
 import { engine } from 'express-handlebars';
 import { Server } from 'socket.io';
@@ -94,48 +95,6 @@ app.use('/', homeRoute);
 app.use('/api/products', ProductsRoute);
 app.use('/api/carts', CartsRoute);
 
-app.get('/add-product', (req, res) => {
-    res.render('addProduct');  
-});
-
-app.post('/add-product', async (req, res) => {
-    const product = req.body;
-    if (!product.title || !product.description || !product.code || !product.price || !product.stock || !product.category || product.status === undefined) {
-        return res.status(400).json({ message: 'Missing required fields for this operation' });
-    }
-
-    try {
-        const result = await productManager.addProduct(product);
-        if (result) {
-            notifyProductChange();
-            res.redirect('/api/products');  
-        } else {
-            res.status(500).json({ message: "Failed to save product" });
-        }
-    } catch (error) {
-        res.status(500).json({ message: `Server error ${error}` });
-    }
-});
-
-app.get("/delete-product", (req, res) => {
-    res.render("deleteProduct");
-});
-
-app.post('/delete-product/:pid', async (req, res) => {
-    const { pid } = req.params;
-    try {
-        const result = await productManager.deleteProduct(pid);
-        if (result) {
-            notifyProductChange();
-            res.redirect('/api/products');  
-        } else {
-            res.status(500).json({ message: "Failed to delete product" });
-        }
-    } catch (error) {
-        res.status(500).json({ message: `Server error ${error}` });
-    }
-});
-
 app.get('/realtimeproducts', async (req, res) => {
     const products = await productManager.getAllProducts();
     res.render('realTimeProducts', { products });
@@ -146,8 +105,6 @@ app.get('/realtimecarts', async (req, res) => {
     const carts = await cartManager.getAllCarts();
     res.render('realTimeCarts', { carts });
 });
-
-
 
 const PORT = 8080;
 server.listen(PORT, () => {

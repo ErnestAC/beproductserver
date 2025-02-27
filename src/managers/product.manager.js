@@ -1,19 +1,24 @@
 // product.manager.js
 import { v4 as uuidv4 } from "uuid";
-import { notifyProductChange } from "../server.js";
 import { connectDB } from "../helpers/mongo.helpers.js";
 import { ProductModel } from "../models/product.model.js";
 
 export class ProductManager {
-    constructor() {
-        this.initialize();
-    }
 
     async initialize() {
-        await connectDB();
+        try {
+            await connectDB();
+            console.log("ProductManager: Database connection initialized.");
+        } catch (error) {
+            console.error("ProductManager: Database connection failed:", error);
+            throw error;
+        }
     }
 
     async addProduct(newProduct) {
+        if (!newProduct.title || !newProduct.description || !newProduct.code || !newProduct.price || !newProduct.stock || !newProduct.category || newProduct.status === undefined) {
+            return null; // handle missing fields within manager
+        }
         const opuuid = uuidv4();
         newProduct.pid = opuuid;
         newProduct.active = true;
@@ -22,7 +27,6 @@ export class ProductManager {
             const product = new ProductModel(newProduct);
             await product.save();
             console.log(`Products: Product with PID ${newProduct.pid} added successfully!`);
-            notifyProductChange();
             return product.toObject();
         } catch (err) {
             console.error("Error saving product:", err);
@@ -56,6 +60,10 @@ export class ProductManager {
     }
 
     async updateProduct(pid, productUpdate) {
+        if (!Object.keys(productUpdate).length) {
+            return null;
+        }
+
         try {
             const updatedProduct = await ProductModel.findOneAndUpdate(
                 { pid: pid, active: true },
@@ -65,7 +73,6 @@ export class ProductManager {
 
             if (updatedProduct) {
                 console.log(`Updated product PID ${pid}.`);
-                notifyProductChange();
                 return updatedProduct;
             } else {
                 console.log(`Nothing found for PID #${pid} or no changes made.`);
@@ -84,7 +91,6 @@ export class ProductManager {
 
                 if (deleteResult.deletedCount > 0) {
                     console.log(`Permanently deleted product PID ${pid}.`);
-                    notifyProductChange();
                     return true;
                 } else {
                     console.log(`PID #${pid} not found. Nothing deleted.`);
@@ -99,7 +105,6 @@ export class ProductManager {
 
                 if (updateResult) {
                     console.log(`Soft deleted product PID ${pid}.`);
-                    notifyProductChange();
                     return true;
                 } else {
                     console.log(`PID #${pid} not found. Nothing deleted.`);
@@ -114,3 +119,8 @@ export class ProductManager {
 }
 
 export const productManager = new ProductManager();
+
+
+productManager.initialize().catch(error => {
+    console.error("ProductManager initialization failed:", error);
+});
