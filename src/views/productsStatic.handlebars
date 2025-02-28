@@ -8,43 +8,77 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
-    <h2 class="subtitle section make-it-left make-it-white-back make-it-dark">Product List - Static view</h2>
+    <h2 class="subtitle section make-it-left make-it-white-back make-it-dark make-it-rounded-top">Product List - Static view</h2>
     
     <!-- Sorting and Pagination Controls at the top -->
     <section class="section">
         <div class="container make-it-dark">
             <div class="columns is-multiline is-centered">
-                <!-- Sorting Options -->
-                <div class="column is-12">
-                    <div class="make-it-semi-back make-it-center section">
-                        <div class="make-it-semi-back make-it-center section">Sort by</div>
-                        <a class="button" href="?page=1&limit={{limit}}&sort=title&sortOrder=asc">Title (A-Z)</a>
-                        <a class="button" href="?page=1&limit={{limit}}&sort=title&sortOrder=desc">Title (Z-A)</a>
-                        <a class="button" href="?page=1&limit={{limit}}&sort=price&sortOrder=asc">Price (Low to High)</a>
-                        <a class="button" href="?page=1&limit={{limit}}&sort=price&sortOrder=desc">Price (High to Low)</a>
-                        <a class="button" href="?page=1&limit={{limit}}&sort=stock&sortOrder=asc">Stock (Low to High)</a>
-                        <a class="button" href="?page=1&limit={{limit}}&sort=stock&sortOrder=desc">Stock (High to Low)</a>
-                    </div>
-                    <hr>
-                </div>
+                <!-- controls -->
+                <div class="grid-container-2c66-by-1r make-it-semi-back make-it-rounded section">
+                    <!-- Sorting Options -->
+                    <div class="column is-12">
+                        <div class="make-it-semi-back make-it-center">
+                            <div class="make-it-semi-back make-it-center section">Sort by</div>
+                            <a class="button" href="?page=1&limit={{limit}}&sort=title&sortOrder=asc">Title asc</a>
+                            <a class="button" href="?page=1&limit={{limit}}&sort=title&sortOrder=desc">Title desc</a>
+                            <a class="button" href="?page=1&limit={{limit}}&sort=price&sortOrder=asc">Price asc</a>
+                            <a class="button" href="?page=1&limit={{limit}}&sort=price&sortOrder=desc">Price desc</a>
+                            <a class="button" href="?page=1&limit={{limit}}&sort=stock&sortOrder=asc">Stock asc</a>
+                            <a class="button" href="?page=1&limit={{limit}}&sort=stock&sortOrder=desc">Stock desc</a>
+                        </div>
 
+                    </div>
+
+                    <!-- Limit Dropdown -->
+                    <div class="column is-12">
+                        <div class="make-it-semi-back make-it-center">
+                            <div class="make-it-semi-back make-it-center section">Items per page</div>
+                            <div class="select">
+                                <select id="limit-select">
+                                    <option value="10" {{#if (eq limit '10')}}selected{{/if}}>10</option>
+                                    <option value="20" {{#if (eq limit '20')}}selected{{/if}}>20</option>
+                                    <option value="50" {{#if (eq limit '50')}}selected{{/if}}>50</option>
+                                    <option value="100" {{#if (eq limit '100')}}selected{{/if}}>100</option>
+                                </select>
+                            </div>
+                            <button class="button is-link" onclick="applyLimit()">Apply</button>
+                        </div>
+                    </div>
+
+                </div>
                 <!-- Pagination Controls -->
                 <div class="column is-12">
                     <div class="make-it-white-back is-centered make-it-rounded-top grid-container-3c-by-1r" role="navigation" aria-label="pagination">
-                        <a class="button section is-success" href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" >Prev page</a>
-                        <div class="section make-it-center make-it-rounded make-it-semi-back make-it-white">Page {{currentPage}} of {{totalPages}}</div>
-                        <a class="button section is-danger" href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" >Next page</a>
+                        <!-- Previous Page Link -->
+                        <a class="button section is-success" 
+                        href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
+                        {{#if (eq currentPage 1)}}disabled{{/if}}>Prev page</a>
+
+                        <div class="section make-it-center make-it-rounded make-it-semi-back make-it-white">
+                            Page {{currentPage}} of {{totalPages}}
+                        </div>
+
+                        <!-- Next Page Link -->
+                        <a class="button section is-danger" 
+                        href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
+                        {{#if (eq currentPage totalPages)}}disabled{{/if}}>Next page</a>
+
+                        <!-- Page Numbers -->
                         <ul class="pagination-list">
                             {{#each pages}}
                                 <li>
-                                    <a class="pagination-link" href="?page={{this}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" {{#if (eq this @root.currentPage)}}aria-current="page"{{/if}}>{{this}}</a>
+                                    <a class="pagination-link" 
+                                    href="?page={{this}}&limit={{../limit}}&sort={{../sort}}&sortOrder={{../sortOrder}}" 
+                                    {{#if (eq this @root.currentPage)}}aria-current="page"{{/if}}>{{this}}</a>
                                 </li>
                             {{/each}}
                         </ul>
                     </div>
                 </div>
-            </div>
-        </div>
+
+
+
     </section>
 
     <!-- Product List -->
@@ -76,10 +110,22 @@
         </div>
     </section>
 
+    <!-- Footer -->
     <section class="rt-general-page-footer make-it-semi-back make-it-dark">
         <div class="content">
             <div>Total Items: {{totalItems}} - Total Pages: {{totalPages}}</div>
         </div>
     </section>
+
+    <!-- Script for handling limit change -->
+    <script>
+        function applyLimit() {
+            const selectedLimit = document.getElementById('limit-select').value;
+            const urlParams = new URLSearchParams(window.location.search);
+            urlParams.set('limit', selectedLimit);
+            urlParams.set('page', 1); // Reset to first page when changing limit
+            window.location.search = urlParams.toString();
+        }
+    </script>
 </body>
 </html>
