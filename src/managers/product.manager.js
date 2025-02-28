@@ -32,7 +32,8 @@ export class ProductManager {
         }
     }
 
-    async getAllProducts({ limit, skip = 0, sort = 'title', sortDirection = 1, filterBy = '' }) {
+    
+    async getAllProducts({ limit = 10, skip = 0, sort = 'title', sortDirection = 1, filterBy = '' }) {
         const query = { active: true }; // Add filter logic if necessary
     
         const sortCriteria = {};
