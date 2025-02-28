@@ -19,7 +19,71 @@ router.post('/', async (req, res) => {
     }
 });
 
-// GET: Retrieve products with pagination, sorting, and filtering
+// GET: Static products page with pagination
+router.get('/static', async (req, res) => {
+    let { limit, page, sort = 'title', sortOrder = 'asc', filterBy = '' } = req.query;
+
+    // Set defaults if limit or page are not provided or invalid
+    limit = limit && !isNaN(limit) && limit > 0 ? parseInt(limit, 10) : 10; // Default limit to 10
+    page = page && !isNaN(page) && page > 0 ? parseInt(page, 10) : 1;         // Default page to 1
+
+    const skip = (page - 1) * limit;
+
+    try {
+        const sortDirection = sortOrder === 'desc' ? -1 : 1;
+
+        // Fetch products with pagination
+        const products = await productManager.getAllProducts({
+            limit,
+            skip,
+            sort,
+            sortDirection,
+            filterBy
+        });
+
+        // Get total product count for pagination
+        const totalProducts = await productManager.getTotalProductCount(filterBy);
+
+        // Calculate total pages and page navigation flags
+        const totalPages = Math.ceil(totalProducts / limit);
+        const hasPrevPage = page > 1;
+        const hasNextPage = page < totalPages;
+        const prevPage = hasPrevPage ? Number(page) - 1 : null;
+        const nextPage = hasNextPage ? Number(page) + 1 : null;
+
+        // Function to generate next/previous links with the correct query parameters
+        const generateLink = (newPage) => {
+            const queryParams = new URLSearchParams(req.query);
+            queryParams.set('page', newPage);  // Set the page number dynamically
+            queryParams.set('limit', limit);  // Always set the limit dynamically
+            return `${req.protocol}://${req.get('host')}${req.path}?${queryParams.toString()}`;
+        };
+
+        const prevLink = hasPrevPage ? generateLink(prevPage) : null;
+        const nextLink = hasNextPage ? generateLink(nextPage) : null;
+
+        // Render the products view with pagination
+        res.render('productsStatic', {
+            products,
+            totalPages,
+            prevPage,
+            nextPage,
+            currentPage: Number(page),
+            hasPrevPage,
+            hasNextPage,
+            prevLink,
+            nextLink,
+            limit,
+            sort,
+            sortOrder,
+            filterBy,
+        });
+    } catch (err) {
+        res.status(500).json({ status: "error", message: 'Server error' });
+    }
+});
+
+// GET: Retrieve products with pagination, sorting, and filtering (API version)
 router.get('/', async (req, res) => {
     const { limit = 10, page = 1, sort = 'title', sortOrder = 'asc', filterBy = '' } = req.query;
     const skip = (page - 1) * limit;

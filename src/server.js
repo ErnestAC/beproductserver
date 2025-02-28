@@ -31,6 +31,26 @@ Handlebars.registerHelper('eq', function (a, b) {
     return a === b;
 });
 
+// Register the ifCond helper for conditional checks (used in productsStatic.handlebars)
+Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
+    switch (operator) {
+        case '==':
+            return v1 == v2 ? options.fn(this) : options.inverse(this);
+        case '===':
+            return v1 === v2 ? options.fn(this) : options.inverse(this);
+        case '<':
+            return v1 < v2 ? options.fn(this) : options.inverse(this);
+        case '<=':
+            return v1 <= v2 ? options.fn(this) : options.inverse(this);
+        case '>':
+            return v1 > v2 ? options.fn(this) : options.inverse(this);
+        case '>=':
+            return v1 >= v2 ? options.fn(this) : options.inverse(this);
+        default:
+            return options.inverse(this);
+    }
+});
+
 // Notify product change to all clients
 export const notifyProductChange = async () => {
     try {
@@ -117,6 +137,50 @@ app.use('/forms', FormsRoute);
 app.use('/api/products', ProductsRoute);
 app.use('/api/carts', CartsRoute);
 
+// Static route for viewing all products with sorting and pagination
+app.get('/products/static', async (req, res) => {
+    const { limit = 10, page = 1, sort = 'title', sortOrder = 'asc' } = req.query;
+    const skip = (page - 1) * limit;
+
+    try {
+        const sortDirection = sortOrder === 'desc' ? -1 : 1;
+
+        // Fetch products with pagination and sorting
+        const products = await productManager.getAllProducts({
+            limit: Number(limit),
+            skip: Number(skip),
+            sort: sort,
+            sortDirection: sortDirection
+        });
+
+        // Get total product count for pagination
+        const totalProducts = await productManager.getTotalProductCount();
+
+        // Calculate total pages and page navigation flags
+        const totalPages = Math.ceil(totalProducts / limit);
+        const hasPrevPage = page > 1;
+        const hasNextPage = page < totalPages;
+        const prevPage = hasPrevPage ? Number(page) - 1 : null;
+        const nextPage = hasNextPage ? Number(page) + 1 : null;
+
+        res.render('productsStatic', {
+            products,
+            currentPage: Number(page),
+            totalPages,
+            prevPage,
+            nextPage,
+            hasPrevPage,
+            hasNextPage,
+            sort,
+            sortOrder
+        });
+    } catch (err) {
+        console.error('Error rendering products page:', err);
+        res.status(500).send("Error rendering products");
+    }
+});
+
+// Real-time products and carts
 app.get('/realtimeproducts', async (req, res) => {
     try {
         const products = await productManager.getAllProducts({
