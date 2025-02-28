@@ -17,8 +17,8 @@ async function simulateActivity() {
 
         const operations = [
             { type: 'create', probability: 0.1 },
-            { type: 'update', probability: 0.8 },
-            { type: 'delete', probability: 0.1 }
+            { type: 'update', probability: 0.4 },
+            { type: 'delete', probability: 0.5 }
         ];
 
         async function createProduct() {
@@ -44,35 +44,37 @@ async function simulateActivity() {
         async function updateProduct() {
             try {
                 const response = await axios.get(API_BASE_URL);
-                const products = response.data.products; // Access the 'products' array
+                const products = response.data.payload; // Access the 'payload' directly
 
                 if (products && products.length > 0) {
                     const randomProduct = products[Math.floor(Math.random() * products.length)];
                     const updatedProduct = {
+                        title: `Updated Simulated Product ${uuidv4().substring(0, 8)}`,
+                        description: `Updated description ${uuidv4().substring(0, 10)}`,
                         price: Math.floor(Math.random() * 100) + 10,
                         stock: Math.floor(Math.random() * 50) + 5,
-                        title: `Updated Simulated Product ${uuidv4().substring(0, 8)}`
+                        status: true
                     };
-                    await axios.put(`${API_BASE_URL}/${randomProduct.pid}`, updatedProduct);
+                    await axios.put(`${API_BASE_URL}/${randomProduct.pid}`, updatedProduct); // Use 'pid' for identification
                     console.log("Updated product:", randomProduct.pid);
                 }
             } catch (error) {
-                console.error("Error updating product:", error);
+                console.error("Error updating product:", error.response?.data || error.message);
             }
         }
 
         async function deleteProduct() {
             try {
                 const response = await axios.get(API_BASE_URL);
-                const products = response.data.products; // Access the 'products' array
+                const products = response.data.payload; // Access the 'payload' directly
 
                 if (products && products.length > 0) {
                     const randomProduct = products[Math.floor(Math.random() * products.length)];
-                    await axios.delete(`${API_BASE_URL}/${randomProduct.pid}`);
+                    await axios.delete(`${API_BASE_URL}/${randomProduct.pid}`); // Use 'pid' for identification
                     console.log("Deleted product:", randomProduct.pid);
                 }
             } catch (error) {
-                console.error("Error deleting product:", error);
+                console.error("Error deleting product:", error.response?.data || error.message);
             }
         }
 
