@@ -32,30 +32,25 @@ export class ProductManager {
         }
     }
 
-    async getAllProducts({ limit = 10, skip = 0, sort = 'title', sortDirection = 1 } = {}) {
-        // Ensure limit is a valid number
-        if (!limit || isNaN(limit) || limit <= 0) {
-            limit = 10; // default to 10 if limit is invalid or missing
-        }
+    async getAllProducts({ limit, skip = 0, sort = 'title', sortDirection = 1, filterBy = '' }) {
+        const query = { active: true }; // Add filter logic if necessary
+    
+        const sortCriteria = {};
+        sortCriteria[sort] = sortDirection;
     
         try {
-            const query = { active: true };
-    
-            const sortCriteria = {};
-            sortCriteria[sort] = sortDirection;
-    
             const products = await ProductModel.find(query)
                 .sort(sortCriteria)
                 .skip(skip)
                 .limit(Number(limit)) // ensure limit is treated as a number
                 .lean();
-    
             return products;
         } catch (err) {
             console.error("Error fetching products:", err);
             return [];
         }
     }
+    
     
     async getProductById(pid) {
         try {

@@ -20,13 +20,8 @@ router.post('/', async (req, res) => {
 });
 
 // GET: Static products page with pagination
-router.get('/static', async (req, res) => {
-    let { limit, page, sort = 'title', sortOrder = 'asc', filterBy = '' } = req.query;
-
-    // Set defaults if limit or page are not provided or invalid
-    limit = limit && !isNaN(limit) && limit > 0 ? parseInt(limit, 10) : 10; // Default limit to 10
-    page = page && !isNaN(page) && page > 0 ? parseInt(page, 10) : 1;         // Default page to 1
-
+router.get('/', async (req, res) => {
+    const { limit = 10, page = 1, sort = 'title', sortOrder = 'asc', filterBy = '' } = req.query;
     const skip = (page - 1) * limit;
 
     try {
@@ -34,11 +29,11 @@ router.get('/static', async (req, res) => {
 
         // Fetch products with pagination
         const products = await productManager.getAllProducts({
-            limit,
-            skip,
-            sort,
-            sortDirection,
-            filterBy
+            limit: Number(limit),
+            skip: Number(skip),
+            sort: sort,
+            sortDirection: sortDirection,
+            filterBy: filterBy
         });
 
         // Get total product count for pagination
@@ -51,33 +46,31 @@ router.get('/static', async (req, res) => {
         const prevPage = hasPrevPage ? Number(page) - 1 : null;
         const nextPage = hasNextPage ? Number(page) + 1 : null;
 
-        // Function to generate next/previous links with the correct query parameters
+        // Function to generate next/previous links
         const generateLink = (newPage) => {
             const queryParams = new URLSearchParams(req.query);
-            queryParams.set('page', newPage);  // Set the page number dynamically
-            queryParams.set('limit', limit);  // Always set the limit dynamically
+            queryParams.set('page', newPage);
             return `${req.protocol}://${req.get('host')}${req.path}?${queryParams.toString()}`;
         };
 
         const prevLink = hasPrevPage ? generateLink(prevPage) : null;
         const nextLink = hasNextPage ? generateLink(nextPage) : null;
 
-        // Render the products view with pagination
-        res.render('productsStatic', {
-            products,
+        // Response object with pagination details
+        const response = {
+            status: "success",
+            payload: products, // Only return the products
             totalPages,
             prevPage,
             nextPage,
-            currentPage: Number(page),
+            page: Number(page),
             hasPrevPage,
             hasNextPage,
             prevLink,
-            nextLink,
-            limit,
-            sort,
-            sortOrder,
-            filterBy,
-        });
+            nextLink
+        };
+
+        res.json(response);
     } catch (err) {
         res.status(500).json({ status: "error", message: 'Server error' });
     }
