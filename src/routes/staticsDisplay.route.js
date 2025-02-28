@@ -8,10 +8,8 @@ router.get('/products', async (req, res) => {
     // Extract query parameters with default values
     let { limit = 10, page = 1, sort = 'title', sortOrder = 'asc' } = req.query;
 
-    // Ensure limit is a valid number and >= 1
     limit = Math.max(1, Number(limit) || 10); // Default to 10 if invalid
 
-    // Ensure the page is a valid number and >= 1
     const currentPage = Math.max(1, Number(page)); // Ensure page is at least 1
     const skip = (currentPage - 1) * limit;
 

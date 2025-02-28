@@ -22,14 +22,21 @@ router.post('/', async (req, res) => {
 // GET: Static products page with pagination
 router.get('/', async (req, res) => {
     const { limit = 10, page = 1, sort = 'title', sortOrder = 'asc', filterBy = '' } = req.query;
-    const skip = (page - 1) * limit;
-
+    
+    // save for possible limit weirdeness
+    let condLimit = 0
+    if (!limit || limit === 'undefined') {
+        condLimit = 10
+    } else{
+        condLimit=Number(limit)
+    }
+    const skip = (page - 1) * condLimit;
     try {
         const sortDirection = sortOrder === 'desc' ? -1 : 1;
 
         // Fetch products with pagination
         const products = await productManager.getAllProducts({
-            limit: Number(limit),
+            limit: condLimit,
             skip: Number(skip),
             sort: sort,
             sortDirection: sortDirection,
@@ -40,7 +47,7 @@ router.get('/', async (req, res) => {
         const totalProducts = await productManager.getTotalProductCount(filterBy);
 
         // Calculate total pages and page navigation flags
-        const totalPages = Math.ceil(totalProducts / limit);
+        const totalPages = Math.ceil(totalProducts / condLimit);
         const hasPrevPage = page > 1;
         const hasNextPage = page < totalPages;
         const prevPage = hasPrevPage ? Number(page) - 1 : null;

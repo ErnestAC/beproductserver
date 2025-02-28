@@ -135,7 +135,6 @@ app.use('/', homeRoute);
 
 // Use the formsRouter
 app.use('/forms', FormsRoute);
-
 app.use('/api/products', ProductsRoute);
 app.use('/api/carts', CartsRoute);
 app.use('/statics/', StaticDisplay)
