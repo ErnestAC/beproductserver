@@ -12,7 +12,8 @@ import homeRoute from './routes/home.route.js';
 import FormsRoute from './routes/forms.route.js';
 import { productManager } from './managers/product.manager.js';
 import { cartManager } from './managers/cart.manager.js';
-import ProductsViewRoute from './routes/productsview.route.js'
+import StaticDisplay from './routes/staticsDisplay.route.js'
+import RealtimeViews from './routes/realtimeDisplay.route.js'
 import Handlebars from 'handlebars';
 
 const app = express();
@@ -137,31 +138,8 @@ app.use('/forms', FormsRoute);
 
 app.use('/api/products', ProductsRoute);
 app.use('/api/carts', CartsRoute);
-app.use('/products/', ProductsViewRoute)
-
-// Real-time products and carts
-app.get('/realtimeproducts', async (req, res) => {
-    try {
-        const products = await productManager.getAllProducts({
-            sort: 'price',
-            sortDirection: -1,
-        });
-        res.render('realTimeProducts', { products });
-    } catch (error) {
-        console.error("Error in realtimeproducts:", error);
-        res.status(500).send("Error rendering realtime products");
-    }
-});
-
-app.get('/realtimecarts', async (req, res) => {
-    try {
-        const carts = await cartManager.getAllCarts();
-        res.render('realTimeCarts', { carts });
-    } catch (error) {
-        console.error("Error in realtimecarts:", error);
-        res.status(500).send("Error rendering realtime carts");
-    }
-});
+app.use('/statics/', StaticDisplay)
+app.use('/realtime/', RealtimeViews)
 
 const PORT = 8080;
 server.listen(PORT, () => {

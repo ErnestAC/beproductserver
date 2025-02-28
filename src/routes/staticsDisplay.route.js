@@ -1,11 +1,10 @@
 import { Router } from "express";
 import { productManager } from "../managers/product.manager.js";
-import { notifyProductChange } from "../server.js";
 
 const router = Router();
 
 // Static route for viewing all products with sorting and pagination
-router.get('/', async (req, res) => {
+router.get('/products', async (req, res) => {
     // Extract query parameters with default values
     let { limit = 10, page = 1, sort = 'title', sortOrder = 'asc' } = req.query;
 
