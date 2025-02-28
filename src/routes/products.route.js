@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { productManager } from "../managers/product.manager.js";
 import { notifyProductChange } from "../server.js";
+import paginate from 'paginate';
 
 const router = Router();
 
-// Add a new product
 router.post('/', async (req, res) => {
     try {
         const product = await productManager.addProduct(req.body);
@@ -15,17 +15,13 @@ router.post('/', async (req, res) => {
             res.status(400).json({ message: "Invalid product data" });
         }
     } catch (err) {
-        console.error("Error adding product:", err);
         res.status(500).json({ error: 'Server error' });
     }
 });
 
-// Get products with pagination, filtering, and sorting
 router.get('/', async (req, res) => {
     const { limit = 10, page = 1, sort = 'title', sortOrder = 'asc', filterBy = '' } = req.query;
     const skip = (page - 1) * limit;
-
-    
 
     try {
         const sortDirection = sortOrder === 'desc' ? -1 : 1;
@@ -39,17 +35,18 @@ router.get('/', async (req, res) => {
         });
 
         const totalProducts = await productManager.getTotalProductCount(filterBy);
-        const totalPages = Math.ceil(totalProducts / limit);
+
+        const pagination = paginate(totalProducts, page, limit);
 
         const response = {
             products,
             page: Number(page),
-            totalPages,
-            previousPage: page > 1 ? Number(page) - 1 : null,
-            nextPage: page < totalPages ? Number(page) + 1 : null,
-            pages: Array.from({ length: totalPages }, (_, i) => i + 1),
-            isFirstPage: page === 1,
-            isLastPage: page === totalPages,
+            totalPages: pagination.total_pages,
+            previousPage: pagination.previous_page,
+            nextPage: pagination.next_page,
+            pages: pagination.page_array,
+            isFirstPage: pagination.current_page === 1,
+            isLastPage: pagination.current_page === pagination.total_pages,
             limit: Number(limit),
             sort,
             sortOrder,
@@ -57,12 +54,10 @@ router.get('/', async (req, res) => {
 
         res.json(response);
     } catch (err) {
-        console.error("Error fetching products:", err);
         res.status(500).json({ error: 'Server error' });
     }
 });
 
-// Get a single product by ID
 router.get('/:pid', async (req, res) => {
     const { pid } = req.params;
     try {
@@ -76,7 +71,6 @@ router.get('/:pid', async (req, res) => {
     }
 });
 
-// Update a product by ID
 router.put('/:pid', async (req, res) => {
     const { pid } = req.params;
     const productUpdate = req.body;
@@ -93,7 +87,6 @@ router.put('/:pid', async (req, res) => {
     }
 });
 
-// Delete a product by ID
 router.delete('/:pid', async (req, res) => {
     const { pid } = req.params;
     const { killFlag } = req.body;

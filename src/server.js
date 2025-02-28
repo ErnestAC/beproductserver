@@ -34,10 +34,12 @@ Handlebars.registerHelper('eq', function (a, b) {
 // Notify product change to all clients
 export const notifyProductChange = async () => {
     try {
-        const products = await productManager.getAllProducts();
-        console.log("Emitting updateProducts event with products:", products);
+        const products = await productManager.getAllProducts({
+            limit: 20,
+            sort: 'stock',
+            sortDirection: -1,
+        });
         io.emit('updateProducts', products);
-        console.log("updateProducts event emitted.");
     } catch (err) {
         console.error('Error notifying product change:', err);
     }
@@ -59,7 +61,11 @@ io.on("connection", async (socket) => {
 
     // Send current products on connection
     try {
-        const products = await productManager.getAllProducts();
+        const products = await productManager.getAllProducts({
+            limit: 20,
+            sort: 'stock',
+            sortDirection: -1,
+        });
         socket.emit('updateProducts', products);
     } catch (err) {
         console.error('Error sending product list:', err);
@@ -76,7 +82,11 @@ io.on("connection", async (socket) => {
     // Handle product requests
     socket.on("requestProducts", async () => {
         try {
-            const products = await productManager.getAllProducts();
+            const products = await productManager.getAllProducts({
+                limit: 20,
+                sort: 'stock',
+                sortDirection: -1,
+            });
             socket.emit("updateProducts", products);
         } catch (err) {
             console.error('Error fetching products:', err);
@@ -109,7 +119,11 @@ app.use('/api/carts', CartsRoute);
 
 app.get('/realtimeproducts', async (req, res) => {
     try {
-        const products = await productManager.getAllProducts();
+        const products = await productManager.getAllProducts({
+            limit: 20,
+            sort: 'stock',
+            sortDirection: -1,
+        });
         res.render('realTimeProducts', { products });
     } catch (error) {
         console.error("Error in realtimeproducts:", error);
