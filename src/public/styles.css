@@ -416,7 +416,7 @@ body {
   justify-items: left
 }
 
-.cart-footer,.general-page-footer {
+.cart-footer,.general-page-footer, .rt-general-page-footer {
   position: fixed;
   bottom: -1.5rem !important;
   left: 0;
@@ -433,6 +433,10 @@ body {
 
 .general-page-footer {
   justify-content: left
+}
+
+.rt-general-page-footer {
+  bottom: 0rem !important;
 }
 
 .general-page-footer-moving,.general-page-log-in-box,.generic-title-container {

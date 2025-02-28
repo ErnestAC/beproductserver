@@ -12,26 +12,28 @@
     
     <!-- Sorting and Pagination Controls at the top -->
     <section class="section">
-        <div class="container">
+        <div class="container make-it-dark">
             <div class="columns is-multiline is-centered">
                 <!-- Sorting Options -->
                 <div class="column is-12">
-                    <h3 class="title is-4">Sort By</h3>
-                    <div class="buttons">
-                        <a class="button is-primary" href="?page=1&limit={{limit}}&sort=title&sortOrder=asc">Title (A-Z)</a>
-                        <a class="button is-primary" href="?page=1&limit={{limit}}&sort=title&sortOrder=desc">Title (Z-A)</a>
-                        <a class="button is-primary" href="?page=1&limit={{limit}}&sort=price&sortOrder=asc">Price (Low to High)</a>
-                        <a class="button is-primary" href="?page=1&limit={{limit}}&sort=price&sortOrder=desc">Price (High to Low)</a>
-                        <a class="button is-primary" href="?page=1&limit={{limit}}&sort=stock&sortOrder=asc">Stock (Low to High)</a>
-                        <a class="button is-primary" href="?page=1&limit={{limit}}&sort=stock&sortOrder=desc">Stock (High to Low)</a>
+                    <div class="make-it-semi-back make-it-center section">
+                        <div class="make-it-semi-back make-it-center section">Sort by</div>
+                        <a class="button" href="?page=1&limit={{limit}}&sort=title&sortOrder=asc">Title (A-Z)</a>
+                        <a class="button" href="?page=1&limit={{limit}}&sort=title&sortOrder=desc">Title (Z-A)</a>
+                        <a class="button" href="?page=1&limit={{limit}}&sort=price&sortOrder=asc">Price (Low to High)</a>
+                        <a class="button" href="?page=1&limit={{limit}}&sort=price&sortOrder=desc">Price (High to Low)</a>
+                        <a class="button" href="?page=1&limit={{limit}}&sort=stock&sortOrder=asc">Stock (Low to High)</a>
+                        <a class="button" href="?page=1&limit={{limit}}&sort=stock&sortOrder=desc">Stock (High to Low)</a>
                     </div>
+                    <hr>
                 </div>
 
                 <!-- Pagination Controls -->
                 <div class="column is-12">
-                    <div class="pagination is-centered" role="navigation" aria-label="pagination">
-                        <a class="pagination-previous" href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" {{#if hasPrevPage}}disabled{{/if}}>Previous</a>
-                        <a class="pagination-next" href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" {{#if hasNextPage}}disabled{{/if}}>Next</a>
+                    <div class="make-it-white-back is-centered make-it-rounded-top grid-container-3c-by-1r" role="navigation" aria-label="pagination">
+                        <a class="button section is-success" href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" >Prev page</a>
+                        <div class="section make-it-center make-it-rounded make-it-semi-back make-it-white">Page {{currentPage}} of {{totalPages}}</div>
+                        <a class="button section is-danger" href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" >Next page</a>
                         <ul class="pagination-list">
                             {{#each pages}}
                                 <li>
@@ -74,5 +76,10 @@
         </div>
     </section>
 
+    <section class="rt-general-page-footer make-it-semi-back make-it-dark">
+        <div class="content">
+            <div>Total Items: {{totalItems}} - Total Pages: {{totalPages}}</div>
+        </div>
+    </section>
 </body>
 </html>

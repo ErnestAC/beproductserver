@@ -9,10 +9,23 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
+        let currentPage = 1;
+        let totalItems = 0;
+        let itemsPerPage = 10;
+        let totalPages = 1;
 
         socket.on('updateProducts', (products) => {
+            totalItems = products.length;
+            totalPages = Math.ceil(totalItems / itemsPerPage);
+
             const productList = document.getElementById('productList');
             const productCount = document.getElementById('productCount');
+            const paginationInfo = document.getElementById('paginationInfo');
+
+            // Pagination logic
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedProducts = products.slice(start, end);
 
             productList.innerHTML = `
                 <table class="table is-striped is-hoverable is-fullwidth make-it-rounded-top make-it-semi-back">
@@ -27,7 +40,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        ${products.map(product => `
+                        ${paginatedProducts.map(product => `
                             <tr>
                                 <td>${product.pid}</td>
                                 <td>${product.title}</td>
@@ -41,15 +54,31 @@
                 </table>
             `;
 
-            productCount.textContent = `Displaying ${products.length} product(s)`;
+            productCount.textContent = `Displaying ${paginatedProducts.length} product(s) | Page ${currentPage}`;
+            paginationInfo.textContent = `Total Items: ${totalItems}, Total Pages: ${totalPages}`;
         });
+
+        function changePage(step) {
+            currentPage += step;
+            if (currentPage < 1) currentPage = 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+            socket.emit('requestProducts');
+        }
     </script>
 </head>
 <body>
-    <div class="subtitle section make-it-white">Real Time Product List</div>
-    <section class="section">
-        <div class="content make-it-dark make-it-rounded-top make-it-semi-back general-page-footer" id="productCount" class="subtitle"></div>
+    <div class="subtitle section make-it-dart make-it-white-back">Product List - Realtime display</div>
+    <div class="section">
+        
         <div id="productList"></div>
-    </section>
+        <br>
+        <div class="grid-container-3c-by-1r make-it-rounded make-it-white-back make-it-dark">
+            <button class="button is-danger" onclick="changePage(-1)">Prev</button>
+            <div class="content make-it-dark make-it-rounded-top make-it-center section" id="productCount"></div>
+            <button class="button is-success" onclick="changePage(1)">Next</button>
+        </div>
+        
+        <div class="content make-it-dark make-it-rounded-top make-it-semi-back rt-general-page-footer" id="paginationInfo"></div>
+    </div>
 </body>
 </html>

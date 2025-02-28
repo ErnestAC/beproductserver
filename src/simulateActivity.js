@@ -16,9 +16,9 @@ async function simulateActivity() {
         console.log("Simulating activity...");
 
         const operations = [
-            { type: 'create', probability: 0.1 },
-            { type: 'update', probability: 0.4 },
-            { type: 'delete', probability: 0.5 }
+            { type: 'create', probability: 0 },
+            { type: 'update', probability: 1 },
+            { type: 'delete', probability: 0 }
         ];
 
         async function createProduct() {
