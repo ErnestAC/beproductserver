@@ -11,7 +11,7 @@
         const socket = io();
         let currentPage = 1;
         let totalItems = 0;
-        let itemsPerPage = 10;
+        let itemsPerPage = 15; // maximum displayed at the same time in rt view
         let totalPages = 1;
 
         socket.on('updateProducts', (products) => {

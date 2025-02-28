@@ -55,8 +55,8 @@ Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
 export const notifyProductChange = async () => {
     try {
         const products = await productManager.getAllProducts({
-            limit: 20,
-            sort: 'stock',
+            limit: 50,
+            sort: 'price',
             sortDirection: -1,
         });
         io.emit('updateProducts', products);
@@ -82,7 +82,7 @@ io.on("connection", async (socket) => {
     // Send current products on connection
     try {
         const products = await productManager.getAllProducts({
-            limit: 20,
+            limit: 50,
             sort: 'stock',
             sortDirection: -1,
         });
@@ -103,7 +103,7 @@ io.on("connection", async (socket) => {
     socket.on("requestProducts", async () => {
         try {
             const products = await productManager.getAllProducts({
-                limit: 20,
+                limit: 50,
                 sort: 'stock',
                 sortDirection: -1,
             });
@@ -193,8 +193,7 @@ app.get('/products/static', async (req, res) => {
 app.get('/realtimeproducts', async (req, res) => {
     try {
         const products = await productManager.getAllProducts({
-            limit: 20,
-            sort: 'stock',
+            sort: 'price',
             sortDirection: -1,
         });
         res.render('realTimeProducts', { products });
