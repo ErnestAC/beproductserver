@@ -139,33 +139,40 @@ app.use('/api/carts', CartsRoute);
 
 // Static route for viewing all products with sorting and pagination
 app.get('/products/static', async (req, res) => {
-    const { limit = 10, page = 1, sort = 'title', sortOrder = 'asc' } = req.query;
-    const skip = (page - 1) * limit;
+    // Extract query parameters with default values
+    let { limit = 10, page = 1, sort = 'title', sortOrder = 'asc' } = req.query;
+
+    // Ensure limit is a valid number and >= 1
+    limit = Math.max(1, Number(limit) || 10); // Default to 10 if invalid
+
+    // Ensure the page is a valid number and >= 1
+    const currentPage = Math.max(1, Number(page)); // Ensure page is at least 1
+    const skip = (currentPage - 1) * limit;
 
     try {
         const sortDirection = sortOrder === 'desc' ? -1 : 1;
 
         // Fetch products with pagination and sorting
         const products = await productManager.getAllProducts({
-            limit: Number(limit),
-            skip: Number(skip),
+            limit: limit,
+            skip: skip,
             sort: sort,
             sortDirection: sortDirection
         });
 
         // Get total product count for pagination
         const totalProducts = await productManager.getTotalProductCount();
-
-        // Calculate total pages and page navigation flags
         const totalPages = Math.ceil(totalProducts / limit);
-        const hasPrevPage = page > 1;
-        const hasNextPage = page < totalPages;
-        const prevPage = hasPrevPage ? Number(page) - 1 : null;
-        const nextPage = hasNextPage ? Number(page) + 1 : null;
+
+        // Calculate page navigation flags
+        const hasPrevPage = currentPage > 1;
+        const hasNextPage = currentPage < totalPages;
+        const prevPage = hasPrevPage ? currentPage - 1 : null;
+        const nextPage = hasNextPage ? currentPage + 1 : null;
 
         res.render('productsStatic', {
             products,
-            currentPage: Number(page),
+            currentPage,
             totalPages,
             prevPage,
             nextPage,
@@ -179,6 +186,8 @@ app.get('/products/static', async (req, res) => {
         res.status(500).send("Error rendering products");
     }
 });
+
+
 
 // Real-time products and carts
 app.get('/realtimeproducts', async (req, res) => {
