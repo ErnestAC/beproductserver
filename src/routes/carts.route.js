@@ -4,68 +4,92 @@ import { notifyCartChange } from "../server.js";
 
 const router = Router();
 
-// GET all carts
+// GET: Retrieve all carts
 router.get('/', async (req, res) => {
     try {
         const carts = await cartManager.getAllCarts();
-        res.json({ result: carts });
+        res.json({
+            status: "success",
+            payload: carts,
+            totalPages: 1,
+            prevPage: null,
+            nextPage: null,
+            page: 1,
+            hasPrevPage: false,
+            hasNextPage: false,
+            prevLink: null,
+            nextLink: null
+        });
     } catch (err) {
-        res.status(500).json({ error: 'Server error' });
+        res.status(500).json({ status: "error", message: 'Server error' });
     }
 });
 
-// GET cart by ID
+// GET: Retrieve a specific cart by CID
 router.get('/:cid', async (req, res) => {
     const { cid } = req.params;
     try {
         const cart = await cartManager.getCartById(cid);
         if (cart) {
-            res.json({ result: cart });
+            res.json({
+                status: "success",
+                payload: cart,
+                totalPages: 1,
+                prevPage: null,
+                nextPage: null,
+                page: 1,
+                hasPrevPage: false,
+                hasNextPage: false,
+                prevLink: null,
+                nextLink: null
+            });
         } else {
-            res.status(404).json({ error: 'Cart not found' });
+            res.status(404).json({ status: "error", message: 'Cart not found' });
         }
     } catch (err) {
-        res.status(500).json({ error: 'Server error' });
+        res.status(500).json({ status: "error", message: 'Server error' });
     }
 });
 
-// POST create a new cart
+// POST: Create a new cart
 router.post('/', async (req, res) => {
     try {
         const newCart = await cartManager.addCart();
-        res.status(201).json({ result: newCart });
+        res.status(201).json({ status: "success", payload: newCart });
     } catch (err) {
-        res.status(500).json({ error: 'Server error' });
+        res.status(500).json({ status: "error", message: 'Server error' });
     }
 });
 
-// POST add product to cart
+// POST: Add a product to a cart
 router.post('/:cid/product/:pid', async (req, res) => {
     const { cid, pid } = req.params;
     try {
         const updatedCart = await cartManager.addProductToCart(cid, pid);
-        res.json({ result: updatedCart });
+        notifyCartChange();
+        res.json({ status: "success", payload: updatedCart });
     } catch (err) {
         if (err.message.includes('Cart with ID')) {
-            res.status(404).json({ error: err.message });
+            res.status(404).json({ status: "error", message: err.message });
         } else {
-            res.status(500).json({ error: 'Server error' });
+            res.status(500).json({ status: "error", message: 'Server error' });
         }
     }
 });
 
-// DELETE cart by ID
+// DELETE: Delete a cart by CID
 router.delete('/:cid', async (req, res) => {
     const { cid } = req.params;
     try {
         const deleted = await cartManager.deleteCartById(cid);
         if (deleted) {
-            res.json({ message: 'Cart deleted' });
+            notifyCartChange();
+            res.json({ status: "success", message: "Cart deleted" });
         } else {
-            res.status(404).json({ error: 'Cart not found' });
+            res.status(404).json({ status: "error", message: 'Cart not found' });
         }
     } catch (err) {
-        res.status(500).json({ error: 'Server error' });
+        res.status(500).json({ status: "error", message: 'Server error' });
     }
 });
 
