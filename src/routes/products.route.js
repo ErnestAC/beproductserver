@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { productManager } from "../managers/product.manager.js";
 import { notifyProductChange } from "../server.js";
+import pkg from 'paginate'; 
+const { paginate } = pkg; 
 
 const router = Router();
 
@@ -39,14 +41,17 @@ router.get('/', async (req, res) => {
         // Get total product count for pagination
         const totalProducts = await productManager.getTotalProductCount(filterBy);
 
-        // Calculate total pages and page navigation flags
+        // Use paginate library to handle pagination
+        const paginatedProducts = paginate(products, { page, limit });
+
+        // Calculate pagination details
         const totalPages = Math.ceil(totalProducts / limit);
         const hasPrevPage = page > 1;
         const hasNextPage = page < totalPages;
-        const prevPage = hasPrevPage ? Number(page) - 1 : null;
-        const nextPage = hasNextPage ? Number(page) + 1 : null;
+        const prevPage = hasPrevPage ? page - 1 : null;
+        const nextPage = hasNextPage ? page + 1 : null;
 
-        // Function to generate next/previous links
+        // Generate links for pagination
         const generateLink = (newPage) => {
             const queryParams = new URLSearchParams(req.query);
             queryParams.set('page', newPage);
@@ -59,64 +64,7 @@ router.get('/', async (req, res) => {
         // Response object with pagination details
         const response = {
             status: "success",
-            payload: products, // Only return the products
-            totalPages,
-            prevPage,
-            nextPage,
-            page: Number(page),
-            hasPrevPage,
-            hasNextPage,
-            prevLink,
-            nextLink
-        };
-
-        res.json(response);
-    } catch (err) {
-        res.status(500).json({ status: "error", message: 'Server error' });
-    }
-});
-
-// GET: Retrieve products with pagination, sorting, and filtering (API version)
-router.get('/', async (req, res) => {
-    const { limit = 10, page = 1, sort = 'title', sortOrder = 'asc', filterBy = '' } = req.query;
-    const skip = (page - 1) * limit;
-
-    try {
-        const sortDirection = sortOrder === 'desc' ? -1 : 1;
-
-        // Fetch products with pagination
-        const products = await productManager.getAllProducts({
-            limit: Number(limit),
-            skip: Number(skip),
-            sort: sort,
-            sortDirection: sortDirection,
-            filterBy: filterBy
-        });
-
-        // Get total product count for pagination
-        const totalProducts = await productManager.getTotalProductCount(filterBy);
-
-        // Calculate total pages and page navigation flags
-        const totalPages = Math.ceil(totalProducts / limit);
-        const hasPrevPage = page > 1;
-        const hasNextPage = page < totalPages;
-        const prevPage = hasPrevPage ? Number(page) - 1 : null;
-        const nextPage = hasNextPage ? Number(page) + 1 : null;
-
-        // Function to generate next/previous links
-        const generateLink = (newPage) => {
-            const queryParams = new URLSearchParams(req.query);
-            queryParams.set('page', newPage);
-            return `${req.protocol}://${req.get('host')}${req.path}?${queryParams.toString()}`;
-        };
-
-        const prevLink = hasPrevPage ? generateLink(prevPage) : null;
-        const nextLink = hasNextPage ? generateLink(nextPage) : null;
-
-        // Response object
-        const response = {
-            status: "success",
-            payload: products,
+            payload: paginatedProducts,
             totalPages,
             prevPage,
             nextPage,

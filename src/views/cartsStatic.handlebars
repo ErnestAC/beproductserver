@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart List</title>
+    <meta name="color-scheme" content="dark">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+</head>
+<body>
+    <h2 class="subtitle section make-it-left make-it-white-back make-it-dark">Cart List - Static View</h2>
+
+    <!-- Sorting and Pagination Controls at the top -->
+    <section class="section">
+        <div class="container make-it-dark">
+            <div class="columns is-multiline is-centered">
+                <!-- Pagination Controls -->
+                <div class="column is-12">
+                    <div class="make-it-white-back is-centered make-it-rounded-top grid-container-3c-by-1r" role="navigation" aria-label="pagination">
+                        <a class="button section is-success" href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" >Prev page</a>
+                        <div class="section make-it-center make-it-rounded make-it-semi-back make-it-white">Page {{currentPage}} of {{totalPages}}</div>
+                        <a class="button section is-danger" href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" >Next page</a>
+                        <ul class="pagination-list">
+                            {{#each pages}}
+                                <li>
+                                    <a class="pagination-link" href="?page={{this}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" {{#if (eq this @root.currentPage)}}aria-current="page"{{/if}}>{{this}}</a>
+                                </li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart List -->
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline is-centered">
+                {{#if carts.length}}
+                    {{#each carts}}
+                        <div class="column is-12-mobile is-4-desktop">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="content">
+                                        <strong>Cart ID:</strong> {{this.cid}}
+                                    </div>
+                                    <div class="content">
+                                        <strong>Products:</strong>
+                                        <ul>
+                                            {{#each this.products}}
+                                                <li>
+                                                    <strong>PID:</strong> {{this.pid}} - 
+                                                    <strong>Quantity:</strong> {{this.quantity}}
+                                                </li>
+                                            {{/each}}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {{/each}}
+                {{else}}
+                    <p class="has-text-centered">No carts available.</p>
+                {{/if}}
+            </div>
+        </div>
+    </section>
+
+    <section class="rt-general-page-footer make-it-semi-back make-it-dark">
+        <div class="content">
+            <div>Total Items: {{totalItems}} - Total Pages: {{totalPages}}</div>
+        </div>
+    </section>
+</body>
+</html>

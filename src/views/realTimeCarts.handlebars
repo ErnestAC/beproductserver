@@ -9,10 +9,31 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
+        let currentPage = 1;
+        let totalItems = 0;
+        let itemsPerPage = 15; // maximum displayed at the same time in rt view
+        let totalPages = 1;
+
+        // Display connection ID
+        socket.on('connect', () => {
+            const connectionIdElement = document.getElementById('connectionId');
+            connectionIdElement.textContent = `Connection ID: ${socket.id}`;
+        });
 
         socket.on('updateCarts', (carts) => {
+            totalItems = carts.length;
+            totalPages = Math.ceil(totalItems / itemsPerPage);
+
             const cartList = document.getElementById('cartList');
-            cartList.innerHTML = carts.map(cart => `
+            const cartCount = document.getElementById('cartCount');
+            const paginationInfo = document.getElementById('paginationInfo');
+
+            // Pagination logic
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedCarts = carts.slice(start, end);
+
+            cartList.innerHTML = paginatedCarts.map(cart => `
                 <div class="box">
                     <h4 class="title is-4">Cart ID: ${cart.cid}</h4>
                     <ul>
@@ -25,25 +46,34 @@
                     </ul>
                 </div>
             `).join('');
+
+            cartCount.textContent = `Displaying ${paginatedCarts.length} cart(s) | Page ${currentPage}`;
+            paginationInfo.textContent = `Total Items: ${totalItems}, Total Pages: ${totalPages}`;
         });
+
+        function changePage(step) {
+            currentPage += step;
+            if (currentPage < 1) currentPage = 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+            socket.emit('requestCarts');
+        }
     </script>
 </head>
 <body>
-    <h2 class="title section">Real-Time Cart List</h2>
-    <div class="section" id="cartList">
-        {{#each carts}}
-            <div class="box">
-                <h4 class="title is-4">Cart ID: {{this.cid}}</h4>
-                <ul>
-                    {{#each this.products}}
-                        <li>
-                            <strong>PID:</strong> {{this.pid}} - 
-                            <strong>Quantity:</strong> {{this.quantity}}
-                        </li>
-                    {{/each}}
-                </ul>
-            </div>
-        {{/each}}
-    </div>
+    <div class="subtitle section make-it-dark make-it-white-back">Cart List - Realtime display</div>
+    <div class="section">
+
+
+        <div id="cartList"></div>
+        <br>
+        <div class="grid-container-3c-by-1r make-it-rounded make-it-white-back make-it-dark">
+            <button class="button is-danger" onclick="changePage(-1)">Prev</button>
+            <div class="content make-it-dark make-it-semi-back make-it-rounded make-it-center section" id="cartCount"></div>
+            <button class="button is-success" onclick="changePage(1)">Next</button>
+        </div>
+        <br>
+        <div class="content make-it-dark make-it-rounded-top make-it-semi-back rt-general-page-footer" id="paginationInfo"></div>
+    </div>  
+    <div id="connectionId" class="make-it-white make-it-rounded make-it-center"></div>
 </body>
 </html>
