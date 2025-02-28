@@ -14,12 +14,6 @@
         let itemsPerPage = 15; // maximum displayed at the same time in rt view
         let totalPages = 1;
 
-        // Display connection ID
-        socket.on('connect', () => {
-            const connectionIdElement = document.getElementById('connectionId');
-            connectionIdElement.textContent = `Connection ID: ${socket.id}`;
-        });
-
         socket.on('updateProducts', (products) => {
             totalItems = products.length;
             totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -75,8 +69,6 @@
 <body>
     <div class="subtitle section make-it-dark make-it-white-back">Product List - Realtime display</div>
     <div class="section">
-        <!-- Display Connection ID -->
-        
         
         <div id="productList"></div>
         <br>
@@ -85,8 +77,7 @@
             <div class="content make-it-dark make-it-semi-back make-it-rounded make-it-center section" id="productCount"></div>
             <button class="button is-success" onclick="changePage(1)">Next</button>
         </div>
-        <br>
-        <div id="connectionId" class="make-it-white make-it-rounded make-it-center"></div>
+        
         <div class="content make-it-dark make-it-rounded-top make-it-semi-back rt-general-page-footer" id="paginationInfo"></div>
     </div>
 </body>

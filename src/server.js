@@ -1,3 +1,4 @@
+// server.js
 import express from 'express';
 import { engine } from 'express-handlebars';
 import { Server } from 'socket.io';
@@ -137,7 +138,7 @@ app.use('/api/products', ProductsRoute);
 app.use('/api/carts', CartsRoute);
 
 // Static route for viewing all products with sorting and pagination
-app.get('/products/static', async (req, res) => {
+app.get('/products/', async (req, res) => {
     // Extract query parameters with default values
     let { limit = 10, page = 1, sort = 'title', sortOrder = 'asc' } = req.query;
 
@@ -186,47 +187,16 @@ app.get('/products/static', async (req, res) => {
     }
 });
 
+
+
 // Real-time products and carts
 app.get('/realtimeproducts', async (req, res) => {
-    // Extract query parameters with default values
-    let { limit = 10, page = 1, sort = 'title', sortOrder = 'asc' } = req.query;
-
-    // Ensure limit is a valid number and >= 1
-    limit = Math.max(1, Number(limit) || 10);
-
-    const currentPage = Math.max(1, Number(page));
-    const skip = (currentPage - 1) * limit;
-
     try {
-        const sortDirection = sortOrder === 'desc' ? -1 : 1;
-
-        // Fetch products with pagination and sorting
         const products = await productManager.getAllProducts({
-            limit: limit,
-            skip: skip,
-            sort: sort,
-            sortDirection: sortDirection
+            sort: 'price',
+            sortDirection: -1,
         });
-
-        const totalProducts = await productManager.getTotalProductCount();
-        const totalPages = Math.ceil(totalProducts / limit);
-
-        const hasPrevPage = currentPage > 1;
-        const hasNextPage = currentPage < totalPages;
-        const prevPage = hasPrevPage ? currentPage - 1 : null;
-        const nextPage = hasNextPage ? currentPage + 1 : null;
-
-        res.render('realTimeProducts', {
-            products,
-            currentPage,
-            totalPages,
-            prevPage,
-            nextPage,
-            hasPrevPage,
-            hasNextPage,
-            sort,
-            sortOrder
-        });
+        res.render('realTimeProducts', { products });
     } catch (error) {
         console.error("Error in realtimeproducts:", error);
         res.status(500).send("Error rendering realtime products");
