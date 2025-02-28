@@ -25,28 +25,37 @@ router.get('/', async (req, res) => {
     const { limit = 10, page = 1, sort = 'title', sortOrder = 'asc', filterBy = '' } = req.query;
     const skip = (page - 1) * limit;
 
+    
+
     try {
         const sortDirection = sortOrder === 'desc' ? -1 : 1;
 
-        // Fetch products with filters and sorting applied
         let products = await productManager.getAllProducts({
             limit: Number(limit),
             skip: Number(skip),
             sort: sort,
-            sortDirection: sortDirection
+            sortDirection: sortDirection,
+            filterBy: filterBy
         });
 
-        // Apply filtering if a filter is provided
-        if (filterBy) {
-            products = products.filter(product => {
-                return Object.values(product).some(value =>
-                    String(value).toLowerCase().includes(filterBy.toLowerCase())
-                );
-            });
-        }
+        const totalProducts = await productManager.getTotalProductCount(filterBy);
+        const totalPages = Math.ceil(totalProducts / limit);
 
-        // Return products as JSON
-        res.json({ products });
+        const response = {
+            products,
+            page: Number(page),
+            totalPages,
+            previousPage: page > 1 ? Number(page) - 1 : null,
+            nextPage: page < totalPages ? Number(page) + 1 : null,
+            pages: Array.from({ length: totalPages }, (_, i) => i + 1),
+            isFirstPage: page === 1,
+            isLastPage: page === totalPages,
+            limit: Number(limit),
+            sort,
+            sortOrder,
+        };
+
+        res.json(response);
     } catch (err) {
         console.error("Error fetching products:", err);
         res.status(500).json({ error: 'Server error' });

@@ -39,12 +39,11 @@ export class ProductManager {
             const sortCriteria = {};
             sortCriteria[sort] = sortDirection;
 
-            // Return plain JavaScript objects using .lean()
             const products = await ProductModel.find(query)
                 .sort(sortCriteria)
                 .skip(skip)
                 .limit(Number(limit))
-                .lean();  // This ensures we get plain objects
+                .lean();
 
             return products;
         } catch (err) {
@@ -55,7 +54,6 @@ export class ProductManager {
 
     async getProductById(pid) {
         try {
-            // .lean() is already in use, returning plain object
             return await ProductModel.findOne({ pid: pid, active: true }).lean();
         } catch (err) {
             console.error("Error fetching product by PID:", err);
@@ -115,6 +113,29 @@ export class ProductManager {
         } catch (err) {
             console.error("Error deleting product:", err);
             return null;
+        }
+    }
+
+    async getTotalProductCount(filterBy = '') {
+        try {
+            const query = { active: true };
+
+            if (filterBy) {
+                query.$or = [
+                    { title: { $regex: filterBy, $options: 'i' } },
+                    { description: { $regex: filterBy, $options: 'i' } },
+                    { code: { $regex: filterBy, $options: 'i' } },
+                    { price: { $regex: filterBy, $options: 'i' } },
+                    { stock: { $regex: filterBy, $options: 'i' } },
+                    { category: { $regex: filterBy, $options: 'i' } },
+                    { pid: { $regex: filterBy, $options: 'i' } }
+                ];
+            }
+
+            return await ProductModel.countDocuments(query);
+        } catch (err) {
+            console.error("Error getting total product count:", err);
+            return 0;
         }
     }
 }

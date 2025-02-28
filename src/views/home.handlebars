@@ -6,7 +6,6 @@
     <title>Product List</title>
     <meta name="color-scheme" content="dark">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-    <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
     <h2 class="subtitle section make-it-left make-it-white-back make-it-dark">Product List - Static view</h2>
@@ -45,28 +44,6 @@
                         </li>
                     {{/each}}
                 </ul>
-            </div>
-            <div class="field is-grouped is-grouped-centered">
-                <div class="control">
-                    <label class="label make-it-white">Sort By</label>
-                    <div class="select">
-                        <select id="sortSelect" onchange="location = this.value;">
-                            <option value="?page=1&limit={{limit}}&sort=title&sortOrder={{sortOrder}}" {{#if (eq sort 'title')}}selected{{/if}}>Title</option>
-                            <option value="?page=1&limit={{limit}}&sort=price&sortOrder={{sortOrder}}" {{#if (eq sort 'price')}}selected{{/if}}>Price</option>
-                            <option value="?page=1&limit={{limit}}&sort=stock&sortOrder={{sortOrder}}" {{#if (eq sort 'stock')}}selected{{/if}}>Stock</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="control">
-                    <label class="label make-it-white">Items Per Page</label>
-                    <div class="select">
-                        <select id="limitSelect" onchange="location = this.value;">
-                            <option value="?page=1&limit=10&sort={{sort}}&sortOrder={{sortOrder}}" {{#if (eq limit '10')}}selected{{/if}}>10</option>
-                            <option value="?page=1&limit=20&sort={{sort}}&sortOrder={{sortOrder}}" {{#if (eq limit '20')}}selected{{/if}}>20</option>
-                            <option value="?page=1&limit=30&sort={{sort}}&sortOrder={{sortOrder}}" {{#if (eq limit '30')}}selected{{/if}}>30</option>
-                        </select>
-                    </div>
-                </div>
             </div>
         </div>
     </section>

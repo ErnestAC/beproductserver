@@ -16,9 +16,9 @@ async function simulateActivity() {
         console.log("Simulating activity...");
 
         const operations = [
-            { type: 'create', probability: 0.3 },
-            { type: 'update', probability: 0.4 },
-            { type: 'delete', probability: 0.3 }
+            { type: 'create', probability: 0.1 },
+            { type: 'update', probability: 0.8 },
+            { type: 'delete', probability: 0.1 }
         ];
 
         async function createProduct() {
@@ -44,7 +44,7 @@ async function simulateActivity() {
         async function updateProduct() {
             try {
                 const response = await axios.get(API_BASE_URL);
-                const products = response.data.result; // Access the 'result' property
+                const products = response.data.products; // Access the 'products' array
 
                 if (products && products.length > 0) {
                     const randomProduct = products[Math.floor(Math.random() * products.length)];
@@ -64,7 +64,7 @@ async function simulateActivity() {
         async function deleteProduct() {
             try {
                 const response = await axios.get(API_BASE_URL);
-                const products = response.data.result; // Access the 'result' property
+                const products = response.data.products; // Access the 'products' array
 
                 if (products && products.length > 0) {
                     const randomProduct = products[Math.floor(Math.random() * products.length)];
@@ -99,7 +99,7 @@ async function simulateActivity() {
             }
         }
 
-        setInterval(performRandomOperation, Math.floor(Math.random() * 4000) + 1000);
+        setInterval(performRandomOperation, Math.floor(Math.random() * 1000) + 1000);
 
     } catch (error) {
         console.error('Error simulating activity:', error);
