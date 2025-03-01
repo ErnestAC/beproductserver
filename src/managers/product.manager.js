@@ -33,8 +33,8 @@ export class ProductManager {
     }
 
     
-    async getAllProducts({ limit = 10, skip = 0, sort = 'title', sortDirection = 1, filterBy = '' }) {
-        const query = { active: true }; // Add filter logic if necessary
+    async getAllProducts({ limit = 10, skip = 0, sort = '', sortDirection = 1, filterBy = '' }) {
+        const query = { active: true };
     
         const sortCriteria = {};
         sortCriteria[sort] = sortDirection;
@@ -43,7 +43,7 @@ export class ProductManager {
             const products = await ProductModel.find(query)
                 .sort(sortCriteria)
                 .skip(skip)
-                .limit(Number(limit)) // ensure limit is treated as a number
+                .limit(Number(limit))
                 .lean();
             return products;
         } catch (err) {

@@ -5,7 +5,7 @@ import paginate from 'express-paginate';
 const router = Router();
 
 // Middleware setup
-router.use(paginate.middleware(10, 50));
+router.use(paginate.middleware(10, 50)); // lim 10, 50 max
 
 // Static route for viewing all products with sorting and pagination
 router.get('/', async (req, res) => {
