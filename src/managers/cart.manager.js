@@ -93,6 +93,27 @@ export class CartManager {
             throw err;
         }
     }
+
+    async clearCartById(cartId) {
+        try {
+            // Find the cart by ID
+            const cart = await Cart.findOne({ cid: cartId });
+            if (!cart) {
+                throw Error(`Cart with ID ${cartId} not found`);
+            }
+    
+            // Clear all products in the cart
+            cart.products = [];
+    
+            // Save the updated cart
+            await cart.save();
+            notifyCartChange(); // Notify all clients about the cart update
+            return cart;
+        } catch (err) {
+            console.error("Error clearing cart contents:", err);
+            throw err;
+        }
+    }
 }
 
 export const cartManager = new CartManager();

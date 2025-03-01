@@ -77,14 +77,14 @@ router.post('/:cid/product/:pid', async (req, res) => {
     }
 });
 
-// DELETE: Delete a cart by CID
+// DELETE: Delete cart contents by CID
 router.delete('/:cid', async (req, res) => {
     const { cid } = req.params;
     try {
-        const deleted = await cartManager.deleteCartById(cid);
+        const deleted = await cartManager.clearCartById(cid);
         if (deleted) {
             notifyCartChange();
-            res.json({ status: "success", message: "Cart deleted" });
+            res.json({ status: "success", message: "Cart contents deleted" });
         } else {
             res.status(404).json({ status: "error", message: 'Cart not found' });
         }
@@ -92,5 +92,34 @@ router.delete('/:cid', async (req, res) => {
         res.status(500).json({ status: "error", message: 'Server error' });
     }
 });
+
+// DELETE: Remove a specific product from a cart
+router.delete('/:cid/products/:pid', async (req, res) => {
+    const { cid, pid } = req.params;
+    try {
+        // Find the cart by cid
+        const cart = await cartManager.getCartById(cid);
+        if (!cart) {
+            return res.status(404).json({ status: "error", message: "Cart not found" });
+        }
+
+        // Check if the product exists in the cart
+        const productIndex = cart.products.findIndex(item => item.pid === pid);
+        if (productIndex === -1) {
+            return res.status(404).json({ status: "error", message: "Product not found in cart" });
+        }
+
+        // Remove the product from the cart
+        cart.products.splice(productIndex, 1);
+
+        // Save the updated cart
+        await cart.save();
+        notifyCartChange(); // Notify 
+        res.json({ status: "success", message: "Product removed from cart", payload: cart });
+    } catch (err) {
+        res.status(500).json({ status: "error", message: 'Server error' });
+    }
+});
+
 
 export default router;

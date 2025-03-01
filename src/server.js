@@ -6,8 +6,8 @@ import http from 'http';
 import path from 'path';
 
 import { __dirname } from './utils.js';
-import ProductsRoute from './routes/products.route.js';
-import CartsRoute from './routes/carts.route.js';
+import ProductsRoute from './routes/api.products.route.js';
+import CartsRoute from './routes/api.carts.route.js';
 import homeRoute from './routes/home.route.js';
 import FormsRoute from './routes/forms.route.js';
 import { productManager } from './managers/product.manager.js';
@@ -142,6 +142,16 @@ app.use('/realtime/', RealtimeViews)
 
 const PORT = 8080;
 server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`** Server running on port ${PORT} **`);
     console.log(`http://localhost:${PORT}`);
+    console.log(`Other views:`)
+    console.log(`http://localhost:${PORT}/realtime/products`)
+    console.log(`http://localhost:${PORT}/realtime/carts`)
+    console.log(`http://localhost:${PORT}/statics/products`)
+    console.log(`http://localhost:${PORT}/statics/carts`)
+    console.log(`Forms:`)
+    console.log(`http://localhost:${PORT}/forms/add-product`)
+    console.log(`http://localhost:${PORT}/forms/delete-product`)
+    console.log(`** See readme for API implementations **`)
+
 });
