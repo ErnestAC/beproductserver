@@ -11,7 +11,7 @@
         const socket = io();
         let currentPage = 1;
         let totalItems = 0;
-        let itemsPerPage = 15; // maximum displayed at the same time in rt view
+        let itemsPerPage = 50; // maximum displayed at the same time in rt view
         let totalPages = 1;
 
         socket.on('updateCarts', (carts) => {
@@ -28,15 +28,14 @@
             const paginatedCarts = carts.slice(start, end);
 
             cartList.innerHTML = `
-                <div class="box make-it-rounded-top make-it-semi-back">
-                    <h4 class="title is-4">Carts</h4>
-                    <div>
+                <div class="make-it-rounded-top make-it-white-back">
+                    <div class="grid-container">
                         ${paginatedCarts.map(cart => `
-                            <div class="box">
-                                <h5 class="subtitle">Cart ID: ${cart.cid}</h5>
-                                <table class="table is-striped is-hoverable is-fullwidth">
+                            <div class="box make-it-white-back">
+                                <h5 class="make-it-dark-back make-it-white make-it-center make-it-rounded-top">Cart ${cart.cid}</h5>
+                                <table class="table make-it-dark is-hoverable is-fullwidth">
                                     <thead>
-                                        <tr>
+                                        <tr class="make-it-semi-back make-it-rounded">
                                             <th>PID</th>
                                             <th>Quantity</th>
                                         </tr>

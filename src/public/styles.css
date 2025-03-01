@@ -672,12 +672,12 @@ textarea:focus {
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(2, 3fr);
   gap: .5rem;
   padding: .5rem;
   width: 100%;
   text-align: left;
-  align-items: center
+  align-items: top
 }
 
 .correction-down-half {
