@@ -2,7 +2,6 @@ import { v4 as uuidv4 } from "uuid";
 import { connectDB } from "../helpers/mongo.helpers.js";
 import { ProductModel } from "../models/product.model.js";
 import { notifyProductChange } from "../server.js";
-import mongoosePaginate from 'mongoose-paginate-v2';
 
 export class ProductManager {
     async initialize() {
@@ -33,41 +32,27 @@ export class ProductManager {
         }
     }
 
-    // Updated to use pagination via mongoose-paginate-v2
-    async getAllProducts({ limit = 10, page = 1, sort = 'title', sortDirection = 1, filterBy = '' }) {
+    
+    async getAllProducts({ limit = 10, skip = 0, sort = 'title', sortDirection = 1, filterBy = '' }) {
         const query = { active: true }; // Add filter logic if necessary
     
         const sortCriteria = {};
         sortCriteria[sort] = sortDirection;
-
+    
         try {
-            const options = {
-                page: Number(page),
-                limit: Number(limit),
-                sort: sortCriteria,
-                lean: true
-            };
-
-            if (filterBy) {
-                query.$or = [
-                    { title: { $regex: filterBy, $options: 'i' } },
-                    { description: { $regex: filterBy, $options: 'i' } },
-                    { code: { $regex: filterBy, $options: 'i' } },
-                    { price: { $regex: filterBy, $options: 'i' } },
-                    { stock: { $regex: filterBy, $options: 'i' } },
-                    { category: { $regex: filterBy, $options: 'i' } },
-                    { pid: { $regex: filterBy, $options: 'i' } }
-                ];
-            }
-
-            const result = await ProductModel.paginate(query, options);
-            return result;
+            const products = await ProductModel.find(query)
+                .sort(sortCriteria)
+                .skip(skip)
+                .limit(Number(limit)) // ensure limit is treated as a number
+                .lean();
+            return products;
         } catch (err) {
             console.error("Error fetching products:", err);
-            return { docs: [], totalDocs: 0 };
+            return [];
         }
     }
-
+    
+    
     async getProductById(pid) {
         try {
             return await ProductModel.findOne({ pid: pid, active: true }).lean();
@@ -132,7 +117,6 @@ export class ProductManager {
         }
     }
 
-    // This method is now unnecessary, as pagination handles the counting.
     async getTotalProductCount(filterBy = '') {
         try {
             const query = { active: true };
@@ -149,8 +133,7 @@ export class ProductManager {
                 ];
             }
 
-            const count = await ProductModel.countDocuments(query);
-            return count;
+            return await ProductModel.countDocuments(query);
         } catch (err) {
             console.error("Error getting total product count:", err);
             return 0;

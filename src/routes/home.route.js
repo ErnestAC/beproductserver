@@ -1,27 +1,26 @@
 import { Router } from "express";
 import { productManager } from "../managers/product.manager.js";
+import paginate from 'express-paginate';
 
 const router = Router();
 
+// Middleware setup
+router.use(paginate.middleware(10, 50));
+
 // Static route for viewing all products with sorting and pagination
 router.get('/', async (req, res) => {
-    // Extract query parameters with default values
-    let { limit = 10, page = 1, sort = 'title', sortOrder = 'asc' } = req.query;
-
-    // Ensure limit is a valid number and >= 1
-    limit = Math.max(1, Number(limit) || 10); // Default to 10 if invalid
-
-    // Ensure the page is a valid number and >= 1
-    const currentPage = Math.max(1, Number(page)); // Ensure page is at least 1
-    const skip = (currentPage - 1) * limit;
+    let { sort = 'title', sortOrder = 'asc' } = req.query;
 
     try {
         const sortDirection = sortOrder === 'desc' ? -1 : 1;
+        let limit = Math.max(1, Number(req.query.limit) || 10);
+        let page = Math.max(1, Number(req.query.page) || 1);
+        const offset = (page - 1) * limit; //calculate the offset manually
 
         // Fetch products with pagination and sorting
-        const result = await productManager.getAllProducts({
+        const products = await productManager.getAllProducts({
             limit: limit,
-            skip: skip,
+            skip: offset, //use the manually calculated offset
             sort: sort,
             sortDirection: sortDirection
         });
@@ -31,29 +30,21 @@ router.get('/', async (req, res) => {
         const totalPages = Math.ceil(totalProducts / limit);
 
         // Calculate page navigation flags
-        const hasPrevPage = currentPage > 1;
-        const hasNextPage = currentPage < totalPages;
-        const prevPage = hasPrevPage ? currentPage - 1 : null;
-        const nextPage = hasNextPage ? currentPage + 1 : null;
+        const hasPrevPage = page > 1;
+        const hasNextPage = page < totalPages;
+        const prevPage = hasPrevPage ? page - 1 : null;
+        const nextPage = hasNextPage ? page + 1 : null;
 
-        // Paginated pages array
-        const pages = [];
-        for (let i = 1; i <= totalPages; i++) {
-            pages.push(i);
-        }
-        console.log(result);
         res.render('productsStatic', {
-            products: result.docs,
-            currentPage,
-            totalPages,
-            prevPage,
-            nextPage,
-            hasPrevPage,
-            hasNextPage,
+            products,
+            currentPage: page,
+            totalPages: totalPages,
+            prevPage: prevPage,
+            nextPage: nextPage,
+            hasPrevPage: hasPrevPage,
+            hasNextPage: hasNextPage,
             sort,
             sortOrder,
-            pages, // Pass the pages for pagination links
-            limit // Ensure the limit is passed to the Handlebars template
         });
     } catch (err) {
         console.error('Error rendering products page:', err);

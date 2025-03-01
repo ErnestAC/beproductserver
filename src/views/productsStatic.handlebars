@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
-    <h2 class="subtitle section make-it-left make-it-white-back make-it-dark make-it-rounded-top">Product List</h2>
+    <h2 class="subtitle section make-it-left make-it-white-back make-it-dark make-it-rounded-top">Product List - Static view</h2>
     
     <!-- Sorting and Pagination Controls at the top -->
     <section class="section">
@@ -27,6 +27,7 @@
                             <a class="button" href="?page=1&limit={{limit}}&sort=stock&sortOrder=asc">Stock asc</a>
                             <a class="button" href="?page=1&limit={{limit}}&sort=stock&sortOrder=desc">Stock desc</a>
                         </div>
+
                     </div>
 
                     <!-- Limit Dropdown -->
@@ -69,16 +70,18 @@
                                 <li>
                                     <a class="pagination-link" 
                                     href="?page={{this}}&limit={{../limit}}&sort={{../sort}}&sortOrder={{../sortOrder}}" 
-                                    {{#if (eq this ../currentPage)}}aria-current="page"{{/if}}>{{this}}</a>
+                                    {{#if (eq this @root.currentPage)}}aria-current="page"{{/if}}>{{this}}</a>
                                 </li>
                             {{/each}}
                         </ul>
                     </div>
                 </div>
-            </div>
-        </div>
+
+
+
     </section>
 
+    <!-- Product List -->
     <section class="section">
         <div class="container">
             <div class="columns is-multiline is-centered">
