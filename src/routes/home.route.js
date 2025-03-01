@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
         const sortDirection = sortOrder === 'desc' ? -1 : 1;
 
         // Fetch products with pagination and sorting
-        const products = await productManager.getAllProducts({
+        const result = await productManager.getAllProducts({
             limit: limit,
             skip: skip,
             sort: sort,
@@ -36,8 +36,14 @@ router.get('/', async (req, res) => {
         const prevPage = hasPrevPage ? currentPage - 1 : null;
         const nextPage = hasNextPage ? currentPage + 1 : null;
 
+        // Paginated pages array
+        const pages = [];
+        for (let i = 1; i <= totalPages; i++) {
+            pages.push(i);
+        }
+        console.log(result);
         res.render('productsStatic', {
-            products,
+            products: result,
             currentPage,
             totalPages,
             prevPage,
@@ -45,7 +51,9 @@ router.get('/', async (req, res) => {
             hasPrevPage,
             hasNextPage,
             sort,
-            sortOrder
+            sortOrder,
+            pages, // Pass the pages for pagination links
+            limit // Ensure the limit is passed to the Handlebars template
         });
     } catch (err) {
         console.error('Error rendering products page:', err);

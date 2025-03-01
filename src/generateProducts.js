@@ -47,5 +47,5 @@ async function generateProducts(count) {
     }
 }
 
-const productCount = 250;
+const productCount = 15;
 generateProducts(productCount);
