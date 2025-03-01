@@ -43,7 +43,7 @@ router.get('/', async (req, res) => {
         }
         console.log(result);
         res.render('productsStatic', {
-            products: result,
+            products: result.docs,
             currentPage,
             totalPages,
             prevPage,

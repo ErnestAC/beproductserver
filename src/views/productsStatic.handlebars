@@ -20,18 +20,12 @@
                     <div class="column is-12">
                         <div class="make-it-semi-back make-it-center">
                             <div class="make-it-semi-back make-it-center section">Sort by</div>
-                            <a class="button" href="?page=1&limit={{limit}}&sort=title&sortOrder=asc" 
-                               {{#if (eq sort 'title')}}{{#if (eq sortOrder 'asc')}}class="is-active"{{/if}}{{/if}}>Title asc</a>
-                            <a class="button" href="?page=1&limit={{limit}}&sort=title&sortOrder=desc" 
-                               {{#if (eq sort 'title')}}{{#if (eq sortOrder 'desc')}}class="is-active"{{/if}}{{/if}}>Title desc</a>
-                            <a class="button" href="?page=1&limit={{limit}}&sort=price&sortOrder=asc" 
-                               {{#if (eq sort 'price')}}{{#if (eq sortOrder 'asc')}}class="is-active"{{/if}}{{/if}}>Price asc</a>
-                            <a class="button" href="?page=1&limit={{limit}}&sort=price&sortOrder=desc" 
-                               {{#if (eq sort 'price')}}{{#if (eq sortOrder 'desc')}}class="is-active"{{/if}}{{/if}}>Price desc</a>
-                            <a class="button" href="?page=1&limit={{limit}}&sort=stock&sortOrder=asc" 
-                               {{#if (eq sort 'stock')}}{{#if (eq sortOrder 'asc')}}class="is-active"{{/if}}{{/if}}>Stock asc</a>
-                            <a class="button" href="?page=1&limit={{limit}}&sort=stock&sortOrder=desc" 
-                               {{#if (eq sort 'stock')}}{{#if (eq sortOrder 'desc')}}class="is-active"{{/if}}{{/if}}>Stock desc</a>
+                            <a class="button" href="?page=1&limit={{limit}}&sort=title&sortOrder=asc">Title asc</a>
+                            <a class="button" href="?page=1&limit={{limit}}&sort=title&sortOrder=desc">Title desc</a>
+                            <a class="button" href="?page=1&limit={{limit}}&sort=price&sortOrder=asc">Price asc</a>
+                            <a class="button" href="?page=1&limit={{limit}}&sort=price&sortOrder=desc">Price desc</a>
+                            <a class="button" href="?page=1&limit={{limit}}&sort=stock&sortOrder=asc">Stock asc</a>
+                            <a class="button" href="?page=1&limit={{limit}}&sort=stock&sortOrder=desc">Stock desc</a>
                         </div>
                     </div>
 
@@ -85,7 +79,6 @@
         </div>
     </section>
 
-    <!-- Product List -->
     <section class="section">
         <div class="container">
             <div class="columns is-multiline is-centered">
