@@ -17,7 +17,7 @@ body {
   background-repeat: repeat-x;
   background-attachment: fixed;
   background-color: #172330;
-  padding: 4.5rem 1rem 3rem 1rem !important;
+  padding: 5.5rem 1rem 3rem 1rem !important;
 }
 
 .App,
@@ -630,8 +630,14 @@ textarea:focus {
 
 .make-it-normal {
   font-family: Roboto, Arial, Helvetica, sans-serif;
-  font-size: 1rem;
+  font-size: 1rem !important;
 }
+
+.make-it-small {
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+  font-size: 0.7rem !important;
+}
+
 
 .make-it-white {
   color: #fff !important
@@ -639,6 +645,10 @@ textarea:focus {
 
 .make-it-white-back {
   background-color: #fff !important
+}
+
+.make-it-semi {
+  color: rgba(163, 172, 182, .999) !important
 }
 
 .make-it-semi-back {
@@ -694,6 +704,7 @@ textarea:focus {
 
 .grid-container-2c-by-1r,
 .grid-container-2c66-by-1r,
+.grid-container-3c-by-1r-special,
 .grid-container-3c-by-1r {
   display: grid;
   gap: .5rem;
@@ -701,6 +712,10 @@ textarea:focus {
   width: 100%;
   text-align: left;
   align-items: center
+}
+
+.grid-container-3c-by-1r-special{
+  width: 70% !important;
 }
 
 .grid-container-2c66-by-1r {

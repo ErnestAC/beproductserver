@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
-    <h2 class=" section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Cart List - Static view</h2>
+    <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Cart List - Static view</h2>
     
     <!-- Sorting and Pagination Controls at the top -->
     <section class="section">
@@ -18,10 +18,13 @@
                 <div class="grid-container-2c66-by-1r make-it-semi-back make-it-normal make-it-rounded section">
                     <!-- Sorting Options -->
                     <div class="column is-12">
-                        <div class="make-it-semi-back make-it-normal make-it-center">
+                        <div class="make-it-semi-back make-it-small make-it-center">
                             <div class="make-it-semi-back make-it-normal make-it-center section">Sort by</div>
-                            <a class="button" href="?page=1&limit={{limit}}&sort=cid">Cart ID</a>
-                            <a class="button" href="?page=1&limit={{limit}}&sort=products">Number of Products</a>
+                            <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=cid&sortOrder=asc">Cart ID Asc</a>
+                            <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=cid&sortOrder=desc">Cart ID Desc</a>
+                            <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=products&sortOrder=asc">Products in Cart Asc</a>
+                            <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=products&sortOrder=desc">Products in Cart Desc</a>
+
                         </div>
                     </div>
 
@@ -29,34 +32,33 @@
                     <div class="column is-12">
                         <div class="make-it-semi-back make-it-normal make-it-center">
                             <div class="make-it-semi-back make-it-normal make-it-center section">Items per page</div>
-                            <div class="select">
+                            <div class="select make-it-small">
                                 <select id="limit-select">
                                     <option value="10" {{#if (eq limit '10')}}selected{{/if}}>10</option>
                                     <option value="20" {{#if (eq limit '20')}}selected{{/if}}>20</option>
                                     <option value="50" {{#if (eq limit '50')}}selected{{/if}}>50</option>
-                                    <option value="100" {{#if (eq limit '100')}}selected{{/if}}>100</option>
                                 </select>
                             </div>
-                            <button class="button is-link" onclick="applyLimit()">Apply</button>
+                            <button class="button is-link make-it-small" onclick="applyLimit()">Apply</button>
                         </div>
                     </div>
 
                 </div>
 
                 <!-- Pagination Controls -->
-                <div class="column is-12">
-                    <div class="make-it-white-back is-centered make-it-rounded-top grid-container-3c-by-1r" role="navigation" aria-label="pagination">
+                <div class="column is-10">
+                    <div class="make-it-semi-back is-centered make-it-rounded-top grid-container-3c-by-1r" role="navigation" aria-label="pagination">
                         <!-- Previous Page Link -->
-                        <a class="button section is-success" 
+                        <a class="button section make-it-small" 
                         href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}" 
                         {{#if (eq currentPage 1)}}disabled{{/if}}>Prev page</a>
 
-                        <div class="section make-it-center make-it-rounded make-it-semi-back make-it-normal make-it-white">
+                        <div class="section make-it-center make-it-rounded make-it-semi-back make-it-small make-it-white">
                             Page {{currentPage}} of {{pageCount}}
                         </div>
 
                         <!-- Next Page Link -->
-                        <a class="button section is-danger" 
+                        <a class="button section make-it-small" 
                         href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}" 
                         {{#if (eq currentPage pageCount)}}disabled{{/if}}>Next page</a>
 
@@ -103,7 +105,7 @@
                         </div>
                     {{/each}}
                 {{else}}
-                    <p class="has-text-centered">No carts available.</p>
+                    <div class="has-text-centered make-it-white section">No carts found in database.</div>
                 {{/if}}
             </div>
         </div>

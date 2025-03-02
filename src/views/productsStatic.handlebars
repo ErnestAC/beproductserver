@@ -15,52 +15,51 @@
         <div class="container make-it-dark">
             <div class="columns is-multiline is-centered">
                 <!-- controls -->
-                <div class="grid-container-2c66-by-1r make-it-semi-back make-it-normal make-it-rounded section">
+                <div class="grid-container-2c66-by-1r make-it-semi-back make-it-small make-it-rounded section">
                     <!-- Sorting Options -->
                     <div class="column is-12">
-                        <div class="make-it-semi-back make-it-normal make-it-center">
+                        <div class="make-it-semi-back make-it-small make-it-center">
                             <div class="make-it-semi-back make-it-normal make-it-center section">Sort by</div>
-                            <a class="button" href="?page=1&limit={{limit}}&sort=title&sortOrder=asc">Title asc</a>
-                            <a class="button" href="?page=1&limit={{limit}}&sort=title&sortOrder=desc">Title desc</a>
-                            <a class="button" href="?page=1&limit={{limit}}&sort=price&sortOrder=asc">Price asc</a>
-                            <a class="button" href="?page=1&limit={{limit}}&sort=price&sortOrder=desc">Price desc</a>
-                            <a class="button" href="?page=1&limit={{limit}}&sort=stock&sortOrder=asc">Stock asc</a>
-                            <a class="button" href="?page=1&limit={{limit}}&sort=stock&sortOrder=desc">Stock desc</a>
+                            <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=title&sortOrder=asc">Title asc</a>
+                            <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=title&sortOrder=desc">Title desc</a>
+                            <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=price&sortOrder=asc">Price asc</a>
+                            <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=price&sortOrder=desc">Price desc</a>
+                            <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=stock&sortOrder=asc">Stock asc</a>
+                            <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=stock&sortOrder=desc">Stock desc</a>
                         </div>
 
                     </div>
 
                     <!-- Limit Dropdown -->
-                    <div class="column is-12">
+                    <div class="column is-10">
                         <div class="make-it-semi-back make-it-normal make-it-center">
-                            <div class="make-it-semi-back make-it-normal make-it-center section">Items per page</div>
-                            <div class="select">
+                            <div class="make-it-semi-back make-it-center section">Items per page</div>
+                            <div class="select make-it-small">
                                 <select id="limit-select">
                                     <option value="10" {{#if (eq limit '10')}}selected{{/if}}>10</option>
                                     <option value="20" {{#if (eq limit '20')}}selected{{/if}}>20</option>
                                     <option value="50" {{#if (eq limit '50')}}selected{{/if}}>50</option>
-                                    <option value="100" {{#if (eq limit '100')}}selected{{/if}}>100</option>
                                 </select>
                             </div>
-                            <button class="button is-link" onclick="applyLimit()">Apply</button>
+                            <button class="button is-warning make-it-small" onclick="applyLimit()">Apply</button>
                         </div>
                     </div>
 
                 </div>
                 <!-- Pagination Controls -->
-                <div class="column is-12">
-                    <div class="make-it-white-back is-centered make-it-rounded-top grid-container-3c-by-1r" role="navigation" aria-label="pagination">
+                <div class="column is-10">
+                    <div class="make-it-semi-back is-centered make-it-rounded-top grid-container-3c-by-1r" role="navigation" aria-label="pagination">
                         <!-- Previous Page Link -->
-                        <a class="button section is-success" 
+                        <a class="button section make-it-small" 
                         href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
                         {{#if (eq currentPage 1)}}disabled{{/if}}>Prev page</a>
 
-                        <div class="section make-it-center make-it-rounded make-it-semi-back make-it-normal make-it-white">
+                        <div class="section make-it-center make-it-rounded make-it-semi-back make-it-small make-it-white">
                             Page {{currentPage}} of {{totalPages}}
                         </div>
 
                         <!-- Next Page Link -->
-                        <a class="button section is-danger" 
+                        <a class="button section make-it-small" 
                         href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
                         {{#if (eq currentPage totalPages)}}disabled{{/if}}>Next page</a>
 
@@ -88,23 +87,25 @@
                 {{#if products.length}}
                     {{#each products}}
                         <div class="column is-12-mobile is-4-desktop">
-                            <div class="card">
+                            <div class="box">
+                                <div class="make-it-dark-back make-it-white section make-it-rounded">
+                                    {{this.title}}
+                                </div>
                                 <div class="card-content">
-                                    <div class="content">
-                                        <strong>PID:</strong> {{this.pid}}
-                                    </div>
-                                    <div class="content">
-                                        <strong>{{this.title}} - ${{this.price}}</strong>
+                                    <img src={{this.imageURL}} alt={{this.title}}>
+                                    <div class="section make-it-semi-back make-it-rounded make-it-dark make-it-small">
+                                        <p><strong>Price:</strong>${{this.price}}</p>
                                         <p><strong>Stock:</strong> {{this.stock}}</p>
                                         <p><strong>Motorizable:</strong> {{#if this.motorizable}} Yes {{else}} No {{/if}}</p>
                                         <p><strong>Lighting:</strong> {{#if this.lighting}} Yes {{else}} No {{/if}}</p>
+                                        <strong>PID:</strong> {{this.pid}}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     {{/each}}
                 {{else}}
-                    <p class="has-text-centered">No products available.</p>
+                    <p class="has-text-centered make-it-white section">No products found in the database.</p>
                 {{/if}}
             </div>
         </div>
