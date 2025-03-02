@@ -17,9 +17,9 @@ async function simulateCartActivity() {
 
         const operations = [
             { type: 'createCart', probability: 0.3 },
-            { type: 'addProduct', probability: 0.4 },
-            { type: 'removeProduct', probability: 0.2 },
-            { type: 'deleteCart', probability: 0.1 }
+            { type: 'addProduct', probability: 0.7 },
+            { type: 'removeProduct', probability: 0 },
+            { type: 'deleteCart', probability: 0 }
         ];
 
         async function createCart() {

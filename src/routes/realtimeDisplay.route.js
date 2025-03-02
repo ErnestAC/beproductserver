@@ -38,12 +38,13 @@ router.get('/products', async (req, res) => {
 
 router.get('/carts', async (req, res) => {
     try {
-        const carts = await cartManager.getAllCarts();
-        res.render('realTimeCarts', { carts });
+        const carts = await cartManager.getAllCarts(); // Get all carts from your cartManager
+        res.render('realTimeCarts', { carts }); // Pass carts to the template
     } catch (error) {
         console.error("Error in realtimecarts:", error);
         res.status(500).send("Error rendering realtime carts");
     }
 });
+
 
 export default router;

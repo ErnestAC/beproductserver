@@ -81,8 +81,12 @@ router.get('/carts', async (req, res) => {
         const productIds = carts.flatMap(cart => cart.products.map(p => p.pid));
 
         // Fetch product details
-        let products = await productManager.getProductById(productIds);
-
+        let products = await productManager.getAllProducts({
+            limit: 50,
+            sort: 'stock',
+            sortDirection: -1,
+        });
+        console.log(products);
         // Ensure `products` is an array
         if (!Array.isArray(products)) {
             products = products ? [products] : [];

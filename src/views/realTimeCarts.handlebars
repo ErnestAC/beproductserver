@@ -11,7 +11,7 @@
         const socket = io();
         let currentPage = 1;
         let totalItems = 0;
-        let itemsPerPage = 50; // maximum displayed at the same time in rt view
+        let itemsPerPage = 6; // Default value
         let totalPages = 1;
 
         socket.on('updateCarts', (carts) => {
@@ -45,7 +45,7 @@
                                             <tr class="make-it-small">
                                                 <td>${product.pid}</td>
                                                 <td>${product.quantity}</td>
-                                                <td>${product.quantity}</td>
+                                                <td>${product.price}</td>
                                             </tr>
                                         `).join('')}
                                     </tbody>
@@ -66,13 +66,60 @@
             if (currentPage > totalPages) currentPage = totalPages;
             socket.emit('requestCarts');
         }
+
+        function applyItemsPerPage() {
+            const dropdown = document.getElementById('itemsPerPageDropdown');
+            itemsPerPage = parseInt(dropdown.value, 10); // Get the selected value
+            currentPage = 1; // Reset to the first page
+            socket.emit('requestCarts');
+        }
     </script>
 </head>
 <body>
-    <div class=" section make-it-dark make-it-white-back">Cart List - Realtime display</div>
+    <div class="section make-it-dark make-it-white-back">Cart List - Realtime display</div>
     <div class="section">
-        
-        <div id="cartList"></div>
+        <div id="cartList">
+            {{#each carts}}
+                <div class="box make-it-white-back">
+                    <h5 class="make-it-dark-back make-it-white make-it-center make-it-rounded-top make-it-small">Cart {{cid}}</h5>
+                    <table class="table make-it-dark is-hoverable is-fullwidth">
+                        <thead>
+                            <tr class="make-it-semi-back make-it-small make-it-rounded">
+                                <th>PID</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each products}}
+                                <tr class="make-it-small">
+                                    <td>{{pid}}</td>
+                                    <td>{{quantity}}</td>
+                                    <td>{{price}}</td>
+                                </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            {{/each}}
+        </div>
+
+        <!-- Dropdown to select items per page -->
+        <div class="field has-addons section">
+            <div class="control">
+                <div class="select make-it-small">
+                    <select id="itemsPerPageDropdown">
+                        <option value="6" selected>6 carts per page</option>
+                        <option value="12">12 carts per page</option>
+                        <option value="36">36 carts per page</option>
+                    </select>
+                </div>
+            </div>
+            <div class="control">
+                <button class="button make-it-small" onclick="applyItemsPerPage()">Apply</button>
+            </div>
+        </div>
+
         <br>
         <div class="grid-container-3c-by-1r make-it-rounded make-it-white-back make-it-dark">
             <button class="button make-it-small" onclick="changePage(-1)">Prev</button>

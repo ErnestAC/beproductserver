@@ -17,7 +17,6 @@
                 <!-- controls -->
                 <div class="grid-container-2c66-by-1r make-it-semi-back make-it-small make-it-rounded section">
                     <!-- Sorting Options -->
-
                         <div class="make-it-semi-back make-it-small make-it-center">
                             <div class="make-it-semi-back make-it-normal make-it-center section">Sort by</div>
                             <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=title&sortOrder=asc">Title asc</a>
@@ -27,7 +26,6 @@
                             <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=stock&sortOrder=asc">Stock asc</a>
                             <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=stock&sortOrder=desc">Stock desc</a>
                         </div>
-
 
                     <!-- Limit Dropdown -->
                     <div class="column is-10">
@@ -43,8 +41,8 @@
                             <button class="button is-warning make-it-small" onclick="applyLimit()">Apply</button>
                         </div>
                     </div>
-
                 </div>
+
                 <!-- Pagination Controls -->
                 <div class="column is-10">
                     <div class="make-it-dark-back is-centered make-it-rounded-top grid-container-3c-by-1r" role="navigation" aria-label="pagination">
@@ -74,9 +72,6 @@
                         </ul>
                     </div>
                 </div>
-
-
-
     </section>
 
     <!-- Product List -->
@@ -100,10 +95,17 @@
                                     </div>
                                     
                                 </div>
-                                    <div class="make-it-center">
-                                        <div class="button make-it-small is-warning">Add to cart</div>
-                                    </div>
-                                    <div class="make-it-semi make-it-small section make-it-center">PID: {{this.pid}}</div>
+
+                                <!-- Add to Cart Button (POST) -->
+                                <form id="addToCartForm-{{this.pid}}" action="/api/carts/0199112a-75eb-48a5-b04f-28659df00d75/product/{{this.pid}}" method="POST" style="display: none;">
+                                    <input type="hidden" name="pid" value="{{this.pid}}">
+                                    <input type="hidden" name="quantity" value="1"> <!-- Example quantity -->
+                                </form>
+                                <div class="make-it-center">
+                                    <button class="button make-it-small is-warning" onclick="document.getElementById('addToCartForm-{{this.pid}}').submit();">Add to cart</button>
+                                </div>
+
+                                <div class="make-it-semi make-it-small section make-it-center">PID: {{this.pid}}</div>
 
                             </div>
                         </div>
