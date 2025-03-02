@@ -8,15 +8,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
-    <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Cart List - Static view</h2>
-    
-    <!-- Sorting and Pagination Controls at the top -->
+    <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Cart List - Static View</h2>
+
+    <!-- Sorting and Pagination Controls -->
     <section class="section">
         <div class="container make-it-dark">
             <div class="columns is-multiline is-centered">
-                <!-- controls -->
+                <!-- Sorting Options -->
                 <div class="grid-container-2c66-by-1r make-it-semi-back make-it-normal make-it-rounded section">
-                    <!-- Sorting Options -->
                     <div class="column is-12">
                         <div class="make-it-semi-back make-it-small make-it-center">
                             <div class="make-it-semi-back make-it-normal make-it-center section">Sort by</div>
@@ -24,7 +23,6 @@
                             <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=cid&sortOrder=desc">Cart ID Desc</a>
                             <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=products&sortOrder=asc">Products in Cart Asc</a>
                             <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=products&sortOrder=desc">Products in Cart Desc</a>
-
                         </div>
                     </div>
 
@@ -42,33 +40,29 @@
                             <button class="button is-link make-it-small" onclick="applyLimit()">Apply</button>
                         </div>
                     </div>
-
                 </div>
 
                 <!-- Pagination Controls -->
                 <div class="column is-10">
                     <div class="make-it-dark-back is-centered grid-container-3c-by-1r" role="navigation" aria-label="pagination">
-                        <!-- Previous Page Link -->
                         <a class="button section make-it-small" 
-                        href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}" 
-                        {{#if (eq currentPage 1)}}disabled{{/if}}>Prev page</a>
+                           href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}" 
+                           {{#if (eq currentPage 1)}}disabled{{/if}}>Prev page</a>
 
                         <div class="section make-it-center make-it-rounded make-it-semi-back make-it-small make-it-white">
                             Page {{currentPage}} of {{pageCount}}
                         </div>
 
-                        <!-- Next Page Link -->
                         <a class="button section make-it-small" 
-                        href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}" 
-                        {{#if (eq currentPage pageCount)}}disabled{{/if}}>Next page</a>
+                           href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}" 
+                           {{#if (eq currentPage pageCount)}}disabled{{/if}}>Next page</a>
 
-                        <!-- Page Numbers -->
                         <ul class="pagination-list make-it-small make-it-white">
                             {{#each pages}}
                                 <li>
                                     <a class="pagination-link make-it-white" 
-                                    href="?page={{this}}&limit={{../limit}}&sort={{../sort}}" 
-                                    {{#if (eq this @root.currentPage)}}aria-current="page"{{/if}}>{{this}}</a>
+                                       href="?page={{this}}&limit={{../limit}}&sort={{../sort}}" 
+                                       {{#if (eq this @root.currentPage)}}aria-current="page"{{/if}}>{{this}}</a>
                                 </li>
                             {{/each}}
                         </ul>
@@ -95,9 +89,13 @@
                                     </div>
                                     <div class="content">
                                         <ul>
-                                            
                                             {{#each this.products}}
-                                                <li>{{this.price}} - {{this.pid}} - Quantity: {{this.quantity}}</li>
+                                                <li class="box">
+                                                    <img src="{{this.imageURL}}" alt="{{this.title}}" width="50">
+                                                    <strong>{{this.title}}</strong> - 
+                                                    {{this.price}} USD - 
+                                                    Quantity: {{this.quantity}}
+                                                </li>
                                             {{/each}}
                                         </ul>
                                     </div>
@@ -112,20 +110,12 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <section class="rt-general-page-footer make-it-semi-back make-it-normal make-it-dark">
-        <div class="content">
-            <div>Total Carts: {{itemCount}} - Total Pages: {{pageCount}}</div>
-        </div>
-    </section>
-
-    <!-- Script for handling limit change -->
     <script>
         function applyLimit() {
             const selectedLimit = document.getElementById('limit-select').value;
             const urlParams = new URLSearchParams(window.location.search);
             urlParams.set('limit', selectedLimit);
-            urlParams.set('page', 1); // Reset to first page when changing limit
+            urlParams.set('page', 1);
             window.location.search = urlParams.toString();
         }
     </script>

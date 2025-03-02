@@ -1,27 +1,38 @@
 import { v4 as uuidv4 } from "uuid";
 import { Cart } from "../models/cart.model.js";
 import { notifyCartChange } from "../server.js";
-import { productManager } from "../managers/product.manager.js";
+import { ProductModel } from "../models/product.model.js";
 
 export class CartManager {
-    // Get all carts
+    // Get all carts with populated product details
     async getAllCarts() {
-        
         try {
-            const carts = await Cart.find(); // Find all carts
-            for (const cart of carts) {
-                for (const product of cart.products) {
-                    const productDetails = await productManager.getProductById(product.pid);
-                    
+            const carts = await Cart.find(); // Fetch all carts
+
+            // Collect all product IDs from all carts
+            const allProductIds = [...new Set(carts.flatMap(cart => cart.products.map(p => p.pid)))];
+
+            // Fetch all product details in one query
+            const productsMap = new Map();
+            if (allProductIds.length > 0) {
+                const products = await ProductModel.find({ pid: { $in: allProductIds } });
+                products.forEach(product => {
+                    productsMap.set(product.pid, product);
+                });
+            }
+
+            // Attach product details to each cart
+            carts.forEach(cart => {
+                cart.products.forEach(product => {
+                    const productDetails = productsMap.get(product.pid);
                     if (productDetails) {
                         product.title = productDetails.title;
                         product.imageURL = productDetails.imageURL;
                         product.price = productDetails.price;
                     }
+                });
+            });
 
-                    console.log(product.price)
-                }
-            }
             return carts;
         } catch (err) {
             console.error("Error retrieving carts:", err);
@@ -49,7 +60,7 @@ export class CartManager {
     async addProductToCart(cid, pid) {
         try {
             // Check if the product exists and has stock
-            const product = await productManager.getProductById(pid);
+            const product = await ProductModel.findOne({ pid });
             if (!product) {
                 throw Error(`Product with ID ${pid} not found`);
             }
@@ -64,9 +75,7 @@ export class CartManager {
             }
 
             // Check if product is already in the cart
-            const productInCart = cart.products.find(
-                (item) => item.pid === pid
-            );
+            const productInCart = cart.products.find(item => item.pid === pid);
 
             if (productInCart) {
                 productInCart.quantity += 1;
@@ -83,15 +92,42 @@ export class CartManager {
         }
     }
 
-    // Get a cart by its ID
-    async getCartById(cartId) {
-        try {
-            return await Cart.findOne({ cid: cartId }) || null;
-        } catch (err) {
-            console.error("Error retrieving cart by ID:", err);
-            throw err;
+    // Get a cart by its ID (without product details)
+// Get a single cart by ID with populated product details
+async getCartById(cartId) {
+    try {
+        const cart = await Cart.findOne({ cid: cartId });
+        if (!cart) return null;
+
+        // Collect product IDs from the cart
+        const productIds = cart.products.map(p => p.pid);
+
+        // Fetch all product details in one query
+        const productsMap = new Map();
+        if (productIds.length > 0) {
+            const products = await ProductModel.find({ pid: { $in: productIds } });
+            products.forEach(product => {
+                productsMap.set(product.pid, product);
+            });
         }
+
+        // Attach product details to the cart
+        cart.products.forEach(product => {
+            const productDetails = productsMap.get(product.pid);
+            if (productDetails) {
+                product.title = productDetails.title;
+                product.imageURL = productDetails.imageURL;
+                product.price = productDetails.price;
+            }
+        });
+
+        return cart;
+    } catch (err) {
+        console.error("Error retrieving cart by ID:", err);
+        throw err;
     }
+}
+
 
     // Delete a cart by its ID
     async deleteCartById(cartId) {
@@ -109,6 +145,7 @@ export class CartManager {
         }
     }
 
+    // Clear all products from a cart
     async clearCartById(cartId) {
         try {
             // Find the cart by ID

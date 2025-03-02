@@ -68,20 +68,43 @@ router.get('/carts', async (req, res) => {
         page = parseInt(page);
         limit = parseInt(limit);
 
-        const totalItems = await Cart.countDocuments(); // Total carts
-        const pageCount = Math.ceil(totalItems / limit); // Total pages
+        const totalItems = await Cart.countDocuments();
+        const pageCount = Math.ceil(totalItems / limit);
+
         const carts = await Cart.find()
-            .sort(sort ? { [sort]: 1 } : {}) // Sort dynamically if provided
+            .sort(sort ? { [sort]: 1 } : {})
             .skip((page - 1) * limit)
             .limit(limit)
-            .populate('products.pid')  // Populate the product information
-            .lean(); // Convert Mongoose objects to plain JSON
+            .lean();
 
-        // Generate page numbers
-        const pages = [];
-        for (let i = 1; i <= pageCount; i++) {
-            pages.push(i);
+        // Collect all product IDs from carts
+        const productIds = carts.flatMap(cart => cart.products.map(p => p.pid));
+
+        // Fetch product details
+        let products = await productManager.getProductById(productIds);
+
+        // Ensure `products` is an array
+        if (!Array.isArray(products)) {
+            products = products ? [products] : [];
         }
+
+        // Create a map of products for quick lookup
+        const productsMap = new Map();
+        products.forEach(product => productsMap.set(product.pid, product));
+
+        // Attach product details to each cart's products
+        carts.forEach(cart => {
+            cart.products.forEach(product => {
+                const productDetails = productsMap.get(product.pid);
+                if (productDetails) {
+                    product.title = productDetails.title;
+                    product.imageURL = productDetails.imageURL;
+                    product.price = productDetails.price;
+                }
+            });
+        });
+
+        const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
 
         res.render('cartsStatic', {
             carts,
@@ -92,14 +115,13 @@ router.get('/carts', async (req, res) => {
             nextPage: page < pageCount ? page + 1 : pageCount,
             limit,
             sort,
-            pages, // Pass the pages array to Handlebars
+            pages,
         });
 
     } catch (error) {
-        console.error(error);
+        console.error("Error fetching carts:", error);
         res.status(500).send("Internal Server Error");
     }
 });
-
 
 export default router;
