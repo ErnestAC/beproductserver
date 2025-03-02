@@ -6,8 +6,23 @@ import { productManager } from "../managers/product.manager.js";
 export class CartManager {
     // Get all carts
     async getAllCarts() {
+        
         try {
-            return await Cart.find();
+            const carts = await Cart.find(); // Find all carts
+            for (const cart of carts) {
+                for (const product of cart.products) {
+                    const productDetails = await productManager.getProductById(product.pid);
+                    
+                    if (productDetails) {
+                        product.title = productDetails.title;
+                        product.imageURL = productDetails.imageURL;
+                        product.price = productDetails.price;
+                    }
+
+                    console.log(product.price)
+                }
+            }
+            return carts;
         } catch (err) {
             console.error("Error retrieving carts:", err);
             throw err;

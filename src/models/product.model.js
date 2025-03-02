@@ -8,7 +8,7 @@ const productSchema = new Schema({
     imageURL: String,
     description: String,
     stock: Number,
-    code: String, // Change to String
+    code: String, 
     pid: {
         type: String,
         unique: true

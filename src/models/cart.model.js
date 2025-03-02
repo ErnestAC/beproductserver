@@ -1,24 +1,22 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 
-const cartSchema = new mongoose.Schema({
+const cartSchema = new Schema({
     cid: {
         type: String,
-        required: true,
         unique: true,
     },
     products: [
         {
             pid: {
-                type: String,
+                type: String,  // Change from ObjectId to String
                 required: true,
             },
             quantity: {
                 type: Number,
-                required: true,
                 default: 1,
             },
         },
     ],
-});
+}, { timestamps: true });
 
-export const Cart = mongoose.model("Cart", cartSchema);
+export const Cart = model("Cart", cartSchema);

@@ -8,7 +8,6 @@ const router = Router();
 // Middleware setup
 router.use(paginate.middleware(10, 50)); // lim 10, 50 max
 
-
 router.get('/', async (req, res) => {
     try {
         // Render the home page
@@ -18,7 +17,6 @@ router.get('/', async (req, res) => {
         res.status(500).send("Error rendering home page");
     }
 });
-
 
 router.get('/products', async (req, res) => {
     let { sort = 'title', sortOrder = 'asc' } = req.query;
@@ -64,7 +62,6 @@ router.get('/products', async (req, res) => {
     }
 });
 
-
 router.get('/carts', async (req, res) => {
     try {
         let { page = 1, limit = 10, sort } = req.query;
@@ -77,6 +74,7 @@ router.get('/carts', async (req, res) => {
             .sort(sort ? { [sort]: 1 } : {}) // Sort dynamically if provided
             .skip((page - 1) * limit)
             .limit(limit)
+            .populate('products.pid')  // Populate the product information
             .lean(); // Convert Mongoose objects to plain JSON
 
         // Generate page numbers
@@ -102,5 +100,6 @@ router.get('/carts', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+
 
 export default router;

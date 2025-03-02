@@ -32,18 +32,19 @@
                     <div class="grid-container">
                         ${paginatedCarts.map(cart => `
                             <div class="box make-it-white-back">
-                                <h5 class="make-it-dark-back make-it-white make-it-center make-it-rounded-top make-it-normal">Cart ${cart.cid}</h5>
+                                <h5 class="make-it-dark-back make-it-white make-it-center make-it-rounded-top make-it-small">Cart ${cart.cid}</h5>
                                 <table class="table make-it-dark is-hoverable is-fullwidth">
                                     <thead>
-                                        <tr class="make-it-semi-back make-it-normal make-it-rounded">
+                                        <tr class="make-it-semi-back make-it-small make-it-rounded">
                                             <th>PID</th>
                                             <th>Quantity</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         ${cart.products.map(product => `
-                                            <tr>
+                                            <tr class="make-it-small">
                                                 <td>${product.pid}</td>
+                                                <td>${product.quantity}</td>
                                                 <td>${product.quantity}</td>
                                             </tr>
                                         `).join('')}
@@ -74,12 +75,12 @@
         <div id="cartList"></div>
         <br>
         <div class="grid-container-3c-by-1r make-it-rounded make-it-white-back make-it-dark">
-            <button class="button is-danger" onclick="changePage(-1)">Prev</button>
-            <div class="content make-it-dark make-it-semi-back make-it-normal make-it-rounded make-it-center section" id="cartCount"></div>
-            <button class="button is-success" onclick="changePage(1)">Next</button>
+            <button class="button make-it-small" onclick="changePage(-1)">Prev</button>
+            <div class="content make-it-dark make-it-semi-back make-it-small make-it-rounded make-it-center section" id="cartCount"></div>
+            <button class="button make-it-small" onclick="changePage(1)">Next</button>
         </div>
         
-        <div class="content make-it-dark make-it-rounded-top make-it-semi-back make-it-normal rt-general-page-footer" id="paginationInfo"></div>
+        <div class="content make-it-dark make-it-rounded-top make-it-semi-back make-it-small rt-general-page-footer" id="paginationInfo"></div>
     </div>
 </body>
 </html>

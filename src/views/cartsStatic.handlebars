@@ -47,7 +47,7 @@
 
                 <!-- Pagination Controls -->
                 <div class="column is-10">
-                    <div class="make-it-semi-back is-centered make-it-rounded-top grid-container-3c-by-1r" role="navigation" aria-label="pagination">
+                    <div class="make-it-dark-back is-centered grid-container-3c-by-1r" role="navigation" aria-label="pagination">
                         <!-- Previous Page Link -->
                         <a class="button section make-it-small" 
                         href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}" 
@@ -63,10 +63,10 @@
                         {{#if (eq currentPage pageCount)}}disabled{{/if}}>Next page</a>
 
                         <!-- Page Numbers -->
-                        <ul class="pagination-list">
+                        <ul class="pagination-list make-it-small make-it-white">
                             {{#each pages}}
                                 <li>
-                                    <a class="pagination-link" 
+                                    <a class="pagination-link make-it-white" 
                                     href="?page={{this}}&limit={{../limit}}&sort={{../sort}}" 
                                     {{#if (eq this @root.currentPage)}}aria-current="page"{{/if}}>{{this}}</a>
                                 </li>
@@ -87,16 +87,17 @@
                         <div class="column is-12-mobile is-12-desktop">
                             <div class="card">
                                 <div class="card-content">
-                                    <div class="content">
+                                    <div class="make-it-semi-back section make-it-rounded-top">
                                         <strong>Cart ID:</strong> {{this.cid}}
                                     </div>
-                                    <div class="content">
+                                    <div class="section">
                                         <strong>Products in Cart:</strong> {{this.products.length}}
                                     </div>
                                     <div class="content">
                                         <ul>
+                                            
                                             {{#each this.products}}
-                                                <li>{{this.pid}} - Quantity: {{this.quantity}}</li>
+                                                <li>{{this.price}} - {{this.pid}} - Quantity: {{this.quantity}}</li>
                                             {{/each}}
                                         </ul>
                                     </div>
