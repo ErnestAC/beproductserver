@@ -17,7 +17,7 @@ body {
   background-repeat: repeat-x;
   background-attachment: fixed;
   background-color: #172330;
-  margin: 5rem 0rem 0rem 0rem !important;
+  padding: 4.5rem 1rem 3rem 1rem !important;
 }
 
 .App,
@@ -331,15 +331,14 @@ body {
   position: relative;
   background-color: #172330;
   padding: .5rem;
-  border-radius: 3px
 }
 
 .subtitle-bar-container,
 .title-bar-container {
   font-family: Roboto, Arial, Helvetica, sans-serif;
-  font-size: 1.6rem;
+  font-size: 1rem;
   background-color: #172330;
-  padding: 1.6rem 1rem 1.2rem;
+  padding: 1rem;
   color: #fff !important
 }
 
@@ -380,13 +379,7 @@ body {
   flex-direction: row
 }
 
-.navbar {
-  color: #172330;
-  padding: .7rem;
-  background-color: rgba(163, 172, 182, .999) !important
-}
 
-.navbar,
 .navbar-right,
 .search-container {
   display: flex;
@@ -633,6 +626,11 @@ textarea:focus {
 
 .make-it-rounded {
   border-radius: .35rem
+}
+
+.make-it-normal {
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+  font-size: 1rem;
 }
 
 .make-it-white {

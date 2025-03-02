@@ -142,16 +142,22 @@ app.use('/realtime/', RealtimeViews)
 
 const PORT = 8080;
 server.listen(PORT, () => {
-    console.log(`** Server running on port ${PORT} **`);
+    
+    console.log(` `) 
+    console.log(`Server started on port ${PORT}.`);
+
+    console.log(`-> Home:`);
     console.log(`http://localhost:${PORT}`);
-    console.log(`Other views:`)
+    console.log(`-> Views:`);
+    console.log(`http://localhost:${PORT}/products`)
+    console.log(`http://localhost:${PORT}/carts`)
+    console.log(`-> Other views:`)
     console.log(`http://localhost:${PORT}/realtime/products`)
     console.log(`http://localhost:${PORT}/realtime/carts`)
-    console.log(`http://localhost:${PORT}/statics/products`)
-    console.log(`http://localhost:${PORT}/statics/carts`)
-    console.log(`Forms:`)
+    console.log(`-> Special testing forms:`)
     console.log(`http://localhost:${PORT}/forms/add-product`)
     console.log(`http://localhost:${PORT}/forms/delete-product`)
-    console.log(`** See readme for API implementations **`)
+    console.log(`** See readme for API implementations **`) 
+    console.log(` `) 
 
 });

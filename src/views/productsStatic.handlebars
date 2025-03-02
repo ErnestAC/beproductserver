@@ -8,18 +8,18 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
-    <h2 class="subtitle section make-it-left make-it-white-back make-it-dark make-it-rounded-top">Product List - Static view</h2>
+    <h2 class=" section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Product List - Static view</h2>
     
     <!-- Sorting and Pagination Controls at the top -->
     <section class="section">
         <div class="container make-it-dark">
             <div class="columns is-multiline is-centered">
                 <!-- controls -->
-                <div class="grid-container-2c66-by-1r make-it-semi-back make-it-rounded section">
+                <div class="grid-container-2c66-by-1r make-it-semi-back make-it-normal make-it-rounded section">
                     <!-- Sorting Options -->
                     <div class="column is-12">
-                        <div class="make-it-semi-back make-it-center">
-                            <div class="make-it-semi-back make-it-center section">Sort by</div>
+                        <div class="make-it-semi-back make-it-normal make-it-center">
+                            <div class="make-it-semi-back make-it-normal make-it-center section">Sort by</div>
                             <a class="button" href="?page=1&limit={{limit}}&sort=title&sortOrder=asc">Title asc</a>
                             <a class="button" href="?page=1&limit={{limit}}&sort=title&sortOrder=desc">Title desc</a>
                             <a class="button" href="?page=1&limit={{limit}}&sort=price&sortOrder=asc">Price asc</a>
@@ -32,8 +32,8 @@
 
                     <!-- Limit Dropdown -->
                     <div class="column is-12">
-                        <div class="make-it-semi-back make-it-center">
-                            <div class="make-it-semi-back make-it-center section">Items per page</div>
+                        <div class="make-it-semi-back make-it-normal make-it-center">
+                            <div class="make-it-semi-back make-it-normal make-it-center section">Items per page</div>
                             <div class="select">
                                 <select id="limit-select">
                                     <option value="10" {{#if (eq limit '10')}}selected{{/if}}>10</option>
@@ -55,7 +55,7 @@
                         href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
                         {{#if (eq currentPage 1)}}disabled{{/if}}>Prev page</a>
 
-                        <div class="section make-it-center make-it-rounded make-it-semi-back make-it-white">
+                        <div class="section make-it-center make-it-rounded make-it-semi-back make-it-normal make-it-white">
                             Page {{currentPage}} of {{totalPages}}
                         </div>
 
@@ -111,7 +111,7 @@
     </section>
 
     <!-- Footer -->
-    <section class="rt-general-page-footer make-it-semi-back make-it-dark">
+    <section class="rt-general-page-footer make-it-semi-back make-it-normal make-it-dark">
         <div class="content">
             <div>Total Items: {{totalItems}} - Total Pages: {{totalPages}}</div>
         </div>

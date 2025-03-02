@@ -28,14 +28,14 @@
             const paginatedCarts = carts.slice(start, end);
 
             cartList.innerHTML = `
-                <div class="make-it-rounded-top make-it-white-back">
+                <div class="make-it-rounded-top make-it-white-back make-it-normal">
                     <div class="grid-container">
                         ${paginatedCarts.map(cart => `
                             <div class="box make-it-white-back">
-                                <h5 class="make-it-dark-back make-it-white make-it-center make-it-rounded-top">Cart ${cart.cid}</h5>
+                                <h5 class="make-it-dark-back make-it-white make-it-center make-it-rounded-top make-it-normal">Cart ${cart.cid}</h5>
                                 <table class="table make-it-dark is-hoverable is-fullwidth">
                                     <thead>
-                                        <tr class="make-it-semi-back make-it-rounded">
+                                        <tr class="make-it-semi-back make-it-normal make-it-rounded">
                                             <th>PID</th>
                                             <th>Quantity</th>
                                         </tr>
@@ -68,18 +68,18 @@
     </script>
 </head>
 <body>
-    <div class="subtitle section make-it-dark make-it-white-back">Cart List - Realtime display</div>
+    <div class=" section make-it-dark make-it-white-back">Cart List - Realtime display</div>
     <div class="section">
         
         <div id="cartList"></div>
         <br>
         <div class="grid-container-3c-by-1r make-it-rounded make-it-white-back make-it-dark">
             <button class="button is-danger" onclick="changePage(-1)">Prev</button>
-            <div class="content make-it-dark make-it-semi-back make-it-rounded make-it-center section" id="cartCount"></div>
+            <div class="content make-it-dark make-it-semi-back make-it-normal make-it-rounded make-it-center section" id="cartCount"></div>
             <button class="button is-success" onclick="changePage(1)">Next</button>
         </div>
         
-        <div class="content make-it-dark make-it-rounded-top make-it-semi-back rt-general-page-footer" id="paginationInfo"></div>
+        <div class="content make-it-dark make-it-rounded-top make-it-semi-back make-it-normal rt-general-page-footer" id="paginationInfo"></div>
     </div>
 </body>
 </html>
