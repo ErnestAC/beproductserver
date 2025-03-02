@@ -17,7 +17,7 @@
                 <!-- controls -->
                 <div class="grid-container-2c66-by-1r make-it-semi-back make-it-small make-it-rounded section">
                     <!-- Sorting Options -->
-                    <div class="column is-12">
+
                         <div class="make-it-semi-back make-it-small make-it-center">
                             <div class="make-it-semi-back make-it-normal make-it-center section">Sort by</div>
                             <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=title&sortOrder=asc">Title asc</a>
@@ -28,7 +28,6 @@
                             <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=stock&sortOrder=desc">Stock desc</a>
                         </div>
 
-                    </div>
 
                     <!-- Limit Dropdown -->
                     <div class="column is-10">
@@ -48,13 +47,13 @@
                 </div>
                 <!-- Pagination Controls -->
                 <div class="column is-10">
-                    <div class="make-it-semi-back is-centered make-it-rounded-top grid-container-3c-by-1r" role="navigation" aria-label="pagination">
+                    <div class="make-it-dark-back is-centered make-it-rounded-top grid-container-3c-by-1r" role="navigation" aria-label="pagination">
                         <!-- Previous Page Link -->
                         <a class="button section make-it-small" 
                         href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
                         {{#if (eq currentPage 1)}}disabled{{/if}}>Prev page</a>
 
-                        <div class="section make-it-center make-it-rounded make-it-semi-back make-it-small make-it-white">
+                        <div class="section make-it-center make-it-rounded make-it-semi-back make-it-small make-it-dark">
                             Page {{currentPage}} of {{totalPages}}
                         </div>
 
@@ -91,16 +90,21 @@
                                 <div class="make-it-dark-back make-it-white section make-it-rounded">
                                     {{this.title}}
                                 </div>
-                                <div class="card-content">
-                                    <img src={{this.imageURL}} alt={{this.title}}>
-                                    <div class="section make-it-semi-back make-it-rounded make-it-dark make-it-small">
+                                <div class="columns section">
+                                    <div class="column is-9"><img src={{this.imageURL}} alt={{this.title}}></div>
+                                    <div class="column is-3 make-it-white-back make-it-rounded make-it-dark make-it-small">
                                         <p><strong>Price:</strong>${{this.price}}</p>
                                         <p><strong>Stock:</strong> {{this.stock}}</p>
-                                        <p><strong>Motorizable:</strong> {{#if this.motorizable}} Yes {{else}} No {{/if}}</p>
-                                        <p><strong>Lighting:</strong> {{#if this.lighting}} Yes {{else}} No {{/if}}</p>
-                                        <strong>PID:</strong> {{this.pid}}
+                                        <p><strong>Motor:</strong> {{#if this.motorizable}} Yes {{else}} No {{/if}}</p>
+                                        <p><strong>Lights:</strong> {{#if this.lighting}} Yes {{else}} No {{/if}}</p>
                                     </div>
+                                    
                                 </div>
+                                    <div class="make-it-center">
+                                        <div class="button make-it-small is-warning">Add to cart</div>
+                                    </div>
+                                    <div class="make-it-semi make-it-small section make-it-center">PID: {{this.pid}}</div>
+
                             </div>
                         </div>
                     {{/each}}

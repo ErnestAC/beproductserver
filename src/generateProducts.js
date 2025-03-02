@@ -47,20 +47,20 @@ async function generateProducts(count) {
 
             const product = {
                 pid: uuidv4(),
-                title: `Product ${i + 1}`,
-                description: `Description of product ${i + 1}`,
+                title: `Model Train ${i + 1}`,
+                description: `Description of model train ${i + 1}`,
                 code: `CODE-${i + 1}`,
-                price: Math.floor(Math.random() * 100) + 10,
+                price: Math.floor(Math.random() * 300) + 10,
                 status: Math.random() < 0.9,
-                stock: Math.floor(Math.random() * 50) + 5,
+                stock: Math.floor(Math.random() * 50) + 1,
                 category: `Category ${Math.floor(Math.random() * 5) + 1}`,
                 thumbnails: [],
                 active: true,
                 handle: `product-${i + 1}-handle`,
-                imageURL: randomImageUrl, // Assign random image URL here
+                imageURL: randomImageUrl, // Assign random image URL from list
                 pieces: Math.floor(Math.random() * 10) + 1,
                 lighting: Math.random() < 0.5,
-                wheelArrangement: `Wheel-${Math.floor(Math.random() * 3) + 1}`
+                wheelArrangement: `Wheel-A${Math.floor(Math.random() * 3) + 1}`
             };
             products.push(product);
         }

@@ -31,20 +31,22 @@
                 <table class="table is-striped is-hoverable is-fullwidth make-it-rounded-top make-it-semi-back make-it-normal">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>PID</th>
                             <th>Title</th>
                             <th>Price</th>
                             <th>Stock</th>
-                            <th>Motorizable</th>
-                            <th>Lighting</th>
+                            <th>Motor</th>
+                            <th>Lights</th>
                         </tr>
                     </thead>
                     <tbody>
                         ${paginatedProducts.map(product => `
-                            <tr>
+                            <tr class="make-it-small">
+                                <td class="make-it-center"><img src=${product.imageURL} width="28px"></td>
                                 <td>${product.pid}</td>
                                 <td>${product.title}</td>
-                                <td>${product.price}</td>
+                                <td>$${product.price}</td>
                                 <td>${product.stock}</td>
                                 <td>${product.motorizable ? "Yes" : "No"}</td>
                                 <td>${product.lighting ? "Yes" : "No"}</td>
@@ -73,12 +75,12 @@
         <div id="productList"></div>
         <br>
         <div class="grid-container-3c-by-1r make-it-rounded make-it-white-back make-it-dark">
-            <button class="button is-danger" onclick="changePage(-1)">Prev</button>
-            <div class="content make-it-dark make-it-semi-back make-it-normal make-it-rounded make-it-center section" id="productCount"></div>
-            <button class="button is-success" onclick="changePage(1)">Next</button>
+            <button class="button make-it-small" onclick="changePage(-1)">Prev</button>
+            <div class="content make-it-dark make-it-semi-back make-it-small make-it-rounded make-it-center section" id="productCount"></div>
+            <button class="button make-it-small" onclick="changePage(1)">Next</button>
         </div>
         
-        <div class="content make-it-dark make-it-rounded-top make-it-semi-back make-it-normal rt-general-page-footer" id="paginationInfo"></div>
+        <div class="content make-it-dark make-it-rounded-top make-it-semi-back make-it-small rt-general-page-footer" id="paginationInfo"></div>
     </div>
 </body>
 </html>
