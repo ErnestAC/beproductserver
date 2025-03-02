@@ -11,7 +11,7 @@
         const socket = io();
         let currentPage = 1;
         let totalItems = 0;
-        let itemsPerPage = 50; // initial value
+        let itemsPerPage = 10; // initial value
         let totalPages = 1;
 
         socket.on('updateProducts', (products) => {
@@ -89,9 +89,9 @@
             <div class="control">
                 <div class="select make-it-small">
                     <select id="itemsPerPageDropdown">
-                        <option value="15" selected>15 products per page</option>
+                        <option value="10" selected>10 products per page</option>
+                        <option value="20">20 products per page</option>
                         <option value="30">30 products per page</option>
-                        <option value="45">45 products per page</option>
                     </select>
                 </div>
             </div>
