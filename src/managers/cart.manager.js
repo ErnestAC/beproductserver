@@ -89,41 +89,43 @@ export class CartManager {
     }
 
     // Get a cart by its ID (without product details)
-// Get a single cart by ID with populated product details
-async getCartById(cartId) {
-    try {
-        const cart = await Cart.findOne({ cid: cartId });
-        if (!cart) return null;
-
-        // Collect product IDs from the cart
-        const productIds = cart.products.map(p => p.pid);
-
-        // Fetch all product details in one query
-        const productsMap = new Map();
-        if (productIds.length > 0) {
-            const products = await ProductModel.find({ pid: { $in: productIds } });
-            products.forEach(product => {
-                productsMap.set(product.pid, product);
-            });
-        }
-
-        // Attach product details to the cart
-        cart.products.forEach(product => {
-            const productDetails = productsMap.get(product.pid);
-            if (productDetails) {
-                product.title = productDetails.title;
-                product.imageURL = productDetails.imageURL;
-                product.price = productDetails.price;
+    async getCartById(cartId) {
+        try {
+            const cart = await Cart.findOne({ cid: cartId });
+            if (!cart) return null;
+    
+            // Convert cart to a plain object before modifying
+            const cartObject = cart.toObject();
+    
+            // Collect product IDs from the cart
+            const productIds = cartObject.products.map(p => p.pid);
+    
+            // Fetch all product details in one query
+            const productsMap = new Map();
+            if (productIds.length > 0) {
+                const products = await ProductModel.find({ pid: { $in: productIds } });
+                products.forEach(product => {
+                    productsMap.set(product.pid, product);
+                });
             }
-        });
-
-        return cart;
-    } catch (err) {
-        console.error("Error retrieving cart by ID:", err);
-        throw err;
+    
+            // Attach product details to the cart
+            cartObject.products.forEach(product => {
+                const productDetails = productsMap.get(product.pid);
+                if (productDetails) {
+                    product.title = productDetails.title;
+                    product.imageURL = productDetails.imageURL;
+                    product.price = productDetails.price;
+                }
+            });
+    
+            return cartObject; // Return the modified plain object
+        } catch (err) {
+            console.error("Error retrieving cart by ID:", err);
+            throw err;
+        }
     }
-}
-
+    
 
     // Delete a cart by its ID
     async deleteCartById(cartId) {

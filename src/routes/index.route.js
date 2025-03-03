@@ -128,24 +128,24 @@ router.get('/carts', async (req, res) => {
 
 router.get('/carts/:cid', async (req, res) => {
     const { cid } = req.params;
-
     try {
-        // Fetch cart by cid using the provided getCartById function
         const cart = await cartManager.getCartById(cid);
-        
-        // If cart is not found, return a 404 error page
         if (!cart) {
-            return res.status(404).render('error', { message: 'Cart not found' });
+            return res.status(404).render("cart", { error: "Cart not found" });
         }
-
-        // Convert cart to a plain object
-        const cartPlainObject = cart.toObject();
-
-        // Render the cart details in the Handlebars view
-        res.render('cart', { cart: cartPlainObject });
+        res.render("cart", { cart });
     } catch (err) {
-        console.error("Error fetching cart by ID:", err);
-        res.status(500).render('error', { message: 'Internal server error' });
+        res.status(500).render("cart", { error: "Failed to load cart" });
+    }
+});
+
+router.get('/test-cart/:cid', async (req, res) => {
+    const { cid } = req.params;
+    try {
+        const cart = await cartManager.getCartById(cid);
+        res.json(cart);
+    } catch (err) {
+        res.status(500).json({ error: "Failed to fetch cart" });
     }
 });
 

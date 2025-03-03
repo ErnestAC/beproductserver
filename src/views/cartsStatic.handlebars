@@ -16,7 +16,7 @@
             <div class="columns is-multiline is-centered">
                 <!-- Sorting Options -->
                 <div class="grid-container-2c66-by-1r make-it-semi-back make-it-normal make-it-rounded section">
-                    <div class="column is-12">
+                    <div class="column is-10">
                         <div class="make-it-semi-back make-it-small make-it-center">
                             <div class="make-it-semi-back make-it-normal make-it-center section">Sort by</div>
                             <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=cid&sortOrder=asc">Cart ID Asc</a>
@@ -27,7 +27,7 @@
                     </div>
 
                     <!-- Limit Dropdown -->
-                    <div class="column is-12">
+                    <div class="column is-10">
                         <div class="make-it-semi-back make-it-normal make-it-center">
                             <div class="make-it-semi-back make-it-normal make-it-center section">Items per page</div>
                             <div class="select make-it-small">
@@ -82,31 +82,32 @@
                         <div class="column is-12-mobile is-12-desktop">
                             <div class="card make-it-small">
                                 <div class="section">
-                                    <div class="make-it-semi-back section make-it-rounded-top">
-                                        <strong>Cart ID:</strong> {{this.cid}}
+                                    <div class="make-it-dark-back section make-it-rounded-top make-it-white">
+                                        <b>Cart ID:</b> {{this.cid}}
                                     </div>
+
                                     <div class="section">
-                                        <strong>Products in Cart:</strong> {{this.products.length}}
-                                    </div>
-                                    <div>
-                                                <table class="make-it-wide">
-                                                    <tr>
+                                                <table width="100%">
+                                                    <tr class="table make-it-semi-back make-it-white make-it-rounded">
                                                         <th>Image</th>
                                                         <th>Title</th>
-                                                        <th>Price (USD)</th>
+                                                        <th class="make-it-center">Price (USD)</th>
                                                         <th>Quantity</th>
                                                     </tr>
                                 
                                             {{#each this.products}}
 
-                                                    <tr>
+                                                    <tr class="table is-striped">
                                                         <td><img src="{{this.imageURL}}" alt="{{this.title}}" width="28"></td>
                                                         <td><strong>{{this.title}}</strong></td>
-                                                        <td>${{this.price}}</td>
+                                                        <td class="make-it-center">${{this.price}}</td>
                                                         <td>{{this.quantity}}</td>
                                                     </tr>
                                             {{/each}}
                                         </table>
+                                    </div>
+                                    <div class="make-it-semi-back make-it-dark make-it-rounded section">
+                                        <strong>Products in Cart:</strong> {{this.products.length}}
                                     </div>
                                 </div>
                             </div>
