@@ -1,17 +1,34 @@
 import { Router } from "express";
 import { cartManager } from "../managers/cart.manager.js";
 import { notifyCartChange } from "../server.js";
+import { ProductModel } from "../models/product.model.js"
+import { ProductManager } from "../managers/product.manager.js";
 
 const router = Router();
 
-// GET: Retrieve all carts
+// GET: Retrieve all carts with product details
+
 router.get('/', async (req, res) => {
     try {
-        // Fetch all carts without populating product details
+        // Fetch all carts
         const carts = await cartManager.getAllCarts();
-        console.log(carts);
-        // Simply return the carts without any further modifications
-        const cartData = carts.map(cart => cart.toObject());
+
+        // Enrich carts with product details
+        const cartData = await Promise.all(carts.map(async cart => {
+            const enrichedProducts = await Promise.all(cart.products.map(async item => {
+                const productDetails = await ProductModel.findOne({ pid: item.pid }).lean(); // Fetch product details
+                
+                return {
+                    ...item.toObject(), // Convert item to plain object
+                    productDetails: productDetails || null // Attach product details or null if not found
+                };
+            }));
+
+            return {
+                ...cart.toObject(), // Convert cart to plain object
+                products: enrichedProducts
+            };
+        }));
 
         res.json({
             status: "success",
@@ -25,10 +42,14 @@ router.get('/', async (req, res) => {
             prevLink: null,
             nextLink: null
         });
+
     } catch (err) {
+        console.error("Error retrieving carts with product details:", err);
         res.status(500).json({ status: "error", message: 'Server error' });
     }
 });
+
+
 
 
 // GET: Retrieve a specific cart by CID
