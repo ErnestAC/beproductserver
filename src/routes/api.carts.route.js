@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { cartManager } from "../managers/cart.manager.js";
 import { notifyCartChange } from "../server.js";
+import { ProductModel } from '../models/product.model.js';
 
 const router = Router();
 
@@ -31,9 +32,20 @@ router.get('/:cid', async (req, res) => {
     try {
         const cart = await cartManager.getCartById(cid);
         if (cart) {
+            // For each product in the cart, fetch product details
+            const productDetailsPromises = cart.products.map(async (product) => {
+                const productDetails = await ProductModel.findOne({ pid: product.pid });
+                return {
+                    ...product.toObject(),  // Convert mongoose doc to plain object
+                    ...productDetails.toObject(), // Merge product details into product
+                };
+            });
+
+            const productsWithDetails = await Promise.all(productDetailsPromises);
+
             res.json({
                 status: "success",
-                payload: cart,
+                payload: { ...cart.toObject(), products: productsWithDetails },
                 totalPages: 1,
                 prevPage: null,
                 nextPage: null,
@@ -77,7 +89,7 @@ router.post('/:cid/product/:pid', async (req, res) => {
     }
 });
 
-// DELETE: Delete cart contents by CID
+// DELETE: delete cart contents by CID
 router.delete('/:cid', async (req, res) => {
     const { cid } = req.params;
     try {
