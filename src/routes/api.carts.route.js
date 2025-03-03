@@ -2,7 +2,7 @@ import { Router } from "express";
 import { cartManager } from "../managers/cart.manager.js";
 import { notifyCartChange } from "../server.js";
 import { ProductModel } from "../models/product.model.js"
-import { ProductManager } from "../managers/product.manager.js";
+import { Cart } from "../models/cart.model.js"
 
 const router = Router();
 
@@ -10,16 +10,21 @@ const router = Router();
 
 router.get('/', async (req, res) => {
     try {
-        // Fetch all carts
-        const carts = await cartManager.getAllCarts();
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
 
-        // Enrich carts with product details - Not using Mongoose.populate since I chose pid as the product Id and pid is a string which I UUID into the DB...
+        // Fetch carts with pagination using Mongoose query
+        const [carts, totalCount] = await Promise.all([
+            cartManager.getAllCartsMongoose(page, limit),  // Apply skip and limit in the query
+            Cart.countDocuments()  // Get total count for pagination directly from the model
+        ]);
+
+        // Enrich carts with product details
         const cartData = await Promise.all(carts.map(async cart => {
             const enrichedProducts = await Promise.all(cart.products.map(async item => {
-                const productDetails = await ProductModel.findOne({ pid: item.pid }).lean(); // Fetch product details
-                
+                const productDetails = await ProductModel.findOne({ pid: item.pid }).lean();
                 return {
-                    ...item.toObject(), // Convert item to plain object or null if nothing found
+                    ...item.toObject(),
                     productDetails: productDetails || null
                 };
             }));
@@ -30,17 +35,22 @@ router.get('/', async (req, res) => {
             };
         }));
 
+        // Pagination metadata
+        const pageCount = Math.ceil(totalCount / limit);
+        const hasNextPage = page < pageCount;
+        const hasPrevPage = page > 1;
+
         res.json({
             status: "success",
             payload: cartData,
-            totalPages: 1,
-            prevPage: null,
-            nextPage: null,
-            page: 1,
-            hasPrevPage: false,
-            hasNextPage: false,
-            prevLink: null,
-            nextLink: null
+            totalPages: pageCount,
+            prevPage: hasPrevPage ? page - 1 : null,
+            nextPage: hasNextPage ? page + 1 : null,
+            page: page,
+            hasPrevPage: hasPrevPage,
+            hasNextPage: hasNextPage,
+            prevLink: hasPrevPage ? `${req.baseUrl}?page=${page - 1}&limit=${limit}` : null,
+            nextLink: hasNextPage ? `${req.baseUrl}?page=${page + 1}&limit=${limit}` : null
         });
 
     } catch (err) {
@@ -48,6 +58,9 @@ router.get('/', async (req, res) => {
         res.status(500).json({ status: "error", message: 'Server error' });
     }
 });
+
+
+
 
 
 

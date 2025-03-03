@@ -101,6 +101,16 @@ export class CartManager {
         }
     }
 
+    async getAllCartsMongoose(page, limit) {
+        try {
+            return Cart.find().skip((page - 1) * limit).limit(limit);
+        } catch (err) {
+            console.error("Error retrieving carts:", err);
+            throw err;
+        }
+    }
+    
+
     async deleteCartById(cartId) {
         try {
             const deletedCart = await Cart.findOneAndDelete({ cid: cartId });
