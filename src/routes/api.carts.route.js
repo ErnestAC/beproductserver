@@ -2,6 +2,7 @@ import { Router } from "express";
 import { cartManager } from "../managers/cart.manager.js";
 import { notifyCartChange } from "../server.js";
 import { ProductModel } from '../models/product.model.js';
+import { productManager } from "../managers/product.manager.js";
 
 const router = Router();
 

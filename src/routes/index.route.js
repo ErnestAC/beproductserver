@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { productManager } from "../managers/product.manager.js";
+import { cartManager } from "../managers/cart.manager.js";
 import { Cart } from "../models/cart.model.js";
 import paginate from 'express-paginate';
 
@@ -77,9 +78,6 @@ router.get('/carts', async (req, res) => {
             .limit(limit)
             .lean();
 
-        // Collect all product IDs from carts
-        const productIds = carts.flatMap(cart => cart.products.map(p => p.pid));
-
         // Fetch product details
         let products = await productManager.getAllProducts({
             limit: 50,
@@ -125,6 +123,29 @@ router.get('/carts', async (req, res) => {
     } catch (error) {
         console.error("Error fetching carts:", error);
         res.status(500).send("Internal Server Error");
+    }
+});
+
+router.get('/carts/:cid', async (req, res) => {
+    const { cid } = req.params;
+
+    try {
+        // Fetch cart by cid using the provided getCartById function
+        const cart = await cartManager.getCartById(cid);
+        
+        // If cart is not found, return a 404 error page
+        if (!cart) {
+            return res.status(404).render('error', { message: 'Cart not found' });
+        }
+
+        // Convert cart to a plain object
+        const cartPlainObject = cart.toObject();
+
+        // Render the cart details in the Handlebars view
+        res.render('cart', { cart: cartPlainObject });
+    } catch (err) {
+        console.error("Error fetching cart by ID:", err);
+        res.status(500).render('error', { message: 'Internal server error' });
     }
 });
 
