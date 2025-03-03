@@ -139,14 +139,6 @@ router.get('/carts/:cid', async (req, res) => {
     }
 });
 
-router.get('/test-cart/:cid', async (req, res) => {
-    const { cid } = req.params;
-    try {
-        const cart = await cartManager.getCartById(cid);
-        res.json(cart);
-    } catch (err) {
-        res.status(500).json({ error: "Failed to fetch cart" });
-    }
-});
+
 
 export default router;

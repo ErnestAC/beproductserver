@@ -113,9 +113,7 @@ export class CartManager {
             cartObject.products.forEach(product => {
                 const productDetails = productsMap.get(product.pid);
                 if (productDetails) {
-                    product.title = productDetails.title;
-                    product.imageURL = productDetails.imageURL;
-                    product.price = productDetails.price;
+                    Object.assign(product, productDetails.toObject());
                 }
             });
     

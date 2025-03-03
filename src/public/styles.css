@@ -665,7 +665,7 @@ textarea:focus {
 
 .make-it-left {
   align-items: left !important;
-  text-align: left
+  text-align: left !important
 }
 
 .make-it-center {
@@ -673,9 +673,15 @@ textarea:focus {
   text-align: center !important
 }
 
+.make-it-left-center {
+  align-items: left !important;
+  text-align: left !important;
+  align-content:center !important;
+}
+
 .make-it-right {
   align-items: right !important;
-  text-align: right
+  text-align: right !important;
 }
 
 .grid-container {

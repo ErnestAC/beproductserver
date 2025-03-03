@@ -53,6 +53,7 @@ router.get('/:cid', async (req, res) => {
     const { cid } = req.params;
     try {
         const cart = await cartManager.getCartById(cid);
+        console.log(cart);
         if (cart) {
             // For each product in the cart, fetch product details
             const productDetailsPromises = cart.products.map(async (product) => {

@@ -1,20 +1,35 @@
-<h2>Cart Details</h2>
-
 {{#if cart.products.length}}
-    <div class="cart-products">
-        {{#each cart.products}}
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="{{this.imageURL}}" alt="{{this.title}}">
-                </div>
-                <div class="product-details make-it-white make-it-small">
-                    <h3>{{this.title}}</h3>
-                    <h3>{{this.pid}}</h3>
-                    <p>Price: ${{this.price}}</p>
-                    <p>Quantity: {{this.quantity}}</p>
-                </div>
-            </div>
-        {{/each}}
+    <div class="box cart-products">
+        
+        <div class="make-it-semi-back make-it-rounded-top section make-it-normal make-it-dark">
+            Cart Details - {{cart.cid}}
+        </div>
+
+        <table width="100%" class="section make-it-small">
+            <thead>
+                <tr>
+                    <th class="make-it-center"></th>
+                    <th></th>
+                    <th>Product ID</th>
+                    <th class="make-it-center">Price/u</th>
+                    <th class="make-it-center">Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each cart.products}}
+                <tr>
+                    <td class="section" width="64px"><img src="{{this.imageURL}}"  alt="{{this.title}}"></td>
+                    <td class="make-it-dark make-it-small">{{this.title}} <br> <a class="make-it-semi">({{this.pid}})</a></td>
+                    <td class="make-it-dark make-it-small">{{this.pid}}</td>
+                    <td class="make-it-center">${{this.pieces}}</td>
+                    <td class="make-it-center">${{this.price}}</td>
+                    <td class="make-it-center">x{{this.quantity}}</td>
+
+                    
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
     </div>
 {{else}}
     <p>Your cart is empty.</p>
