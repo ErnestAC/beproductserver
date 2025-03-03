@@ -8,10 +8,31 @@ const router = Router();
 // GET: Retrieve all carts
 router.get('/', async (req, res) => {
     try {
+        // Fetch all carts
         const carts = await cartManager.getAllCarts();
+
+        // For each cart, fetch product details for each product
+        const populatedCartsPromises = carts.map(async (cart) => {
+            const productDetailsPromises = cart.products.map(async (product) => {
+                const productDetails = await ProductModel.findOne({ pid: product.pid });
+                return {
+                    ...product.toObject(),  // Merge product details into the product object
+                    ...productDetails.toObject(),
+                };
+            });
+
+            // Wait for all product details to be fetched for the current cart
+            const productsWithDetails = await Promise.all(productDetailsPromises);
+
+            return { ...cart.toObject(), products: productsWithDetails }; // Merge with cart data
+        });
+
+        // Wait for all populated carts to be ready
+        const populatedCarts = await Promise.all(populatedCartsPromises);
+
         res.json({
             status: "success",
-            payload: carts,
+            payload: populatedCarts,
             totalPages: 1,
             prevPage: null,
             nextPage: null,
