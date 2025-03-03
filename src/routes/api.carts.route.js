@@ -13,19 +13,19 @@ router.get('/', async (req, res) => {
         // Fetch all carts
         const carts = await cartManager.getAllCarts();
 
-        // Enrich carts with product details
+        // Enrich carts with product details - Not using Mongoose.populate since I chose pid as the product Id and pid is a string which I UUID into the DB...
         const cartData = await Promise.all(carts.map(async cart => {
             const enrichedProducts = await Promise.all(cart.products.map(async item => {
                 const productDetails = await ProductModel.findOne({ pid: item.pid }).lean(); // Fetch product details
                 
                 return {
-                    ...item.toObject(), // Convert item to plain object
-                    productDetails: productDetails || null // Attach product details or null if not found
+                    ...item.toObject(), // Convert item to plain object or null if nothing found
+                    productDetails: productDetails || null
                 };
             }));
 
             return {
-                ...cart.toObject(), // Convert cart to plain object
+                ...cart.toObject(),
                 products: enrichedProducts
             };
         }));
@@ -56,11 +56,11 @@ router.get('/', async (req, res) => {
 router.get('/:cid', async (req, res) => {
     const { cid } = req.params;
     try {
-        // Fetch the cart without populating product details
+        
         const cart = await cartManager.getCartById(cid);
 
         if (cart) {
-            // Just return the cart as is, without any product details population
+            
             res.json({
                 status: "success",
                 payload: cart,  // Directly return the cart without extra population
