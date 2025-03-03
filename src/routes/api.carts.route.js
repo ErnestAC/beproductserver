@@ -1,39 +1,21 @@
 import { Router } from "express";
 import { cartManager } from "../managers/cart.manager.js";
 import { notifyCartChange } from "../server.js";
-import { ProductModel } from '../models/product.model.js';
-import { productManager } from "../managers/product.manager.js";
 
 const router = Router();
 
 // GET: Retrieve all carts
 router.get('/', async (req, res) => {
     try {
-        // Fetch all carts
+        // Fetch all carts without populating product details
         const carts = await cartManager.getAllCarts();
-
-        // For each cart, fetch product details for each product
-        const populatedCartsPromises = carts.map(async (cart) => {
-            const productDetailsPromises = cart.products.map(async (product) => {
-                const productDetails = await ProductModel.findOne({ pid: product.pid });
-                return {
-                    ...product.toObject(),  // Merge product details into the product object
-                    ...productDetails.toObject(),
-                };
-            });
-
-            // Wait for all product details to be fetched for the current cart
-            const productsWithDetails = await Promise.all(productDetailsPromises);
-
-            return { ...cart.toObject(), products: productsWithDetails }; // Merge with cart data
-        });
-
-        // Wait for all populated carts to be ready
-        const populatedCarts = await Promise.all(populatedCartsPromises);
+        console.log(carts);
+        // Simply return the carts without any further modifications
+        const cartData = carts.map(cart => cart.toObject());
 
         res.json({
             status: "success",
-            payload: populatedCarts,
+            payload: cartData,
             totalPages: 1,
             prevPage: null,
             nextPage: null,
@@ -48,27 +30,19 @@ router.get('/', async (req, res) => {
     }
 });
 
+
 // GET: Retrieve a specific cart by CID
 router.get('/:cid', async (req, res) => {
     const { cid } = req.params;
     try {
+        // Fetch the cart without populating product details
         const cart = await cartManager.getCartById(cid);
-        console.log(cart);
+
         if (cart) {
-            // For each product in the cart, fetch product details
-            const productDetailsPromises = cart.products.map(async (product) => {
-                const productDetails = await ProductModel.findOne({ pid: product.pid });
-                return {
-                    ...product.toObject(),  // Convert mongoose doc to plain object
-                    ...productDetails.toObject(), // Merge product details into product
-                };
-            });
-
-            const productsWithDetails = await Promise.all(productDetailsPromises);
-
+            // Just return the cart as is, without any product details population
             res.json({
                 status: "success",
-                payload: { ...cart.toObject(), products: productsWithDetails },
+                payload: cart,  // Directly return the cart without extra population
                 totalPages: 1,
                 prevPage: null,
                 nextPage: null,
@@ -85,6 +59,7 @@ router.get('/:cid', async (req, res) => {
         res.status(500).json({ status: "error", message: 'Server error' });
     }
 });
+
 
 // POST: Create a new cart
 router.post('/', async (req, res) => {
@@ -133,7 +108,7 @@ router.delete('/:cid/products/:pid', async (req, res) => {
     const { cid, pid } = req.params;
     try {
         // Find the cart by cid
-        const cart = await cartManager.getCartById(cid);
+        const cart = await cartManager.getCartByIdMongoose(cid);
         if (!cart) {
             return res.status(404).json({ status: "error", message: "Cart not found" });
         }
