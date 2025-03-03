@@ -11,7 +11,7 @@ router.use(paginate.middleware(10, 50)); // lim 10, 50 max
 router.get('/', async (req, res) => {
     try {
         // Render the home page
-        res.render('home');
+        res.render('index');
     } catch (err) {
         console.error('Error rendering home page:', err);
         res.status(500).send("Error rendering home page");

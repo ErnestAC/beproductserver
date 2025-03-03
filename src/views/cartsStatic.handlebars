@@ -46,23 +46,24 @@
                 <div class="column is-10">
                     <div class="make-it-dark-back is-centered grid-container-3c-by-1r" role="navigation" aria-label="pagination">
                         <a class="button section make-it-small" 
-                           href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}" 
-                           {{#if (eq currentPage 1)}}disabled{{/if}}>Prev page</a>
+                            href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}" 
+                            {{#if (eq currentPage 1)}}disabled{{/if}}>Prev page</a>
 
                         <div class="section make-it-center make-it-rounded make-it-semi-back make-it-small make-it-white">
                             Page {{currentPage}} of {{pageCount}}
                         </div>
 
                         <a class="button section make-it-small" 
-                           href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}" 
-                           {{#if (eq currentPage pageCount)}}disabled{{/if}}>Next page</a>
+                            href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}" 
+                            {{#if (eq currentPage pageCount)}}disabled{{/if}}>Next page</a>
 
                         <ul class="pagination-list make-it-small make-it-white">
                             {{#each pages}}
                                 <li>
                                     <a class="pagination-link make-it-white" 
-                                       href="?page={{this}}&limit={{../limit}}&sort={{../sort}}" 
-                                       {{#if (eq this @root.currentPage)}}aria-current="page"{{/if}}>{{this}}</a>
+                                        href="?page={{this}}&limit={{../limit}}&sort={{../sort}}" 
+                                        {{#if (eq this @root.currentPage)}}aria-current="page"{{/if}}>{{this}}
+                                    </a>
                                 </li>
                             {{/each}}
                         </ul>
@@ -79,25 +80,33 @@
                 {{#if carts.length}}
                     {{#each carts}}
                         <div class="column is-12-mobile is-12-desktop">
-                            <div class="card">
-                                <div class="card-content">
+                            <div class="card make-it-small">
+                                <div class="section">
                                     <div class="make-it-semi-back section make-it-rounded-top">
                                         <strong>Cart ID:</strong> {{this.cid}}
                                     </div>
                                     <div class="section">
                                         <strong>Products in Cart:</strong> {{this.products.length}}
                                     </div>
-                                    <div class="content">
-                                        <ul>
+                                    <div>
+                                                <table class="make-it-wide">
+                                                    <tr>
+                                                        <th>Image</th>
+                                                        <th>Title</th>
+                                                        <th>Price (USD)</th>
+                                                        <th>Quantity</th>
+                                                    </tr>
+                                
                                             {{#each this.products}}
-                                                <li class="box">
-                                                    <img src="{{this.imageURL}}" alt="{{this.title}}" width="28">
-                                                    <strong>{{this.title}}</strong> - 
-                                                    {{this.price}} USD - 
-                                                    Quantity: {{this.quantity}}
-                                                </li>
+
+                                                    <tr>
+                                                        <td><img src="{{this.imageURL}}" alt="{{this.title}}" width="28"></td>
+                                                        <td><strong>{{this.title}}</strong></td>
+                                                        <td>${{this.price}}</td>
+                                                        <td>{{this.quantity}}</td>
+                                                    </tr>
                                             {{/each}}
-                                        </ul>
+                                        </table>
                                     </div>
                                 </div>
                             </div>

@@ -8,7 +8,7 @@ import path from 'path';
 import { __dirname } from './utils.js';
 import ProductsRoute from './routes/api.products.route.js';
 import CartsRoute from './routes/api.carts.route.js';
-import homeRoute from './routes/home.route.js';
+import homeRoute from './routes/index.route.js';
 import FormsRoute from './routes/forms.route.js';
 import { productManager } from './managers/product.manager.js';
 import { cartManager } from './managers/cart.manager.js';

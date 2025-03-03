@@ -57,7 +57,7 @@ router.get('/', async (req, res) => {
         const generateLink = (newPage) => {
             const queryParams = new URLSearchParams(req.query);
             queryParams.set('page', newPage);
-            return `${req.protocol}://${req.get('host')}${req.path}?${queryParams.toString()}`;
+            return `${req.protocol}://${req.get('host')}${req.path}products/?${queryParams.toString()}`;
         };
 
         const prevLink = hasPrevPage ? generateLink(prevPage) : null;
