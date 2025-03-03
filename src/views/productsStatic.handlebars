@@ -85,21 +85,30 @@
                                 <div>
                                     {{this.title}}
                                 </div>
+
                             </div>
                             <div class="make-it-semi-back">
 
-                                <div class="">
-                                    <div class="">
+                                <div class="section">
+
+                                    <div class="make-it-rounded">
                                         <img src={{this.imageURL}} alt={{this.title}}>
                                     </div>
+                                    <div class="card-category-badge-prebuilt">
+                                            {{this.category}}
+                                    </div>
                                     <div class="columns make-it-white-back make-it-rounded make-it-dark make-it-small section">
-                                        <div class="column is-6 make-it-center">
+
+                                        <div class="column is-6 make-it-left">
                                             <p><b>Price:</b>${{this.price}}</p>
                                             <p><b>Stock:</b> {{this.stock}}</p>
+                                            <p><b>Pieces:</b> {{this.pieces}}</p>
+                                            <p><b>Code:</b> {{this.code}}</p>
                                         </div>
                                         <div class="column is-6 make-it-center">
                                             <p><b>Motor:</b> {{#if this.motorizable}} Yes {{else}} No {{/if}}</p>
                                             <p><b>Lights:</b> {{#if this.lighting}} Yes {{else}} No {{/if}}</p>
+                                            
                                         </div>
                                     </div>
                                 </div>

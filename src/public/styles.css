@@ -183,12 +183,12 @@ body {
 .card-category-badge-prebuilt,
 .card-category-badge-specials,
 .card-category-badge-usersubmission {
-  border-radius: 3px;
-  padding: .3rem .5rem;
-  font-size: 1rem;
-  position: absolute;
-  top: 6rem;
-  left: 1rem;
+  border-radius: 7px;
+  padding: 0.5rem;
+  font-size: 0.8rem !important;
+  position: relative;
+  top: 1rem;
+  left: 0rem;
   align-items: center;
   justify-content: center
 }
