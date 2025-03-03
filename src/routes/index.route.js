@@ -86,7 +86,7 @@ router.get('/carts', async (req, res) => {
             sort: 'stock',
             sortDirection: -1,
         });
-        console.log(products);
+        
         // Ensure `products` is an array
         if (!Array.isArray(products)) {
             products = products ? [products] : [];

@@ -45,7 +45,6 @@
                                             <tr class="make-it-small">
                                                 <td>${product.pid}</td>
                                                 <td>${product.quantity}</td>
-                                                <td>${product.price}</td>
                                             </tr>
                                         `).join('')}
                                     </tbody>
@@ -87,6 +86,7 @@
                             <tr class="make-it-semi-back make-it-small make-it-rounded">
                                 <th>PID</th>
                                 <th>Quantity</th>
+                                <th>Title</th>
                                 <th>Price</th>
                             </tr>
                         </thead>
@@ -95,7 +95,8 @@
                                 <tr class="make-it-small">
                                     <td>{{pid}}</td>
                                     <td>{{quantity}}</td>
-                                    <td>{{price}}</td>
+                                    <td>{{title}}</td>
+                                    <td>{{stock}}</td>
                                 </tr>
                             {{/each}}
                         </tbody>

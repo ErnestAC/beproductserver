@@ -2,43 +2,39 @@ import { v4 as uuidv4 } from "uuid";
 import { Cart } from "../models/cart.model.js";
 import { notifyCartChange } from "../server.js";
 import { ProductModel } from "../models/product.model.js";
+import { productManager } from "./product.manager.js"
 
 export class CartManager {
     // Get all carts with populated product details
     async getAllCarts() {
         try {
             const carts = await Cart.find(); // Fetch all carts
-
-            // Collect all product IDs from all carts
-            const allProductIds = [...new Set(carts.flatMap(cart => cart.products.map(p => p.pid)))];
-
-            // Fetch all product details in one query
-            const productsMap = new Map();
-            if (allProductIds.length > 0) {
-                const products = await ProductModel.find({ pid: { $in: allProductIds } });
-                products.forEach(product => {
-                    productsMap.set(product.pid, product);
-                });
-            }
-
-            // Attach product details to each cart
-            carts.forEach(cart => {
-                cart.products.forEach(product => {
-                    const productDetails = productsMap.get(product.pid);
-                    if (productDetails) {
-                        product.title = productDetails.title;
-                        product.imageURL = productDetails.imageURL;
-                        product.price = productDetails.price;
-                    }
-                });
-            });
-
-            return carts;
+    
+            // Function to get cart with populated product details
+            const getCartWithDetails = async (cartId) => {
+                const cart = await this.getCartById(cartId); // Use the getCartById method to fetch cart with products
+                if (!cart) {
+                    console.log(`Cart with ID ${cartId} not found`);
+                    return null;
+                }
+                return cart;
+            };
+    
+            // Fetch details for each cart
+            const cartsWithDetails = await Promise.all(carts.map(async (cart) => {
+                return await getCartWithDetails(cart.cid);
+            }));
+    
+            return cartsWithDetails.filter(cart => cart !== null); // Filter out null carts
+    
         } catch (err) {
-            console.error("Error retrieving carts:", err);
+            console.error("Error retrieving all carts:", err);
             throw err;
         }
     }
+            
+    
+    
 
     // Add a new cart
     async addCart() {
