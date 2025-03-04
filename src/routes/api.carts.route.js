@@ -72,14 +72,14 @@ router.get('/:cid', async (req, res) => {
 
 
 // POST: Create a new cart
-router.post('/', async (req, res) => {
+/* router.post('/', async (req, res) => {
     try {
         const newCart = await cartManager.addCart();
         res.status(201).json({ status: "success", payload: newCart });
     } catch (err) {
         res.status(500).json({ status: "error", message: 'Server error' });
     }
-});
+}); */
 
 // POST: Add a product to a cart
 router.post('/:cid/product/:pid', async (req, res) => {
@@ -179,20 +179,26 @@ router.delete('/:cid/products/:pid', async (req, res) => {
     }
 });
 
-router.put('/', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
-        const { products } = req.body;
+        const { products } = req.body || {};
 
-        if (!Array.isArray(products) || products.length === 0) {
-            return res.status(400).json({ status: "error", message: "Products must be a non-empty array" });
+        let cartProducts = [];
+
+        if (Array.isArray(products) && products.length > 0) {
+            cartProducts = products.map(product => {
+                if (!product.pid) {
+                    throw new Error("Each product must have a valid 'pid'.");
+                }
+
+                return {
+                    pid: product.pid,
+                    quantity: Number.isInteger(product.quantity) && product.quantity > 0 ? product.quantity : 1
+                };
+            });
         }
 
         const cid = uuidv4();
-
-        const cartProducts = products.map(product => ({
-            pid: product.pid,
-            quantity: Number.isInteger(product.quantity) && product.quantity > 0 ? product.quantity : 1
-        }));
 
         const newCart = new Cart({
             cid,
@@ -204,13 +210,13 @@ router.put('/', async (req, res) => {
 
         res.status(201).json({
             status: "success",
-            message: "Cart created successfully",
+            message: cartProducts.length > 0 ? "Cart created successfully with products." : "Empty cart created.",
             payload: newCart
         });
 
     } catch (err) {
         console.error("Error creating custom cart:", err);
-        res.status(500).json({ status: "error", message: "Server error" });
+        res.status(400).json({ status: "error", message: err.message || "Invalid request body." });
     }
 });
 

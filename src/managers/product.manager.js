@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { connectDB } from "../connectors/mongo.helpers.js";
+import { connectDB } from "../connectors/mongo.connector.js";
 import { ProductModel } from "../models/product.model.js";
 import { notifyProductChange } from "../server.js";
 
