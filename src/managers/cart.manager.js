@@ -101,14 +101,27 @@ export class CartManager {
         }
     }
 
-    async getAllCartsMongoose(page, limit) {
+    async getAllCartsMongoose(page, limit, sort, sortOrder) {
         try {
-            return Cart.find().skip((page - 1) * limit).limit(limit);
+            const sortCriteria = {};
+            
+            // Check if sort is provided, then apply sortOrder
+            if (sort && sortOrder) {
+                sortCriteria[sort] = sortOrder === 'desc' ? -1 : 1;  // Descending if 'desc', ascending if 'asc'
+            }
+    
+            // Return the query object with skip, limit, and sort applied
+            return Cart.find()
+                .skip((page - 1) * limit)
+                .limit(limit)
+                .sort(sortCriteria)
+                .populate('products.pid');  // Populate the 'pid' in 'products' field with product details
         } catch (err) {
             console.error("Error retrieving carts:", err);
             throw err;
         }
     }
+    
     
 
     async deleteCartById(cartId) {

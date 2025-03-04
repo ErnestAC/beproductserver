@@ -12,10 +12,12 @@ router.get('/', async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
+        const sort = req.query.sort || 'cid';  // Default sort by 'cid'
+        const sortOrder = req.query.sortOrder || 'asc';  // Default sort order is ascending
 
-        // Fetch carts with pagination using Mongoose query
+        // Fetch carts with pagination, sorting, and limit using Mongoose query
         const [carts, totalCount] = await Promise.all([
-            cartManager.getAllCartsMongoose(page, limit),  // Apply skip and limit in the query
+            cartManager.getAllCartsMongoose(page, limit, sort, sortOrder),  // Pass sort and sortOrder to the function
             Cart.countDocuments()  // Get total count for pagination directly from the model
         ]);
 
@@ -49,8 +51,8 @@ router.get('/', async (req, res) => {
             page: page,
             hasPrevPage: hasPrevPage,
             hasNextPage: hasNextPage,
-            prevLink: hasPrevPage ? `${req.baseUrl}?page=${page - 1}&limit=${limit}` : null,
-            nextLink: hasNextPage ? `${req.baseUrl}?page=${page + 1}&limit=${limit}` : null
+            prevLink: hasPrevPage ? `${req.baseUrl}?page=${page - 1}&limit=${limit}&sort=${sort}&sortOrder=${sortOrder}` : null,
+            nextLink: hasNextPage ? `${req.baseUrl}?page=${page + 1}&limit=${limit}&sort=${sort}&sortOrder=${sortOrder}` : null
         });
 
     } catch (err) {
@@ -58,6 +60,7 @@ router.get('/', async (req, res) => {
         res.status(500).json({ status: "error", message: 'Server error' });
     }
 });
+
 
 
 
