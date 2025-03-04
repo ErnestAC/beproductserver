@@ -2,16 +2,11 @@ import { Router } from "express";
 import { productManager } from "../managers/product.manager.js";
 import { cartManager } from "../managers/cart.manager.js";
 import { Cart } from "../models/cart.model.js";
-import paginate from 'express-paginate';
 
 const router = Router();
 
-// Middleware setup
-router.use(paginate.middleware(10, 50)); // lim 10, 50 max
-
 router.get('/', async (req, res) => {
     try {
-        // Render the home page
         res.render('index');
     } catch (err) {
         console.error('Error rendering home page:', err);
@@ -24,36 +19,14 @@ router.get('/products', async (req, res) => {
 
     try {
         const sortDirection = sortOrder === 'desc' ? -1 : 1;
-        let limit = Math.max(1, Number(req.query.limit) || 10);
-        let page = Math.max(1, Number(req.query.page) || 1);
-        const offset = (page - 1) * limit; //calculate the offset manually
-
-        // Fetch products with pagination and sorting
+        
         const products = await productManager.getAllProducts({
-            limit: limit,
-            skip: offset, //use the manually calculated offset
             sort: sort,
             sortDirection: sortDirection
         });
 
-        // Get total product count for pagination
-        const totalProducts = await productManager.getTotalProductCount();
-        const totalPages = Math.ceil(totalProducts / limit);
-
-        // Calculate page navigation flags
-        const hasPrevPage = page > 1;
-        const hasNextPage = page < totalPages;
-        const prevPage = hasPrevPage ? page - 1 : null;
-        const nextPage = hasNextPage ? page + 1 : null;
-
         res.render('productsStatic', {
             products,
-            currentPage: page,
-            totalPages: totalPages,
-            prevPage: prevPage,
-            nextPage: nextPage,
-            hasPrevPage: hasPrevPage,
-            hasNextPage: hasNextPage,
             sort,
             sortOrder,
         });
@@ -65,36 +38,19 @@ router.get('/products', async (req, res) => {
 
 router.get('/carts', async (req, res) => {
     try {
-        let { page = 1, limit = 10, sort } = req.query;
-        page = parseInt(page);
-        limit = parseInt(limit);
-
-        const totalItems = await Cart.countDocuments();
-        const pageCount = Math.ceil(totalItems / limit);
-
-        const carts = await Cart.find()
-            .sort(sort ? { [sort]: 1 } : {})
-            .skip((page - 1) * limit)
-            .limit(limit)
-            .lean();
-
-        // Fetch product details
+        const carts = await Cart.find().sort({ stock: -1 }).lean();
         let products = await productManager.getAllProducts({
-            limit: 50,
             sort: 'stock',
             sortDirection: -1,
         });
         
-        // Ensure `products` is an array
         if (!Array.isArray(products)) {
             products = products ? [products] : [];
         }
 
-        // Create a map of products for quick lookup
         const productsMap = new Map();
         products.forEach(product => productsMap.set(product.pid, product));
 
-        // Attach product details to each cart's products
         carts.forEach(cart => {
             cart.products.forEach(product => {
                 const productDetails = productsMap.get(product.pid);
@@ -106,20 +62,7 @@ router.get('/carts', async (req, res) => {
             });
         });
 
-        const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
-
-        res.render('cartsStatic', {
-            carts,
-            totalItems,
-            pageCount,
-            currentPage: page,
-            prevPage: page > 1 ? page - 1 : 1,
-            nextPage: page < pageCount ? page + 1 : pageCount,
-            limit,
-            sort,
-            pages,
-        });
-
+        res.render('cartsStatic', { carts });
     } catch (error) {
         console.error("Error fetching carts:", error);
         res.status(500).send("Internal Server Error");
@@ -138,7 +81,5 @@ router.get('/carts/:cid', async (req, res) => {
         res.status(500).render("cart", { error: "Failed to load cart" });
     }
 });
-
-
 
 export default router;

@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import mongoosePaginate from "paginate/lib/mongoose-paginate.js";
 
 const productCollection = "products";
 
@@ -22,7 +23,9 @@ const productSchema = new Schema({
     thumbs: [String],
 }, { timestamps: true });
 
-// Add indexes for common sorting fields (e.g., price, stock)
+productSchema.plugin(mongoosePaginate)
+
+//indices for commonly searched fields
 productSchema.index({ price: 1 });
 productSchema.index({ stock: 1 });
 

@@ -15,7 +15,6 @@ router.get('/', async (req, res) => {
         const sort = req.query.sort || 'cid';  // Default sort by 'cid'
         const sortOrder = req.query.sortOrder || 'asc';  // Default sort order is ascending
 
-        // Fetch carts with pagination, sorting, and limit using Mongoose query
         const [carts, totalCount] = await Promise.all([
             cartManager.getAllCartsMongoose(page, limit, sort, sortOrder),  // Pass sort and sortOrder to the function
             Cart.countDocuments()  // Get total count for pagination directly from the model
