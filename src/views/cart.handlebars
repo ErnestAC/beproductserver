@@ -10,7 +10,9 @@
                 <tr>
                     <th class="make-it-center"></th>
                     <th></th>
-                    <th>Product ID</th>
+                    <th>Product Code</th>
+                    <th>Description</th>
+                    <th class="make-it-center">Pieces</th>
                     <th class="make-it-center">Price/u</th>
                     <th class="make-it-center">Quantity</th>
                 </tr>
@@ -20,10 +22,15 @@
                 <tr>
                     <td class="section" width="64px"><img src="{{this.imageURL}}"  alt="{{this.title}}"></td>
                     <td class="make-it-dark make-it-small">{{this.title}} <br> <a class="make-it-semi">({{this.pid}})</a></td>
-                    <td class="make-it-dark make-it-small">{{this.pid}}</td>
-                    <td class="make-it-center">${{this.pieces}}</td>
+                    <td class="make-it-dark make-it-small">{{this.code}}</td>
+                    <td>{{this.description}}</td>
+                    <td class="make-it-center">{{this.pieces}}</td>
                     <td class="make-it-center">${{this.price}}</td>
                     <td class="make-it-center">x{{this.quantity}}</td>
+
+
+
+
 
                     
                 </tr>

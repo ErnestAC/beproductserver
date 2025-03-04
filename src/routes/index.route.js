@@ -35,18 +35,6 @@ router.get('/products', async (req, res) => {
 
         const result = await ProductModel.paginate(query, options);
 
-        console.log("Pagination Data Sent to Handlebars:", {
-            currentPage: result.page,
-            totalPages: result.totalPages,
-            prevPage: result.prevPage,
-            nextPage: result.nextPage,
-            totalItems: result.totalDocs,
-            limit,
-            sort,
-            sortOrder,
-            filterBy
-        });
-
         res.render('productsStatic', {
             products: result.docs,
             currentPage: result.page,
