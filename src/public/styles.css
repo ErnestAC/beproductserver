@@ -624,6 +624,10 @@ textarea:focus {
   border-radius: .35rem .35rem 0 0
 }
 
+.make-it-rounded-bottom {
+  border-radius: 0 0 .35rem .35rem
+}
+
 .make-it-rounded {
   border-radius: .35rem
 }
