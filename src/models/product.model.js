@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import mongoosePaginate from "paginate/lib/mongoose-paginate.js";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 const productCollection = "products";
 

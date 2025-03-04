@@ -16,9 +16,12 @@ router.get('/', async (req, res) => {
 
         const carts = await Cart.find()
             .sort({ [sort]: sortOrder })
-            .populate('products.pid') // Automatically populate product details
+            .populate('products.pid')
             .lean()
-            .paginate({ page, limit }); // Use Mongoose pagination
+            .paginate({ 
+                page,
+                limit,
+        });
 
         res.json({
             status: "success",
