@@ -22,15 +22,7 @@ router.get('/', async (req, res) => {
 
         res.json({
             status: "success",
-            payload: carts,
-            totalPages: carts.totalPages,
-            prevPage: carts.hasPrevPage ? carts.prevPage : null,
-            nextPage: carts.hasNextPage ? carts.nextPage : null,
-            page: carts.page,
-            hasPrevPage: carts.hasPrevPage,
-            hasNextPage: carts.hasNextPage,
-            prevLink: carts.hasPrevPage ? `${req.baseUrl}?page=${carts.prevPage}&limit=${limit}&sort=${sort}&sortOrder=${req.query.sortOrder}` : null,
-            nextLink: carts.hasNextPage ? `${req.baseUrl}?page=${carts.nextPage}&limit=${limit}&sort=${sort}&sortOrder=${req.query.sortOrder}` : null
+            carts,
         });
 
     } catch (err) {
@@ -38,14 +30,6 @@ router.get('/', async (req, res) => {
         res.status(500).json({ status: "error", message: 'Server error' });
     }
 });
-
-
-
-
-
-
-
-
 
 // GET: Retrieve a specific cart by CID
 router.get('/:cid', async (req, res) => {
