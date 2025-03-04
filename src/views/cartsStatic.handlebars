@@ -32,9 +32,9 @@
                             <div class="make-it-semi-back make-it-normal make-it-center section">Items per page</div>
                             <div class="select make-it-small">
                                 <select id="limit-select">
-                                    <option value="10" {{#if (eq limit '10')}}selected{{/if}}>10</option>
-                                    <option value="20" {{#if (eq limit '20')}}selected{{/if}}>20</option>
-                                    <option value="50" {{#if (eq limit '50')}}selected{{/if}}>50</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
                                 </select>
                             </div>
                             <button class="button is-link make-it-small" onclick="applyLimit()">Apply</button>
@@ -46,27 +46,14 @@
                 <div class="column is-10">
                     <div class="make-it-dark-back is-centered grid-container-3c-by-1r" role="navigation" aria-label="pagination">
                         <a class="button section make-it-small" 
-                            href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}" 
-                            {{#if (eq currentPage 1)}}disabled{{/if}}>Prev page</a>
+                            href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}">Prev page</a>
 
                         <div class="section make-it-center make-it-rounded make-it-semi-back make-it-small make-it-white">
-                            Page {{currentPage}} of {{pageCount}}
+                            Page {{currentPage}} of {{totalPages}}
                         </div>
 
                         <a class="button section make-it-small" 
-                            href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}" 
-                            {{#if (eq currentPage pageCount)}}disabled{{/if}}>Next page</a>
-
-                        <ul class="pagination-list make-it-small make-it-white">
-                            {{#each pages}}
-                                <li>
-                                    <a class="pagination-link make-it-white" 
-                                        href="?page={{this}}&limit={{../limit}}&sort={{../sort}}" 
-                                        {{#if (eq this @root.currentPage)}}aria-current="page"{{/if}}>{{this}}
-                                    </a>
-                                </li>
-                            {{/each}}
-                        </ul>
+                            href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}">Next page</a>
                     </div>
                 </div>
             </div>
@@ -87,22 +74,38 @@
                                     </div>
 
                                     <div class="section">
-                                                <table width="100%">
-                                                    <tr class="table make-it-semi-back make-it-white make-it-rounded">
-                                                        <th>Image</th>
-                                                        <th>Title</th>
-                                                        <th class="make-it-center">Price (USD)</th>
-                                                        <th>Quantity</th>
-                                                    </tr>
-                                
+                                        <table width="100%">
+                                            <tr class="table make-it-semi-back make-it-white make-it-rounded">
+                                                <th>Image</th>
+                                                <th>Title</th>
+                                                <th class="make-it-center">Price (USD)</th>
+                                                <th>Quantity</th>
+                                            </tr>
                                             {{#each this.products}}
-
-                                                    <tr class="table is-striped">
-                                                        <td><img src="{{this.imageURL}}" alt="{{this.title}}" width="28"></td>
-                                                        <td><strong>{{this.title}}</strong></td>
-                                                        <td class="make-it-center">${{this.price}}</td>
-                                                        <td>{{this.quantity}}</td>
-                                                    </tr>
+                                                <tr class="table is-striped">
+                                                    <td>
+                                                        {{#if this.productDetails.imageURL}}
+                                                            <img src="{{this.productDetails.imageURL}}" alt="{{this.productDetails.title}}" width="50">
+                                                        {{else}}
+                                                            <span>No Image</span>
+                                                        {{/if}}
+                                                    </td>
+                                                    <td>
+                                                        {{#if this.productDetails.title}}
+                                                            <strong>{{this.productDetails.title}}</strong>
+                                                        {{else}}
+                                                            <span>Unknown Product</span>
+                                                        {{/if}}
+                                                    </td>
+                                                    <td class="make-it-center">
+                                                        {{#if this.productDetails.price}}
+                                                            ${{this.productDetails.price}}
+                                                        {{else}}
+                                                            N/A
+                                                        {{/if}}
+                                                    </td>
+                                                    <td>{{this.quantity}}</td>
+                                                </tr>
                                             {{/each}}
                                         </table>
                                     </div>

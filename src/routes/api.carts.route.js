@@ -7,6 +7,7 @@ import { Cart } from "../models/cart.model.js"
 const router = Router();
 
 // GET: Retrieve all carts with product details
+
 router.get('/', async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
@@ -16,12 +17,17 @@ router.get('/', async (req, res) => {
 
         const carts = await Cart.find()
             .sort({ [sort]: sortOrder })
-            .populate('products.pid')
+            .populate({
+                path: 'products.pid',
+                model: ProductModel,  // Ensure to populate using the ProductModel
+                select: 'title handle imageURL description price category stock pieces'  // Optional: specify which fields to select
+            })
             .lean()
             .paginate({ 
                 page,
                 limit,
-        });
+                customLabels: { docs:'payload' }
+            });
 
         res.json({
             status: "success",

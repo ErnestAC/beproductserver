@@ -30,6 +30,7 @@ router.get('/', async (req, res) => {
             limit: parseInt(limit),
             sort: { [sort]: sortOrder === 'desc' ? -1 : 1 },
             lean: true, // Convert documents to plain JavaScript objects
+            customLabels: {docs :'payload'}
         };
 
         // Build query filter
@@ -40,7 +41,7 @@ router.get('/', async (req, res) => {
 
         res.json({
             status: "success",
-            payload: result.docs,
+            payload: result.payload,
             totalPages: result.totalPages,
             prevPage: result.hasPrevPage ? result.prevPage : null,
             nextPage: result.hasNextPage ? result.nextPage : null,
@@ -56,6 +57,7 @@ router.get('/', async (req, res) => {
         res.status(500).json({ status: "error", message: 'Server error' });
     }
 });
+
 // GET: Retrieve a specific product by PID
 router.get('/:pid', async (req, res) => {
     const { pid } = req.params;

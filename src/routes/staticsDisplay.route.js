@@ -33,7 +33,7 @@ router.get('/products', async (req, res) => {
         const hasNextPage = currentPage < totalPages;
         const prevPage = hasPrevPage ? currentPage - 1 : null;
         const nextPage = hasNextPage ? currentPage + 1 : null;
-
+        console.log("YIIIIIIIP");
         res.render('productsStatic', {
             products,
             currentPage,

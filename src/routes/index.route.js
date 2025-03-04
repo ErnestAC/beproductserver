@@ -1,3 +1,4 @@
+import { ProductModel } from "../models/product.model.js";
 import { Router } from "express";
 import { productManager } from "../managers/product.manager.js";
 import { cartManager } from "../managers/cart.manager.js";
@@ -14,60 +15,106 @@ router.get('/', async (req, res) => {
     }
 });
 
+
 router.get('/products', async (req, res) => {
-    let { sort = 'title', sortOrder = 'asc' } = req.query;
+    let { page = 1, limit = 10, sort = 'title', sortOrder = 'asc', filterBy = '' } = req.query;
+
+    page = Math.max(1, Number(page));
+    limit = Math.max(1, Number(limit));
+    const sortDirection = sortOrder === 'desc' ? -1 : 1;
 
     try {
-        const sortDirection = sortOrder === 'desc' ? -1 : 1;
-        
-        const products = await productManager.getAllProducts({
-            sort: sort,
-            sortDirection: sortDirection
+        const query = filterBy ? { category: filterBy } : {}; // Filter products if a category is provided
+
+        const options = {
+            page,
+            limit,
+            sort: { [sort]: sortDirection },
+            lean: true // Convert Mongoose docs to plain JS objects
+        };
+
+        const result = await ProductModel.paginate(query, options);
+
+        console.log("Pagination Data Sent to Handlebars:", {
+            currentPage: result.page,
+            totalPages: result.totalPages,
+            prevPage: result.prevPage,
+            nextPage: result.nextPage,
+            totalItems: result.totalDocs,
+            limit,
+            sort,
+            sortOrder,
+            filterBy
         });
 
         res.render('productsStatic', {
-            products,
+            products: result.docs,
+            currentPage: result.page,
+            totalPages: result.totalPages,
+            prevPage: result.prevPage,
+            nextPage: result.nextPage,
+            totalItems: result.totalDocs,
+            limit,
             sort,
             sortOrder,
+            filterBy
         });
+
     } catch (err) {
         console.error('Error rendering products page:', err);
         res.status(500).send("Error rendering products");
     }
 });
 
+
 router.get('/carts', async (req, res) => {
     try {
-        const carts = await Cart.find().sort({ stock: -1 }).lean();
-        let products = await productManager.getAllProducts({
-            sort: 'stock',
-            sortDirection: -1,
-        });
-        
-        if (!Array.isArray(products)) {
-            products = products ? [products] : [];
+        let { limit = 10, page = 1, sort = 'createdAt', sortOrder = 'desc' } = req.query;
+        limit = Math.max(1, Number(limit) || 10);
+        page = Math.max(1, Number(page));
+        const sortDirection = sortOrder === 'desc' ? -1 : 1;
+
+        // Fetch carts without population
+        const options = {
+            page,
+            limit,
+            sort: { [sort]: sortDirection },
+            lean: true // Convert Mongoose docs to plain JS objects
+        };
+
+        const result = await Cart.paginate({}, options);
+
+        // Manually populate product details
+        for (let cart of result.docs) {
+            for (let item of cart.products) {
+                const product = await ProductModel.findOne({ pid: item.pid }).lean();
+                if (product) {
+                    item.productDetails = product;
+                }
+            }
         }
 
-        const productsMap = new Map();
-        products.forEach(product => productsMap.set(product.pid, product));
+        console.log("Carts data being sent to Handlebars:", JSON.stringify(result.docs, null, 2));
 
-        carts.forEach(cart => {
-            cart.products.forEach(product => {
-                const productDetails = productsMap.get(product.pid);
-                if (productDetails) {
-                    product.title = productDetails.title;
-                    product.imageURL = productDetails.imageURL;
-                    product.price = productDetails.price;
-                }
-            });
+        res.render('cartsStatic', {
+            carts: result.docs, 
+            currentPage: result.page,
+            totalPages: result.totalPages,
+            prevPage: result.prevPage,
+            nextPage: result.nextPage,
+            hasPrevPage: result.hasPrevPage,
+            hasNextPage: result.hasNextPage,
+            sort,
+            sortOrder,
+            limit,
         });
 
-        res.render('cartsStatic', { carts });
     } catch (error) {
         console.error("Error fetching carts:", error);
         res.status(500).send("Internal Server Error");
     }
 });
+
 
 router.get('/carts/:cid', async (req, res) => {
     const { cid } = req.params;
