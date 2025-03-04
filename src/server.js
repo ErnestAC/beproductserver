@@ -12,7 +12,6 @@ import homeRoute from './routes/index.route.js';
 import FormsRoute from './routes/forms.route.js';
 import { productManager } from './managers/product.manager.js';
 import { cartManager } from './managers/cart.manager.js';
-import StaticDisplay from './routes/staticsDisplay.route.js'
 import RealtimeViews from './routes/realtimeDisplay.route.js'
 import Handlebars from 'handlebars';
 
@@ -137,7 +136,6 @@ app.use('/', homeRoute);
 app.use('/forms', FormsRoute);
 app.use('/api/products', ProductsRoute);
 app.use('/api/carts', CartsRoute);
-app.use('/statics/', StaticDisplay)
 app.use('/realtime/', RealtimeViews)
 
 const PORT = 8080;
@@ -145,19 +143,7 @@ server.listen(PORT, () => {
     
     console.log(` `) 
     console.log(`Server started on port ${PORT}.`);
-
-    console.log(`-> Home:`);
     console.log(`http://localhost:${PORT}`);
-    console.log(`-> Views:`);
-    console.log(`http://localhost:${PORT}/products`)
-    console.log(`http://localhost:${PORT}/carts`)
-    console.log(`-> Other views:`)
-    console.log(`http://localhost:${PORT}/realtime/products`)
-    console.log(`http://localhost:${PORT}/realtime/carts`)
-    console.log(`-> Special testing forms:`)
-    console.log(`http://localhost:${PORT}/forms/add-product`)
-    console.log(`http://localhost:${PORT}/forms/delete-product`)
-    console.log(`** See readme for API implementations **`) 
     console.log(` `) 
 
 });

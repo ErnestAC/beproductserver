@@ -22,21 +22,22 @@ router.post('/', async (req, res) => {
 // GET: Static products page with pagination
 router.get('/', async (req, res) => {
     try {
-        const { limit = 10, page = 1, sort = 'title', sortOrder = 'asc', filterBy } = req.query;
+        const { limit = 10, page = 1, sort = 'title', sortOrder = 'asc', filterKey, filterValue } = req.query;
 
-        // Convert values to proper types
         const options = {
             page: parseInt(page),
             limit: parseInt(limit),
             sort: { [sort]: sortOrder === 'desc' ? -1 : 1 },
-            lean: true, // Convert documents to plain JavaScript objects
-            customLabels: {docs :'payload'}
+            lean: true,
+            customLabels: { docs: 'payload' }
         };
 
-        // Build query filter
-        const query = filterBy ? { category: filterBy } : {};
+        let query = {};
 
-        // Use mongoose paginate
+        if (filterKey && filterValue) {
+            query[filterKey] = filterValue;
+        }
+
         const result = await ProductModel.paginate(query, options);
 
         res.json({
@@ -48,8 +49,8 @@ router.get('/', async (req, res) => {
             page: result.page,
             hasPrevPage: result.hasPrevPage,
             hasNextPage: result.hasNextPage,
-            prevLink: result.hasPrevPage ? `${req.baseUrl}?page=${result.prevPage}&limit=${limit}&sort=${sort}&sortOrder=${sortOrder}` : null,
-            nextLink: result.hasNextPage ? `${req.baseUrl}?page=${result.nextPage}&limit=${limit}&sort=${sort}&sortOrder=${sortOrder}` : null
+            prevLink: result.hasPrevPage ? `${req.baseUrl}?page=${result.prevPage}&limit=${limit}&sort=${sort}&sortOrder=${sortOrder}${filterKey ? `&filterKey=${filterKey}&filterValue=${filterValue}` : ''}` : null,
+            nextLink: result.hasNextPage ? `${req.baseUrl}?page=${result.nextPage}&limit=${limit}&sort=${sort}&sortOrder=${sortOrder}${filterKey ? `&filterKey=${filterKey}&filterValue=${filterValue}` : ''}` : null
         });
 
     } catch (err) {
@@ -57,6 +58,7 @@ router.get('/', async (req, res) => {
         res.status(500).json({ status: "error", message: 'Server error' });
     }
 });
+
 
 // GET: Retrieve a specific product by PID
 router.get('/:pid', async (req, res) => {
