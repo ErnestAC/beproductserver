@@ -7,51 +7,30 @@ import { Cart } from "../models/cart.model.js"
 const router = Router();
 
 // GET: Retrieve all carts with product details
-
 router.get('/', async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         const sort = req.query.sort || 'cid';  // Default sort by 'cid'
-        const sortOrder = req.query.sortOrder || 'asc';  // Default sort order is ascending
+        const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1;  // Convert sortOrder to number
 
-        const [carts, totalCount] = await Promise.all([
-            cartManager.getAllCartsMongoose(page, limit, sort, sortOrder),  // Pass sort and sortOrder to the function
-            Cart.countDocuments()  // Get total count for pagination directly from the model
-        ]);
-
-        // Enrich carts with product details
-        const cartData = await Promise.all(carts.map(async cart => {
-            const enrichedProducts = await Promise.all(cart.products.map(async item => {
-                const productDetails = await ProductModel.findOne({ pid: item.pid }).lean();
-                return {
-                    ...item.toObject(),
-                    productDetails: productDetails || null
-                };
-            }));
-
-            return {
-                ...cart.toObject(),
-                products: enrichedProducts
-            };
-        }));
-
-        // Pagination metadata
-        const pageCount = Math.ceil(totalCount / limit);
-        const hasNextPage = page < pageCount;
-        const hasPrevPage = page > 1;
+        const carts = await Cart.find()
+            .sort({ [sort]: sortOrder })
+            .populate('products.pid') // Automatically populate product details
+            .lean()
+            .paginate({ page, limit }); // Use Mongoose pagination
 
         res.json({
             status: "success",
-            payload: cartData,
-            totalPages: pageCount,
-            prevPage: hasPrevPage ? page - 1 : null,
-            nextPage: hasNextPage ? page + 1 : null,
-            page: page,
-            hasPrevPage: hasPrevPage,
-            hasNextPage: hasNextPage,
-            prevLink: hasPrevPage ? `${req.baseUrl}?page=${page - 1}&limit=${limit}&sort=${sort}&sortOrder=${sortOrder}` : null,
-            nextLink: hasNextPage ? `${req.baseUrl}?page=${page + 1}&limit=${limit}&sort=${sort}&sortOrder=${sortOrder}` : null
+            payload: carts,
+            totalPages: carts.totalPages,
+            prevPage: carts.hasPrevPage ? carts.prevPage : null,
+            nextPage: carts.hasNextPage ? carts.nextPage : null,
+            page: carts.page,
+            hasPrevPage: carts.hasPrevPage,
+            hasNextPage: carts.hasNextPage,
+            prevLink: carts.hasPrevPage ? `${req.baseUrl}?page=${carts.prevPage}&limit=${limit}&sort=${sort}&sortOrder=${req.query.sortOrder}` : null,
+            nextLink: carts.hasNextPage ? `${req.baseUrl}?page=${carts.nextPage}&limit=${limit}&sort=${sort}&sortOrder=${req.query.sortOrder}` : null
         });
 
     } catch (err) {
@@ -59,6 +38,7 @@ router.get('/', async (req, res) => {
         res.status(500).json({ status: "error", message: 'Server error' });
     }
 });
+
 
 
 
