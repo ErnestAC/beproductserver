@@ -33,7 +33,7 @@
                 <br>
 
                 <div class="column is-6 make-it-white">
-                    <p class="card-title-container make-it-dark make-it-rounded-top make-it-semi-back">Navegación</p>
+                    <p class="card-title-container make-it-dark make-it-rounded-top make-it-semi-back">Navegación y uso</p>
                     <div class="section">
                         <p class="make-it-small">
                             El proyecto comienza con esta página y provee una barra de navegación para moverse 
@@ -70,9 +70,10 @@
                             <p><b>POST /api/carts/ - </b> Crea un nuevo carrito con un ID único y retorna su ID.</p>
                             <p><b>GET /api/carts/cid - </b> Lista los contenidos del carrito por ID (cid) con información agregada de los productos en este.</p>
                             <p><b>POST /api/carts/cid/product/pid - </b> Agrega el producto con el pid pasado o incrementa su cantidad en el carrito con el cid pasado.</p>
+                            <p><b>PATCH /api/carts/cid/product/pid - </b> Modifica el campo quantity de un producto en un carrito. Usa el valor pasado por body con la key 'quantity'.</p>
                             <p><b>DELETE /api/carts/cid/product/pid - </b> Elimina el producto con el pid pasado del carrito pasado por pid.</p>
                             <p><b>DELETE /api/carts/cid - </b> Elimina todos los contenidos del carrito por cid.</p>
-                            <p><b>/api/</b> - Esta página.</p>
+                            
                         </div>
                         
                         <div class="column is-6 section">

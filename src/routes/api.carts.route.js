@@ -3,6 +3,7 @@ import { cartManager } from "../managers/cart.manager.js";
 import { notifyCartChange } from "../server.js";
 import { ProductModel } from "../models/product.model.js"
 import { Cart } from "../models/cart.model.js"
+import { v4 as uuidv4 } from 'uuid';
 
 const router = Router();
 
@@ -96,6 +97,44 @@ router.post('/:cid/product/:pid', async (req, res) => {
     }
 });
 
+// PATCH: Update quantity of a product in a cart
+router.patch('/:cid/product/:pid', async (req, res) => {
+    const { cid, pid } = req.params;
+    const { quantity } = req.body;
+
+    // Validate that quantity is a number and not empty
+    if (!quantity || isNaN(quantity) || quantity <= 0) {
+        return res.status(400).json({ status: "error", message: "Quantity must be a valid positive number" });
+    }
+
+    try {
+        // get the cart contents
+        const cart = await cartManager.getCartByIdMongoose(cid);
+        if (!cart) {
+            return res.status(404).json({ status: "error", message: "Cart not found" });
+        }
+
+        // find product inside the cart
+        const productInCart = cart.products.find(item => item.pid === pid);
+        if (!productInCart) {
+            return res.status(404).json({ status: "error", message: "Product not found in cart" });
+        }
+
+        // Update the quantity
+        productInCart.quantity = parseInt(quantity, 10);
+
+        // Save the updated cart
+        await cart.save();
+        notifyCartChange();
+
+        res.json({ status: "success", message: "Product quantity updated", payload: cart });
+    } catch (err) {
+        console.error("Error updating product quantity:", err);
+        res.status(500).json({ status: "error", message: "Server error" });
+    }
+});
+
+
 // DELETE: delete cart contents by CID
 router.delete('/:cid', async (req, res) => {
     const { cid } = req.params;
@@ -137,6 +176,41 @@ router.delete('/:cid/products/:pid', async (req, res) => {
         res.json({ status: "success", message: "Product removed from cart", payload: cart });
     } catch (err) {
         res.status(500).json({ status: "error", message: 'Server error' });
+    }
+});
+
+router.put('/', async (req, res) => {
+    try {
+        const { products } = req.body;
+
+        if (!Array.isArray(products) || products.length === 0) {
+            return res.status(400).json({ status: "error", message: "Products must be a non-empty array" });
+        }
+
+        const cid = uuidv4();
+
+        const cartProducts = products.map(product => ({
+            pid: product.pid,
+            quantity: Number.isInteger(product.quantity) && product.quantity > 0 ? product.quantity : 1
+        }));
+
+        const newCart = new Cart({
+            cid,
+            products: cartProducts
+        });
+
+        await newCart.save();
+        notifyCartChange();
+
+        res.status(201).json({
+            status: "success",
+            message: "Cart created successfully",
+            payload: newCart
+        });
+
+    } catch (err) {
+        console.error("Error creating custom cart:", err);
+        res.status(500).json({ status: "error", message: "Server error" });
     }
 });
 

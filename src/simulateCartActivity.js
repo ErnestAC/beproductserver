@@ -29,24 +29,44 @@ async function simulateCartActivity() {
 
         async function addProductToCart() {
             try {
+                // Fetch carts
                 const cartResponse = await axios.get(API_BASE_URL);
-                const carts = cartResponse.data.payload;
-                if (!carts.length) return;
-
+                
+        
+                const carts = cartResponse.data?.carts.payload;
+                if (!Array.isArray(carts) || carts.length === 0) {
+                    console.log("No carts available.");
+                    return;
+                }
+        
+                // Fetch products
                 const productResponse = await axios.get(PRODUCT_API_URL);
-                const products = productResponse.data.payload;
-                if (!products.length) return;
-
+                
+        
+                const products = productResponse.data?.payload;
+                if (!Array.isArray(products) || products.length === 0) {
+                    console.log("No products available.");
+                    return;
+                }
+        
+                // Select a random cart and product
                 const randomCart = carts[Math.floor(Math.random() * carts.length)];
                 const randomProduct = products[Math.floor(Math.random() * products.length)];
-
+        
+                // Ensure the cart has a valid `cid` and the product has a valid `pid`
+                if (!randomCart.cid || !randomProduct.pid) {
+                    console.log("Invalid cart or product data.");
+                    return;
+                }
+        
+                // Add product to cart
                 await axios.post(`${API_BASE_URL}/${randomCart.cid}/product/${randomProduct.pid}`);
                 console.log(`Added product ${randomProduct.pid} to cart ${randomCart.cid}`);
             } catch (error) {
                 console.error("Error adding product to cart:", error.response?.data || error.message);
             }
         }
-
+        
         async function removeProductFromCart() {
             try {
                 const cartResponse = await axios.get(API_BASE_URL);
