@@ -15,7 +15,7 @@ Integra una base de datos (**MongoDB**) sobre **Node.js** y **Express** para mon
 
 ---
 
-## 🚀 Navegación  
+## Navegación  
 
 El proyecto comienza con esta página y provee una barra de navegación para moverse por algunas de las operaciones básicas:  
 - Lista de productos  
@@ -26,11 +26,10 @@ El proyecto comienza con esta página y provee una barra de navegación para mov
   **`5ab6e82f-b289-4dff-8ff5-25dc0f749ee2`**  
   (Carrito preexistente en MongoDB).
 - 🛒 El botón **"Add to Cart"** en la vista [`/products`](#rutas) **agrega productos** al carrito mencionado arriba.
-- 🧪 En la sección [`/more`](#rutas) hay vistas adicionales **no incluidas** en la barra de navegación, principalmente para **testing**.
 
 ---
 
-## 📌 Rutas
+## Rutas
 
 ### **🔹 API Endpoints**
 | Método  | Ruta | Descripción |
@@ -62,4 +61,4 @@ El proyecto comienza con esta página y provee una barra de navegación para mov
 | **`/forms/delete-product`** | Formulario para **eliminar** un producto de la base de datos |
 
 ---
-_🚀 Desarrollado como parte del curso de **Programación Backend I**._
+
