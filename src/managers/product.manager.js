@@ -3,6 +3,24 @@ import { connectDB } from "../connectors/mongo.connector.js";
 import { ProductModel } from "../models/product.model.js";
 import { notifyProductChange } from "../server.js";
 
+function validateCompletenessOfProduct(Product){
+    let result = false
+    if (Product.title &&
+        Product.handle &&
+        Product.description &&
+        Product.code &&
+        Product.price &&
+        Product.stock &&
+        Product.category &&
+        Product.wheelArrangement &&
+        Product.wheelArrangement &&
+        Product.pieces
+    ) {        
+        result = true
+    }
+
+    return result
+}
 export class ProductManager {
     async initialize() {
         try {
@@ -13,25 +31,14 @@ export class ProductManager {
         }
     }
 
+
+
     async addProduct(newProduct) {
-        if (
-            !newProduct.title ||
-            !newProduct.description ||
-            !newProduct.code ||
-            !newProduct.price ||
-            !newProduct.stock ||
-            !newProduct.category ||
-            !newProduct.stock ||
-            !newProduct.status ||
-            !newProduct.thumbs ||
-            !newProduct.pieces ||
-            !newProduct.handle ||
-            !newProduct.wheelArrangement ||
-            !newProduct.lighting ||
-            !newProduct.motorizable
-        ) {
+        
+        console.log()
+        if (!validateCompletenessOfProduct(newProduct)) {
             return null;
-        }
+        } 
         const opuuid = uuidv4();
         newProduct.pid = opuuid;
         newProduct.active = true;
@@ -40,7 +47,7 @@ export class ProductManager {
             const product = new ProductModel(newProduct);
             await product.save();
             notifyProductChange();
-            console.log(product.toObject());
+            
             return product.toObject();
         } catch (err) {
             console.error("Error saving product:", err);
