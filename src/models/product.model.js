@@ -4,16 +4,16 @@ import mongoosePaginate from "mongoose-paginate-v2";
 const productCollection = "products";
 
 const productSchema = new Schema(
-  {
+    {
     title: String,
     handle: String,
-    imageURL: String, // Stores the full URL of the uploaded image
+    imageURL: String, // Store the full URL of the uploaded image
     description: String,
     stock: Number,
     code: String,
     pid: {
-      type: String,
-      unique: true,
+        type: String,
+        unique: true,
     },
     price: Number,
     category: String,
@@ -22,8 +22,8 @@ const productSchema = new Schema(
     lighting: Boolean,
     wheelArrangement: String,
     thumbs: [String],
-  },
-  { timestamps: true }
+    },
+    { timestamps: true }
 );
 
 productSchema.plugin(mongoosePaginate);

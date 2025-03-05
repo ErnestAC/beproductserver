@@ -48,11 +48,11 @@ router.post("/", uploader.single("file"), async (req, res) => {
 
         const product = await productManager.addProduct(newProduct);
         console.log(newProduct);
-/*         if (!product) {
+        if (!product) {
             return res
                 .status(400)
                 .json({ status: "error", message: "Invalid product data" });
-        } */
+        }
 
         res.status(201).json({ status: "success", payload: product });
     } catch (err) {
