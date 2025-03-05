@@ -1,17 +1,21 @@
 import multer from "multer";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-const __filename = fileURLToPath(import.meta.url)
+import { v4 as uuidv4 } from "uuid";
+import path from "path";
 
-export const __dirname = dirname(__filename)
+const __filename = fileURLToPath(import.meta.url);
+export const __dirname = dirname(__filename);
 
-const config = multer.diskStorage({
+const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, __dirname + '/public/image')
+        cb(null, path.join(__dirname, "/public/img")); // Ensure this folder exists
     },
     filename: (req, file, cb) => {
-        cb(null, file.originalname)
+        const fileExt = path.extname(file.originalname); // Get file extension
+        const uniqueFilename = `${uuidv4()}${fileExt}`; // Generate UUID filename
+        cb(null, uniqueFilename);
     }
-})
+});
 
-export const upload = multer({ storage: config })
+export const uploader = multer({ storage });

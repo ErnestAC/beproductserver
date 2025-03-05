@@ -8,20 +8,48 @@ router.get('/add-product', (req, res) => {
     res.render('addProduct');
 });
 
-router.post('/add-product', async (req, res) => {
-    const product = req.body;
+import { uploader } from "../utils.js";
+
+router.post('/add-product', uploader.single("file"), async (req, res) => {
     try {
-        const result = await productManager.addProduct(product);
+        const { title, handle, description, stock, code, price, category, pieces, active, lighting, wheelArrangement, motorizable, status } = req.body;
+
+        if (!req.file) {
+            return res.status(400).json({ message: "Error: Missing image file." });
+        }
+
+        const newProduct = {
+            title,
+            handle,
+            description,
+            stock: Number(stock),
+            code,
+            price: Number(price),
+            category,
+            pieces: Number(pieces),
+            active: active === "true",
+            lighting: lighting === "true",
+            wheelArrangement,
+            motorizable: motorizable === "true",
+            status: status === "true",
+            file: `/img/${req.file.filename}`, // Save the image URL
+            thumbs: [`/img/${req.file.filename}`],
+        };
+
+        const result = await productManager.addProduct(newProduct);
+
         if (result) {
             notifyProductChange();
             res.redirect('/api/products');
         } else {
-            res.status(500).json({ message: "Error adding product" });
+            res.status(500).json({ message: "Error adding product. Check required fields." });
         }
+
     } catch (error) {
-        res.status(500).json({ message: `Server error ${error}` });
+        res.status(500).json({ message: `Server error: ${error.message}` });
     }
 });
+
 
 router.get('/delete-product', (req, res) => {
     res.render('deleteProduct');

@@ -3,16 +3,17 @@ import mongoosePaginate from "mongoose-paginate-v2";
 
 const productCollection = "products";
 
-const productSchema = new Schema({
+const productSchema = new Schema(
+  {
     title: String,
     handle: String,
-    imageURL: String,
+    imageURL: String, // Stores the full URL of the uploaded image
     description: String,
     stock: Number,
-    code: String, 
+    code: String,
     pid: {
-        type: String,
-        unique: true
+      type: String,
+      unique: true,
     },
     price: Number,
     category: String,
@@ -21,11 +22,12 @@ const productSchema = new Schema({
     lighting: Boolean,
     wheelArrangement: String,
     thumbs: [String],
-}, { timestamps: true });
+  },
+  { timestamps: true }
+);
 
-productSchema.plugin(mongoosePaginate)
+productSchema.plugin(mongoosePaginate);
 
-//indices for commonly searched fields
 productSchema.index({ price: 1 });
 productSchema.index({ stock: 1 });
 

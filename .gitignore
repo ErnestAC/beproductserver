@@ -1,5 +1,5 @@
 /node_modules
 /connectors
-/src/public/image/*.**
+/src/public/img/*.**
 *.backup
 .env

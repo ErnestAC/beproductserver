@@ -8,32 +8,57 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
-    <h2 class=" section make-it-white">Add a New Product</h2>
-    <form class="content" action="/forms/add-product" method="POST">
-        <div class="section box make-it-semi-back make-it-normal">
-            <label class="make-it-white make-it-normal" for="title">Title:</label>
+    
+    <form class="container" action="/forms/add-product" method="POST" enctype="multipart/form-data">
+        <h2 class="section make-it-white">Add a New Product</h2>
+        <div class="section box make-it-semi-back make-it-small">
+            <label class="make-it-darkmake-it-small" for="title">Title:</label>
             <input placeholder="Title" class="input is-dark is-small" type="text" id="title" name="title" required value="{{title}}"><br><br>
 
-            <label class="make-it-white make-it-normal" for="description">Description:</label>
+            <label class="make-it-darkmake-it-small" for="description">Description:</label>
             <textarea placeholder="Description" class="textarea is-small" id="description" name="description" required>{{description}}</textarea><br><br>
 
-            <label class="make-it-white make-it-normal" for="code">Code:</label>
+            <label class="make-it-darkmake-it-small" for="code">Code:</label>
             <input placeholder="ABC-DEC" class="input is-small" type="text" id="code" name="code" required value="{{code}}"><br><br>
 
-            <label class="make-it-white make-it-normal" for="price">Price:</label>
+            <label class="make-it-darkmake-it-small" for="price">Price:</label>
             <input placeholder="Price" class="input is-small is-dark" type="number" id="price" name="price" min="0" required value="{{price}}"><br><br>
 
-            <label class="make-it-white make-it-normal" for="stock">Current Stock:</label>
+            <label class="make-it-darkmake-it-small" for="stock">Current Stock:</label>
             <input placeholder="Stock" class="input is-small" type="number" id="stock" name="stock" min="0" required value="{{stock}}"><br><br>
 
-            <label class="make-it-white make-it-normal" for="category">Category:</label>
+            <label class="make-it-darkmake-it-small" for="category">Category:</label>
             <input placeholder="Category" class="input is-small" type="text" id="category" name="category" required value="{{category}}"><br><br>
 
-            <label class="make-it-white make-it-normal" for="status">Status:</label>
+            <label class="make-it-darkmake-it-small" for="pieces">Pieces:</label>
+            <input placeholder="Number of Pieces" class="input is-small" type="number" id="pieces" name="pieces" min="1" required value="{{pieces}}"><br><br>
+
+            <label class="make-it-darkmake-it-small" for="handle">Handle:</label>
+            <input placeholder="Handle" class="input is-small" type="text" id="handle" name="handle" required value="{{handle}}"><br><br>
+
+            <label class="make-it-darkmake-it-small" for="wheelArrangement">Wheel Arrangement:</label>
+            <input placeholder="Wheel Arrangement" class="input is-small" type="text" id="wheelArrangement" name="wheelArrangement" required value="{{wheelArrangement}}"><br><br>
+
+            <label class="make-it-darkmake-it-small" for="lighting">Lighting:</label>
+            <select class="input is-small" id="lighting" name="lighting" required>
+                <option value="true" {{#if lighting}}selected{{/if}}>Yes</option>
+                <option value="false" {{#unless lighting}}selected{{/unless}}>No</option>
+            </select><br><br>
+
+            <label class="make-it-darkmake-it-small" for="motorizable">Motorizable:</label>
+            <select class="input is-small" id="motorizable" name="motorizable" required>
+                <option value="true" {{#if motorizable}}selected{{/if}}>Yes</option>
+                <option value="false" {{#unless motorizable}}selected{{/unless}}>No</option>
+            </select><br><br>
+
+            <label class="make-it-darkmake-it-small" for="status">Status:</label>
             <select class="input is-small" id="status" name="status" required>
                 <option value="true" {{#if status}}selected{{/if}}>Active</option>
                 <option value="false" {{#unless status}}selected{{/unless}}>Inactive</option>
             </select><br><br>
+
+            <label class="make-it-darkmake-it-small" for="file">Upload Image:</label>
+            <input class="input is-small" type="file" id="file" name="file" accept="image/*" required><br><br>
 
             <button class="button is-small" type="submit">Add Product</button>
         </div>

@@ -2,22 +2,67 @@ import { Router } from "express";
 import { productManager } from "../managers/product.manager.js";
 import { notifyProductChange } from "../server.js";
 import { ProductModel } from "../models/product.model.js";
+import { __dirname, uploader } from "../utils.js"
 const router = Router();
 
 // POST: Add a new product
-router.post('/', async (req, res) => {
+router.post("/", uploader.single("file"), async (req, res) => {
+    if (!req.file) {
+        return res
+            .status(400)
+            .json({
+                status: "error",
+                message: "Missing image file data. Add and retry.",
+            });
+    }
+
     try {
-        const product = await productManager.addProduct(req.body);
-        if (product) {
-            notifyProductChange();
-            res.status(201).json({ status: "success", payload: product });
-        } else {
-            res.status(400).json({ status: "error", message: "Invalid product data" });
-        }
+        const {
+            title,
+            handle,
+            description,
+            stock,
+            code,
+            price,
+            category,
+            pieces,
+            active,
+            lighting,
+            wheelArrangement,
+        } = req.body;
+
+        const newProduct = {
+            title,
+            handle,
+            imageURL: `/img/${req.file.filename}`, // Store uploaded image path
+            description,
+            stock: Number(stock),
+            code,
+            price: Number(price),
+            category,
+            pieces: Number(pieces),
+            active: active === "true",
+            lighting: lighting === "true",
+            wheelArrangement,
+        };
+
+        const product = await productManager.addProduct(newProduct);
+        console.log(newProduct);
+/*         if (!product) {
+            return res
+                .status(400)
+                .json({ status: "error", message: "Invalid product data" });
+        } */
+
+        res.status(201).json({ status: "success", payload: product });
     } catch (err) {
-        res.status(500).json({ status: "error", message: 'Server error' });
+        console.error("Error creating product:", err);
+        res.status(500).json({ status: "error", message: "Server error" });
     }
 });
+
+
+
 
 // GET: Static products page with pagination
 router.get('/', async (req, res) => {

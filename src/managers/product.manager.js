@@ -14,7 +14,22 @@ export class ProductManager {
     }
 
     async addProduct(newProduct) {
-        if (!newProduct.title || !newProduct.description || !newProduct.code || !newProduct.price || !newProduct.stock || !newProduct.category || newProduct.status === undefined) {
+        if (
+            !newProduct.title ||
+            !newProduct.description ||
+            !newProduct.code ||
+            !newProduct.price ||
+            !newProduct.stock ||
+            !newProduct.category ||
+            !newProduct.stock ||
+            !newProduct.status ||
+            !newProduct.thumbs ||
+            !newProduct.pieces ||
+            !newProduct.handle ||
+            !newProduct.wheelArrangement ||
+            !newProduct.lighting ||
+            !newProduct.motorizable
+        ) {
             return null;
         }
         const opuuid = uuidv4();
@@ -25,20 +40,26 @@ export class ProductManager {
             const product = new ProductModel(newProduct);
             await product.save();
             notifyProductChange();
+            console.log(product.toObject());
             return product.toObject();
         } catch (err) {
             console.error("Error saving product:", err);
-            return null;
+            return err;
         }
     }
 
-    
-    async getAllProducts({ limit = 10, skip = 0, sort = '', sortDirection = 1, filterBy = '' }) {
+    async getAllProducts({
+        limit = 10,
+        skip = 0,
+        sort = "",
+        sortDirection = 1,
+        filterBy = "",
+    }) {
         const query = { active: true };
-    
+
         const sortCriteria = {};
         sortCriteria[sort] = sortDirection;
-    
+
         try {
             const products = await ProductModel.find(query)
                 .sort(sortCriteria)
@@ -51,8 +72,7 @@ export class ProductManager {
             return [];
         }
     }
-    
-    
+
     async getProductById(pid) {
         try {
             return await ProductModel.findOne({ pid: pid, active: true }).lean();
@@ -117,19 +137,19 @@ export class ProductManager {
         }
     }
 
-    async getTotalProductCount(filterBy = '') {
+    async getTotalProductCount(filterBy = "") {
         try {
             const query = { active: true };
 
             if (filterBy) {
                 query.$or = [
-                    { title: { $regex: filterBy, $options: 'i' } },
-                    { description: { $regex: filterBy, $options: 'i' } },
-                    { code: { $regex: filterBy, $options: 'i' } },
-                    { price: { $regex: filterBy, $options: 'i' } },
-                    { stock: { $regex: filterBy, $options: 'i' } },
-                    { category: { $regex: filterBy, $options: 'i' } },
-                    { pid: { $regex: filterBy, $options: 'i' } }
+                    { title: { $regex: filterBy, $options: "i" } },
+                    { description: { $regex: filterBy, $options: "i" } },
+                    { code: { $regex: filterBy, $options: "i" } },
+                    { price: { $regex: filterBy, $options: "i" } },
+                    { stock: { $regex: filterBy, $options: "i" } },
+                    { category: { $regex: filterBy, $options: "i" } },
+                    { pid: { $regex: filterBy, $options: "i" } },
                 ];
             }
 
