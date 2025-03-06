@@ -113,7 +113,7 @@ export class ProductManager {
         }
     }
 
-    async deleteProduct(pid, killFlag = false) {
+    async deleteProduct(pid, killFlag = true) {
         try {
             if (killFlag) {
                 const deleteResult = await ProductModel.deleteOne({ pid: pid });
