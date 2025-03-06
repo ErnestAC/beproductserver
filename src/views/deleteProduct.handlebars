@@ -14,11 +14,6 @@
         <label class="make-it-white make-it-normal" for="pid">Product ID:</label>
         <input type="text" id="pid" name="pid" required>
 
-        <label for="killFlag" class="make-it-white make-it-normal">
-            <input type="checkbox" id="killFlag" name="killFlag">
-            Hard delete (cannot be undone)
-        </label>
-
         <br>
         <br>
         
@@ -32,7 +27,7 @@
             event.preventDefault(); 
 
             const pid = document.getElementById("pid").value;
-            const killFlag = document.getElementById("killFlag").checked; 
+            const killFlag = true
 
             try {
                 const response = await fetch(`/api/products/${pid}`, {
