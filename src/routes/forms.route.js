@@ -32,10 +32,10 @@ router.post('/add-product', uploader.single("file"), async (req, res) => {
             wheelArrangement,
             motorizable: motorizable === "true",
             status: status === "true",
-            file: `/img/${req.file.filename}`, // Save the image URL
+            imageURL: `/img/${req.file.filename}`, // Save the image URL
             thumbs: [`/img/${req.file.filename}`],
         };
-
+        console.log("Saving product:", newProduct);
         const result = await productManager.addProduct(newProduct);
 
         if (result) {
