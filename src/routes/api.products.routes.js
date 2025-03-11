@@ -2,7 +2,7 @@ import { Router } from "express";
 import { productManager } from "../managers/product.manager.js";
 import { notifyProductChange } from "../server.js";
 import { ProductModel } from "../models/product.model.js";
-import { __dirname, uploader } from "../utils.js";
+import { uploader } from "../utils.js";
 import { protect } from "../middlewares/auth.middleware.js";
 
 const router = Router();
