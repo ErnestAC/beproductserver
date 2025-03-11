@@ -1,19 +1,24 @@
-// server.js
-import express from 'express';
-import { engine } from 'express-handlebars';
-import { Server } from 'socket.io';
-import http from 'http';
-import path from 'path';
+import express from "express";
+import { engine } from "express-handlebars";
+import { Server } from "socket.io";
+import http from "http";
+import path from "path";
+import dotenv from "dotenv";
 
-import { __dirname } from './utils.js';
-import ProductsRoute from './routes/api.products.route.js';
-import CartsRoute from './routes/api.carts.route.js';
-import homeRoute from './routes/index.route.js';
-import FormsRoute from './routes/forms.route.js';
-import { productManager } from './managers/product.manager.js';
-import { cartManager } from './managers/cart.manager.js';
-import RealtimeViews from './routes/realtimeDisplay.route.js'
-import Handlebars from 'handlebars';
+import { __dirname } from "./utils.js";
+import ProductsRoute from "./routes/api.products.routes.js";
+import CartsRoute from "./routes/api.carts.routes.js";
+import homeRoute from "./routes/index.routes.js";
+import FormsRoute from "./routes/forms.routes.js";
+import RealtimeViews from "./routes/realtimeDisplay.routes.js";
+import authRoutes from "./routes/auth.routes.js"; // ✅ Added authentication routes
+
+import { productManager } from "./managers/product.manager.js";
+import { cartManager } from "./managers/cart.manager.js";
+import Handlebars from "handlebars";
+
+// Load environment variables
+dotenv.config(); // ✅ Load .env variables
 
 const app = express();
 const server = http.createServer(app);
@@ -21,33 +26,31 @@ const io = new Server(server);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/static', express.static(path.join(__dirname, 'public')));
-app.use('/img', express.static(path.join(__dirname, 'public/img')));
+app.use("/static", express.static(path.join(__dirname, "public")));
+app.use("/img", express.static(path.join(__dirname, "public/img")));
 
+app.set("views", path.join(__dirname, "views"));
+app.engine("handlebars", engine());
+app.set("view engine", "handlebars");
 
-app.set('views', path.join(__dirname, 'views'));
-app.engine('handlebars', engine());
-app.set('view engine', 'handlebars');
-
-// Register the eq helper to handle equality comparison in Handlebars
-Handlebars.registerHelper('eq', function (a, b) {
+// Register Handlebars helpers
+Handlebars.registerHelper("eq", function (a, b) {
     return a === b;
 });
 
-// Register the ifCond helper for conditional checks (used in productsStatic.handlebars)
-Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
+Handlebars.registerHelper("ifCond", function (v1, operator, v2, options) {
     switch (operator) {
-        case '==':
+        case "==":
             return v1 == v2 ? options.fn(this) : options.inverse(this);
-        case '===':
+        case "===":
             return v1 === v2 ? options.fn(this) : options.inverse(this);
-        case '<':
+        case "<":
             return v1 < v2 ? options.fn(this) : options.inverse(this);
-        case '<=':
+        case "<=":
             return v1 <= v2 ? options.fn(this) : options.inverse(this);
-        case '>':
+        case ">":
             return v1 > v2 ? options.fn(this) : options.inverse(this);
-        case '>=':
+        case ">=":
             return v1 >= v2 ? options.fn(this) : options.inverse(this);
         default:
             return options.inverse(this);
@@ -59,12 +62,12 @@ export const notifyProductChange = async () => {
     try {
         const products = await productManager.getAllProducts({
             limit: 50,
-            sort: 'price',
+            sort: "price",
             sortDirection: -1,
         });
-        io.emit('updateProducts', products);
+        io.emit("updateProducts", products);
     } catch (err) {
-        console.error('Error notifying product change:', err);
+        console.error("Error notifying product change:", err);
     }
 };
 
@@ -72,9 +75,9 @@ export const notifyProductChange = async () => {
 export const notifyCartChange = async () => {
     try {
         const carts = await cartManager.getAllCarts();
-        io.emit('updateCarts', carts);
+        io.emit("updateCarts", carts);
     } catch (err) {
-        console.error('Error notifying cart change:', err);
+        console.error("Error notifying cart change:", err);
     }
 };
 
@@ -82,47 +85,43 @@ export const notifyCartChange = async () => {
 io.on("connection", async (socket) => {
     console.log("Client connected:", socket.id);
 
-    // Send current products on connection
     try {
         const products = await productManager.getAllProducts({
             limit: 50,
-            sort: 'stock',
+            sort: "stock",
             sortDirection: -1,
         });
-        socket.emit('updateProducts', products);
+        socket.emit("updateProducts", products);
     } catch (err) {
-        console.error('Error sending product list:', err);
+        console.error("Error sending product list:", err);
     }
 
-    // Send current carts on connection
     try {
         const carts = await cartManager.getAllCarts();
-        socket.emit('updateCarts', carts);
+        socket.emit("updateCarts", carts);
     } catch (err) {
-        console.error('Error sending cart list:', err);
+        console.error("Error sending cart list:", err);
     }
 
-    // Handle product requests
     socket.on("requestProducts", async () => {
         try {
             const products = await productManager.getAllProducts({
                 limit: 50,
-                sort: 'stock',
+                sort: "stock",
                 sortDirection: -1,
             });
             socket.emit("updateProducts", products);
         } catch (err) {
-            console.error('Error fetching products:', err);
+            console.error("Error fetching products:", err);
         }
     });
 
-    // Handle cart requests
     socket.on("requestCarts", async () => {
         try {
             const carts = await cartManager.getAllCarts();
             socket.emit("updateCarts", carts);
         } catch (err) {
-            console.error('Error fetching carts:', err);
+            console.error("Error fetching carts:", err);
         }
     });
 
@@ -132,20 +131,17 @@ io.on("connection", async (socket) => {
 });
 
 // Routes
-app.use('/', homeRoute);
+app.use("/", homeRoute);
+app.use("/forms", FormsRoute);
+app.use("/api/products", ProductsRoute);
+app.use("/api/carts", CartsRoute);
+app.use("/api/auth", authRoutes); // ✅ Register authentication routes
+app.use("/realtime/", RealtimeViews);
 
-// Use the formsRouter
-app.use('/forms', FormsRoute);
-app.use('/api/products', ProductsRoute);
-app.use('/api/carts', CartsRoute);
-app.use('/realtime/', RealtimeViews)
-
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
-    
-    console.log(` `) 
+    console.log(` `);
     console.log(`Server started on port ${PORT}.`);
     console.log(`http://localhost:${PORT}`);
-    console.log(` `) 
-
+    console.log(` `);
 });

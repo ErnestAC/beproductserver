@@ -2,11 +2,13 @@ import { Router } from "express";
 import { productManager } from "../managers/product.manager.js";
 import { notifyProductChange } from "../server.js";
 import { ProductModel } from "../models/product.model.js";
-import { __dirname, uploader } from "../utils.js"
+import { __dirname, uploader } from "../utils.js";
+import { protect } from "../middlewares/auth.middleware.js";
+
 const router = Router();
 
-// POST: Add a new product
-router.post("/", uploader.single("file"), async (req, res) => {
+// POST: Add a new product (Protected)
+router.post("/", protect, uploader.single("file"), async (req, res) => {
     if (!req.file) {
         return res
             .status(400)
@@ -34,7 +36,7 @@ router.post("/", uploader.single("file"), async (req, res) => {
         const newProduct = {
             title,
             handle,
-            imageURL: `/img/${req.file.filename}`, // Store uploaded image path
+            imageURL: `/img/${req.file.filename}`,
             description,
             stock: Number(stock),
             code,
@@ -61,11 +63,8 @@ router.post("/", uploader.single("file"), async (req, res) => {
     }
 });
 
-
-
-
-// GET: Static products page with pagination
-router.get('/', async (req, res) => {
+// GET: Static products page with pagination (Protected)
+router.get('/', protect, async (req, res) => {
     try {
         const { limit = 10, page = 1, sort = 'title', sortOrder = 'asc', filterKey, filterValue } = req.query;
 
@@ -104,9 +103,8 @@ router.get('/', async (req, res) => {
     }
 });
 
-
-// GET: Retrieve a specific product by PID
-router.get('/:pid', async (req, res) => {
+// GET: Retrieve a specific product by PID (Protected)
+router.get('/:pid', protect, async (req, res) => {
     const { pid } = req.params;
     try {
         const selectedProduct = await productManager.getProductById(pid);
@@ -119,8 +117,8 @@ router.get('/:pid', async (req, res) => {
     }
 });
 
-// PUT: Update a product by PID
-router.put('/:pid', async (req, res) => {
+// PUT: Update a product by PID (Protected)
+router.put('/:pid', protect, async (req, res) => {
     const { pid } = req.params;
     const productUpdate = req.body;
     try {
@@ -136,8 +134,8 @@ router.put('/:pid', async (req, res) => {
     }
 });
 
-// DELETE: Delete a product by PID
-router.delete('/:pid', async (req, res) => {
+// DELETE: Delete a product by PID (Protected)
+router.delete('/:pid', protect, async (req, res) => {
     const { pid } = req.params;
     const { killFlag } = req.body;
     try {
