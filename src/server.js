@@ -4,6 +4,8 @@ import { Server } from "socket.io";
 import http from "http";
 import path from "path";
 import dotenv from "dotenv";
+import session from "express-session";
+import passport from "./config/passport.js";
 
 import { __dirname } from "./utils.js";
 import ProductsRoute from "./routes/api.products.routes.js";
@@ -11,14 +13,14 @@ import CartsRoute from "./routes/api.carts.routes.js";
 import homeRoute from "./routes/index.routes.js";
 import FormsRoute from "./routes/forms.routes.js";
 import RealtimeViews from "./routes/realtimeDisplay.routes.js";
-import authRoutes from "./routes/auth.routes.js"; // ✅ Added authentication routes
+import authRoutes from "./routes/auth.routes.js";
 
 import { productManager } from "./managers/product.manager.js";
 import { cartManager } from "./managers/cart.manager.js";
 import Handlebars from "handlebars";
 
 // Load environment variables
-dotenv.config(); // ✅ Load .env variables
+dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
@@ -32,6 +34,19 @@ app.use("/img", express.static(path.join(__dirname, "public/img")));
 app.set("views", path.join(__dirname, "views"));
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
+
+// setup Express Sessions
+app.use(
+    session({
+        secret: process.env.JWT_SECRET || "this_is_not_final",
+        resave: false,
+        saveUninitialized: false,
+    })
+);
+
+// ✅ Initialize Passport.js
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Register Handlebars helpers
 Handlebars.registerHelper("eq", function (a, b) {
@@ -135,7 +150,7 @@ app.use("/", homeRoute);
 app.use("/forms", FormsRoute);
 app.use("/api/products", ProductsRoute);
 app.use("/api/carts", CartsRoute);
-app.use("/api/auth", authRoutes); // ✅ Register authentication routes
+app.use("/api/auth", authRoutes); // ✅ Register auth routes
 app.use("/realtime/", RealtimeViews);
 
 const PORT = process.env.PORT || 8080;

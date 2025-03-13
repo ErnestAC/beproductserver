@@ -3,21 +3,16 @@ import { productManager } from "../managers/product.manager.js";
 import { notifyProductChange } from "../server.js";
 import { ProductModel } from "../models/product.model.js";
 import { uploader } from "../utils.js";
-import { protect } from "../middlewares/auth.middleware.js";
+import passport from "passport";
 
 const router = Router();
 
 // POST: Add a new product (Protected)
-router.post("/", protect, uploader.single("file"), async (req, res) => {
+router.post("/", passport.authenticate("session"), uploader.single("file"), async (req, res) => {
     if (!req.file) {
-        return res
-            .status(400)
-            .json({
-                status: "error",
-                message: "Missing image file data. Add and retry.",
-            });
+        return res.status(400).json({ status: "error", message: "Missing image file data. Add and retry." });
     }
-
+    console.log("User Session:", req.user);
     try {
         const {
             title,
@@ -51,9 +46,7 @@ router.post("/", protect, uploader.single("file"), async (req, res) => {
         const product = await productManager.addProduct(newProduct);
         console.log(newProduct);
         if (!product) {
-            return res
-                .status(400)
-                .json({ status: "error", message: "Invalid product data" });
+            return res.status(400).json({ status: "error", message: "Invalid product data" });
         }
 
         res.status(201).json({ status: "success", payload: product });
@@ -64,7 +57,7 @@ router.post("/", protect, uploader.single("file"), async (req, res) => {
 });
 
 // GET: Static products page with pagination (Protected)
-router.get('/', protect, async (req, res) => {
+router.get('/', passport.authenticate("session"), async (req, res) => {
     try {
         const { limit = 10, page = 1, sort = 'title', sortOrder = 'asc', filterKey, filterValue } = req.query;
 
@@ -104,7 +97,7 @@ router.get('/', protect, async (req, res) => {
 });
 
 // GET: Retrieve a specific product by PID (Protected)
-router.get('/:pid', protect, async (req, res) => {
+router.get('/:pid', passport.authenticate("session"), async (req, res) => {
     const { pid } = req.params;
     try {
         const selectedProduct = await productManager.getProductById(pid);
@@ -118,7 +111,7 @@ router.get('/:pid', protect, async (req, res) => {
 });
 
 // PUT: Update a product by PID (Protected)
-router.put('/:pid', protect, async (req, res) => {
+router.put('/:pid', passport.authenticate("session"), async (req, res) => {
     const { pid } = req.params;
     const productUpdate = req.body;
     try {
@@ -135,7 +128,7 @@ router.put('/:pid', protect, async (req, res) => {
 });
 
 // DELETE: Delete a product by PID (Protected)
-router.delete('/:pid', protect, async (req, res) => {
+router.delete('/:pid', passport.authenticate("session"), async (req, res) => {
     const { pid } = req.params;
     const { killFlag } = req.body;
     try {

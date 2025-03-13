@@ -4,11 +4,11 @@ import { notifyCartChange } from "../server.js";
 import { ProductModel } from "../models/product.model.js";
 import { Cart } from "../models/cart.model.js";
 import { v4 as uuidv4 } from 'uuid';
-import { protect } from "../middlewares/auth.middleware.js";
+import passport from "passport";
 
 const router = Router();
 
-router.get('/', protect, async (req, res) => {
+router.get('/', passport.authenticate("session"), async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
@@ -37,7 +37,7 @@ router.get('/', protect, async (req, res) => {
     }
 });
 
-router.get('/:cid', protect, async (req, res) => {
+router.get('/:cid', passport.authenticate("session"), async (req, res) => {
     const { cid } = req.params;
     try {
         const cart = await cartManager.getCartById(cid);
@@ -62,7 +62,7 @@ router.get('/:cid', protect, async (req, res) => {
     }
 });
 
-router.post('/:cid/product/:pid', protect, async (req, res) => {
+router.post('/:cid/product/:pid', passport.authenticate("session"), async (req, res) => {
     const { cid, pid } = req.params;
     try {
         const updatedCart = await cartManager.addProductToCart(cid, pid);
@@ -77,7 +77,7 @@ router.post('/:cid/product/:pid', protect, async (req, res) => {
     }
 });
 
-router.patch('/:cid/product/:pid', protect, async (req, res) => {
+router.patch('/:cid/product/:pid', passport.authenticate("session"), async (req, res) => {
     const { cid, pid } = req.params;
     const { quantity } = req.body;
 
@@ -107,7 +107,7 @@ router.patch('/:cid/product/:pid', protect, async (req, res) => {
     }
 });
 
-router.delete('/:cid', protect, async (req, res) => {
+router.delete('/:cid', passport.authenticate("session"), async (req, res) => {
     const { cid } = req.params;
     try {
         const deleted = await cartManager.clearCartById(cid);
@@ -122,7 +122,7 @@ router.delete('/:cid', protect, async (req, res) => {
     }
 });
 
-router.delete('/:cid/products/:pid', protect, async (req, res) => {
+router.delete('/:cid/products/:pid', passport.authenticate("session"), async (req, res) => {
     const { cid, pid } = req.params;
     try {
         const cart = await cartManager.getCartByIdMongoose(cid);
@@ -145,7 +145,7 @@ router.delete('/:cid/products/:pid', protect, async (req, res) => {
 });
 
 // create new cart
-router.post('/', protect, async (req, res) => {
+router.post('/', passport.authenticate("session"), async (req, res) => {
     try {
         const { products } = req.body || {};
         const cid = uuidv4();
