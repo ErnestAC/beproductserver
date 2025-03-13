@@ -3,16 +3,16 @@ import { productManager } from "../managers/product.manager.js";
 import { notifyProductChange } from "../server.js";
 import { ProductModel } from "../models/product.model.js";
 import { uploader } from "../utils.js";
-import passport from "passport";
+import { isAuthenticated } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-// POST: Add a new product (Protected)
-router.post("/", passport.authenticate("session"), uploader.single("file"), async (req, res) => {
+// Protected: Add a new product (Requires login)
+router.post("/", isAuthenticated, uploader.single("file"), async (req, res) => {
     if (!req.file) {
         return res.status(400).json({ status: "error", message: "Missing image file data. Add and retry." });
     }
-    console.log("User Session:", req.user);
+
     try {
         const {
             title,
@@ -25,7 +25,7 @@ router.post("/", passport.authenticate("session"), uploader.single("file"), asyn
             pieces,
             active,
             lighting,
-            wheelArrangement,
+            wheelArrangement
         } = req.body;
 
         const newProduct = {
@@ -40,7 +40,7 @@ router.post("/", passport.authenticate("session"), uploader.single("file"), asyn
             pieces: Number(pieces),
             active: active === "true",
             lighting: lighting === "true",
-            wheelArrangement,
+            wheelArrangement
         };
 
         const product = await productManager.addProduct(newProduct);
@@ -56,17 +56,17 @@ router.post("/", passport.authenticate("session"), uploader.single("file"), asyn
     }
 });
 
-// GET: Static products page with pagination (Protected)
-router.get('/', passport.authenticate("session"), async (req, res) => {
+// Protected: Get static products with pagination
+router.get("/", isAuthenticated, async (req, res) => {
     try {
-        const { limit = 10, page = 1, sort = 'title', sortOrder = 'asc', filterKey, filterValue } = req.query;
+        const { limit = 10, page = 1, sort = "title", sortOrder = "asc", filterKey, filterValue } = req.query;
 
         const options = {
             page: parseInt(page),
             limit: parseInt(limit),
-            sort: { [sort]: sortOrder === 'desc' ? -1 : 1 },
+            sort: { [sort]: sortOrder === "desc" ? -1 : 1 },
             lean: true,
-            customLabels: { docs: 'payload' }
+            customLabels: { docs: "payload" }
         };
 
         let query = {};
@@ -86,18 +86,21 @@ router.get('/', passport.authenticate("session"), async (req, res) => {
             page: result.page,
             hasPrevPage: result.hasPrevPage,
             hasNextPage: result.hasNextPage,
-            prevLink: result.hasPrevPage ? `${req.baseUrl}?page=${result.prevPage}&limit=${limit}&sort=${sort}&sortOrder=${sortOrder}${filterKey ? `&filterKey=${filterKey}&filterValue=${filterValue}` : ''}` : null,
-            nextLink: result.hasNextPage ? `${req.baseUrl}?page=${result.nextPage}&limit=${limit}&sort=${sort}&sortOrder=${sortOrder}${filterKey ? `&filterKey=${filterKey}&filterValue=${filterValue}` : ''}` : null
+            prevLink: result.hasPrevPage
+                ? `${req.baseUrl}?page=${result.prevPage}&limit=${limit}&sort=${sort}&sortOrder=${sortOrder}${filterKey ? `&filterKey=${filterKey}&filterValue=${filterValue}` : ""}`
+                : null,
+            nextLink: result.hasNextPage
+                ? `${req.baseUrl}?page=${result.nextPage}&limit=${limit}&sort=${sort}&sortOrder=${sortOrder}${filterKey ? `&filterKey=${filterKey}&filterValue=${filterValue}` : ""}`
+                : null
         });
-
     } catch (err) {
         console.error("Error retrieving products:", err);
-        res.status(500).json({ status: "error", message: 'Server error' });
+        res.status(500).json({ status: "error", message: "Server error" });
     }
 });
 
-// GET: Retrieve a specific product by PID (Protected)
-router.get('/:pid', passport.authenticate("session"), async (req, res) => {
+// Protected: Retrieve a specific product by PID
+router.get("/:pid", isAuthenticated, async (req, res) => {
     const { pid } = req.params;
     try {
         const selectedProduct = await productManager.getProductById(pid);
@@ -106,12 +109,12 @@ router.get('/:pid', passport.authenticate("session"), async (req, res) => {
         }
         res.json({ status: "success", payload: selectedProduct });
     } catch (err) {
-        res.status(500).json({ status: "error", message: 'Server error' });
+        res.status(500).json({ status: "error", message: "Server error" });
     }
 });
 
-// PUT: Update a product by PID (Protected)
-router.put('/:pid', passport.authenticate("session"), async (req, res) => {
+// Protected: Update a product by PID
+router.put("/:pid", isAuthenticated, async (req, res) => {
     const { pid } = req.params;
     const productUpdate = req.body;
     try {
@@ -123,12 +126,12 @@ router.put('/:pid', passport.authenticate("session"), async (req, res) => {
             res.status(400).json({ status: "error", message: "Invalid product ID or update failed" });
         }
     } catch (err) {
-        res.status(500).json({ status: "error", message: 'Server error' });
+        res.status(500).json({ status: "error", message: "Server error" });
     }
 });
 
-// DELETE: Delete a product by PID (Protected)
-router.delete('/:pid', passport.authenticate("session"), async (req, res) => {
+// Protected: Delete a product by PID
+router.delete("/:pid", isAuthenticated, async (req, res) => {
     const { pid } = req.params;
     const { killFlag } = req.body;
     try {
@@ -140,7 +143,7 @@ router.delete('/:pid', passport.authenticate("session"), async (req, res) => {
             res.status(400).json({ status: "error", message: "Product not found or could not be deleted" });
         }
     } catch (err) {
-        res.status(500).json({ status: "error", message: 'Server error' });
+        res.status(500).json({ status: "error", message: "Server error" });
     }
 });
 

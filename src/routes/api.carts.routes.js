@@ -4,40 +4,42 @@ import { notifyCartChange } from "../server.js";
 import { ProductModel } from "../models/product.model.js";
 import { Cart } from "../models/cart.model.js";
 import { v4 as uuidv4 } from 'uuid';
-import passport from "passport";
+import { isAuthenticated } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.get('/', passport.authenticate("session"), async (req, res) => {
+// Protected: Retrieve all carts
+router.get("/", isAuthenticated, async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
-        const sort = req.query.sort || 'cid';
-        const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1;
+        const sort = req.query.sort || "cid";
+        const sortOrder = req.query.sortOrder === "desc" ? -1 : 1;
 
         const carts = await Cart.find()
             .sort({ [sort]: sortOrder })
             .populate({
-                path: 'products.pid',
+                path: "products.pid",
                 model: ProductModel,
-                select: 'title handle imageURL description price category stock pieces'
+                select: "title handle imageURL description price category stock pieces"
             })
             .lean()
-            .paginate({ 
+            .paginate({
                 page,
                 limit,
-                customLabels: { docs:'payload' }
+                customLabels: { docs: "payload" }
             });
 
         res.json({ status: "success", carts });
 
     } catch (err) {
         console.error("Error retrieving carts with product details:", err);
-        res.status(500).json({ status: "error", message: 'Server error' });
+        res.status(500).json({ status: "error", message: "Server error" });
     }
 });
 
-router.get('/:cid', passport.authenticate("session"), async (req, res) => {
+// Protected: Retrieve a specific cart by CID
+router.get("/:cid", isAuthenticated, async (req, res) => {
     const { cid } = req.params;
     try {
         const cart = await cartManager.getCartById(cid);
@@ -55,29 +57,31 @@ router.get('/:cid', passport.authenticate("session"), async (req, res) => {
                 nextLink: null
             });
         } else {
-            res.status(404).json({ status: "error", message: 'Cart not found' });
+            res.status(404).json({ status: "error", message: "Cart not found" });
         }
     } catch (err) {
-        res.status(500).json({ status: "error", message: 'Server error' });
+        res.status(500).json({ status: "error", message: "Server error" });
     }
 });
 
-router.post('/:cid/product/:pid', passport.authenticate("session"), async (req, res) => {
+// Protected: Add a product to a cart
+router.post("/:cid/product/:pid", isAuthenticated, async (req, res) => {
     const { cid, pid } = req.params;
     try {
         const updatedCart = await cartManager.addProductToCart(cid, pid);
         notifyCartChange();
         res.json({ status: "success", payload: updatedCart });
     } catch (err) {
-        if (err.message.includes('Cart with ID')) {
+        if (err.message.includes("Cart with ID")) {
             res.status(404).json({ status: "error", message: err.message });
         } else {
-            res.status(500).json({ status: "error", message: 'Server error' });
+            res.status(500).json({ status: "error", message: "Server error" });
         }
     }
 });
 
-router.patch('/:cid/product/:pid', passport.authenticate("session"), async (req, res) => {
+// Protected: Update quantity of a product in a cart
+router.patch("/:cid/product/:pid", isAuthenticated, async (req, res) => {
     const { cid, pid } = req.params;
     const { quantity } = req.body;
 
@@ -107,7 +111,8 @@ router.patch('/:cid/product/:pid', passport.authenticate("session"), async (req,
     }
 });
 
-router.delete('/:cid', passport.authenticate("session"), async (req, res) => {
+// Protected: Delete a cart by CID
+router.delete("/:cid", isAuthenticated, async (req, res) => {
     const { cid } = req.params;
     try {
         const deleted = await cartManager.clearCartById(cid);
@@ -115,14 +120,15 @@ router.delete('/:cid', passport.authenticate("session"), async (req, res) => {
             notifyCartChange();
             res.json({ status: "success", message: "Cart contents deleted" });
         } else {
-            res.status(404).json({ status: "error", message: 'Cart not found' });
+            res.status(404).json({ status: "error", message: "Cart not found" });
         }
     } catch (err) {
-        res.status(500).json({ status: "error", message: 'Server error' });
+        res.status(500).json({ status: "error", message: "Server error" });
     }
 });
 
-router.delete('/:cid/products/:pid', passport.authenticate("session"), async (req, res) => {
+// Protected: Remove a specific product from a cart
+router.delete("/:cid/products/:pid", isAuthenticated, async (req, res) => {
     const { cid, pid } = req.params;
     try {
         const cart = await cartManager.getCartByIdMongoose(cid);
@@ -140,12 +146,12 @@ router.delete('/:cid/products/:pid', passport.authenticate("session"), async (re
         notifyCartChange();
         res.json({ status: "success", message: "Product removed from cart", payload: cart });
     } catch (err) {
-        res.status(500).json({ status: "error", message: 'Server error' });
+        res.status(500).json({ status: "error", message: "Server error" });
     }
 });
 
-// create new cart
-router.post('/', passport.authenticate("session"), async (req, res) => {
+// Protected: Create a new cart
+router.post("/", isAuthenticated, async (req, res) => {
     try {
         const { products } = req.body || {};
         const cid = uuidv4();

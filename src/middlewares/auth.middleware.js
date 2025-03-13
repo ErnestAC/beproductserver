@@ -1,6 +1,3 @@
-import jwt from "jsonwebtoken";
-import { User } from "../models/user.model.js";
-
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_key";
 
 export const isAuthenticated = (req, res, next) => {
