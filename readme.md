@@ -4,13 +4,14 @@
 
 El proyecto consiste en un backend para una tienda de modelos de trenes llamada **Shopnhour**.  
 Integra una base de datos (**MongoDB**) sobre **Node.js** y **Express** para montar un servicio de backend que provee:  
+
 - Un **catálogo de productos** almacenado en la colección `products`  
 - La **gestión de carritos de compras**, almacenados en la colección `carts`  
 
 ## Alumno  
+
 **Ernesto AC**  
 
-### Proyecto de Programación Backend I  
 **Desarrollo Avanzado de Backend, Comisión 70470**  
 
 ---
@@ -18,10 +19,12 @@ Integra una base de datos (**MongoDB**) sobre **Node.js** y **Express** para mon
 ## Navegación  
 
 El proyecto comienza con esta página y provee una barra de navegación para moverse por algunas de las operaciones básicas:  
+
 - Lista de productos  
 - Gestión de carritos de compras  
 
 ### **Consideraciones**
+
 - 🔒 El proyecto **no implementa sesiones ni autenticación aún**, por lo que el carrito al que agregamos productos desde este frontend está **hardcodeado** en:  
   **`5ab6e82f-b289-4dff-8ff5-25dc0f749ee2`**  
   (Carrito preexistente en MongoDB).
@@ -32,6 +35,7 @@ El proyecto comienza con esta página y provee una barra de navegación para mov
 ## Rutas
 
 ### **🔹 API Endpoints**
+
 | Método  | Ruta | Descripción |
 |---------|------|------------|
 | **GET**  | `/api/products/` | Devuelve todos los productos de la colección `products` en MongoDB (paginado). |
@@ -49,6 +53,7 @@ El proyecto comienza con esta página y provee una barra de navegación para mov
 ---
 
 ### **🔹 Vistas Disponibles**
+
 | Ruta | Descripción |
 |------|------------|
 | **`/`** | Página principal |
