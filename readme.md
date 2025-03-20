@@ -56,7 +56,7 @@ El proyecto comienza con esta página y provee una barra de navegación para mov
 | **`/carts`** | Vista estática de **todos** los carritos en el servidor |
 | **`/carts/:cid`** | Vista del carrito con el ID `cid` |
 | **`/realtime/products`** | Vista **en tiempo real** de la colección `products` |
-| **`/realtime/carts`** | Vista **en tiempo real** de la colección `carts` (**sin detalles de productos, solo `PID` y `cantidad`**) |
+| **`/realtime/carts`** | Vista **en tiempo real** de la colección `carts` (**sin detalles de productos, sólo `PID` y `cantidad`**) |
 | **`/forms/add-product`** | Formulario para **agregar** un producto a la base de datos |
 | **`/forms/delete-product`** | Formulario para **eliminar** un producto de la base de datos |
 

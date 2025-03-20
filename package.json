@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "node --watch src/server.js",
-    "dev": "node --inspect ./src/server.js",
-    "legacy-dev": "node --inspect-brk ./src/server.js"
+    "leg-dev": "node --inspect ./src/server.js",
+    "dev": "node --inspect-brk ./src/server.js"
   },
   "keywords": [],
   "author": "",
