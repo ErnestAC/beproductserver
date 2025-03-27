@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { productManager } from "../managers/product.manager.js";
+import { productManager } from "../persistence/mongo/managers/product.manager.js";
 import { notifyProductChange } from "../server.js";
-import { ProductModel } from "../models/product.model.js";
+import { ProductModel } from "../persistence/mongo/models/product.model.js";
 import { uploader } from "../utils.js";
 import { isAuthenticated } from "../middlewares/auth.middleware.js";
 

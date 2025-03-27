@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import { User } from "../models/user.model.js";
+import { User } from "../persistence/mongo/models/user.model.js";
 import bcrypt from "bcryptjs";
 
 // Local Strategy for login (email & password)

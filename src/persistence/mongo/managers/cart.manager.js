@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { Cart } from "../models/cart.model.js";
-import { notifyCartChange } from "../server.js";
+import { notifyCartChange } from "../../../server.js";
 import { ProductModel } from "../models/product.model.js";
 
 export class CartManager {

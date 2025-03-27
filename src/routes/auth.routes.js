@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
-import { User } from "../models/user.model.js";
+import { User } from "../persistence/mongo/models/user.model.js";
 import { check, validationResult } from "express-validator";
 
 const router = Router();

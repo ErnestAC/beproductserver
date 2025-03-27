@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { cartManager } from "../managers/cart.manager.js";
+import { cartManager } from "../persistence/mongo/managers/cart.manager.js";
 import { notifyCartChange } from "../server.js";
-import { ProductModel } from "../models/product.model.js";
-import { Cart } from "../models/cart.model.js";
-import { v4 as uuidv4 } from 'uuid';
+import { ProductModel } from "../persistence/mongo/models/product.model.js";
+import { Cart } from "../persistence/mongo/models/cart.model.js";
+
 import { isAuthenticated } from "../middlewares/auth.middleware.js";
+import { cartController } from "../controllers/cart.controllers.js"
 
 const router = Router();
 
@@ -151,28 +152,6 @@ router.delete("/:cid/products/:pid", isAuthenticated, async (req, res) => {
 });
 
 // Protected: Create a new cart
-router.post("/", isAuthenticated, async (req, res) => {
-    try {
-        const { products } = req.body || {};
-        const cid = uuidv4();
-        const newCart = new Cart({
-            cid,
-            products: products || []
-        });
-
-        await newCart.save();
-        notifyCartChange();
-
-        res.status(201).json({
-            status: "success",
-            message: products?.length ? "Cart created successfully with products." : "Empty cart created.",
-            payload: newCart
-        });
-
-    } catch (err) {
-        console.error("Error creating custom cart:", err);
-        res.status(400).json({ status: "error", message: err.message || "Invalid request body." });
-    }
-});
+router.post("/", isAuthenticated, cartController.createCart);
 
 export default router;

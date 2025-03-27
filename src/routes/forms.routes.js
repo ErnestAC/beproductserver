@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { productManager } from "../managers/product.manager.js";
+import { productManager } from "../persistence/mongo/managers/product.manager.js";
 import { notifyProductChange } from "../server.js";
 
 const router = Router();

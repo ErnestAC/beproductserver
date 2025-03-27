@@ -1,8 +1,8 @@
-import { ProductModel } from "../models/product.model.js";
+import { ProductModel } from "../persistence/mongo/models/product.model.js";
 import { Router } from "express";
-import { productManager } from "../managers/product.manager.js";
-import { cartManager } from "../managers/cart.manager.js";
-import { Cart } from "../models/cart.model.js";
+import { productManager } from "../persistence/mongo/managers/product.manager.js";
+import { cartManager } from "../persistence/mongo/managers/cart.manager.js";
+import { Cart } from "../persistence/mongo/models/cart.model.js";
 
 const router = Router();
 

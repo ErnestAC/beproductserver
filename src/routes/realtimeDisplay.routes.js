@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { productManager } from "../managers/product.manager.js";
-import { cartManager } from "../managers/cart.manager.js";
+import { productManager } from "../persistence/mongo/managers/product.manager.js";
+import { cartManager } from "../persistence/mongo/managers/cart.manager.js";
 
 const router = Router();
 

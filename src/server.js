@@ -15,8 +15,8 @@ import FormsRoute from "./routes/forms.routes.js";
 import RealtimeViews from "./routes/realtimeDisplay.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 
-import { productManager } from "./managers/product.manager.js";
-import { cartManager } from "./managers/cart.manager.js";
+import { productManager } from "./persistence/mongo/managers/product.manager.js";
+import { cartManager } from "./persistence/mongo/managers/cart.manager.js";
 import Handlebars from "handlebars";
 
 // Load environment variables
