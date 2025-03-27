@@ -2,6 +2,7 @@
 import { productManager } from "../persistence/mongo/managers/product.manager.js";
 import { notifyProductChange } from "../server.js";
 import { ProductModel } from "../persistence/mongo/models/product.model.js";
+import { request, response } from "express"
 
 class ProductsControllers {
     async deleteProduct(req, res) {
@@ -19,7 +20,7 @@ class ProductsControllers {
             res.status(500).json({ status: "error", message: "Server error" });
         }
     }
-    async updateProduct(req, res) {
+    async updateProduct(req = request, res = response) {
         const { pid } = req.params;
         const productUpdate = req.body;
         try {

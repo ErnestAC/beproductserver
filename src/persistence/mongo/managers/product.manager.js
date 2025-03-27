@@ -90,7 +90,9 @@ export class ProductManager {
     }
 
     async updateProduct(pid, productUpdate) {
+        console.log(pid)
         if (!Object.keys(productUpdate).length) {
+            console.log(Object.keys(productUpdate).length);
             return null;
         }
 
