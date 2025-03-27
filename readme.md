@@ -25,7 +25,7 @@ El proyecto comienza con esta página y provee una barra de navegación para mov
 
 ### **Consideraciones**
 
-El carrito al que agregamos productos desde este frontend está **hardcodeado** en:  
+- 🛒 El carrito al que agregamos productos desde este frontend está **hardcodeado** en:  
   **`5ab6e82f-b289-4dff-8ff5-25dc0f749ee2`**  
   (Carrito preexistente en MongoDB).
 - 🛒 El botón **"Add to Cart"** en la vista [`/products`](#rutas) **agrega productos** al carrito mencionado arriba.

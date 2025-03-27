@@ -5,7 +5,7 @@ import http from "http";
 import path from "path";
 import dotenv from "dotenv";
 import session from "express-session";
-import passport from "./config/passport.js";
+import passport from "./config/passport/passport.config.js";
 
 import { __dirname } from "./utils.js";
 import ProductsRoute from "./routes/api.products.routes.js";
