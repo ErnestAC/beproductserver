@@ -12,13 +12,13 @@ const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_key";
 
 // Register with Zod validation
 router.post("/register", validateRequest(registerUserSchema), async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, first_name, last_name, age, cartId, role } = req.body;
 
     try {
         let user = await User.findOne({ email });
         if (user) return res.status(400).json({ message: "User already exists" });
 
-        user = new User({ username, email, password });
+        user = new User({ username, email, password, first_name, last_name, age, cartId, role });
         await user.save();
 
         res.json({ message: "User registered successfully" });
