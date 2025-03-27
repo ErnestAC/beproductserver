@@ -25,7 +25,7 @@ El proyecto comienza con esta página y provee una barra de navegación para mov
 
 ### **Consideraciones**
 
-- 🔒 El proyecto **no implementa sesiones ni autenticación aún**, por lo que el carrito al que agregamos productos desde este frontend está **hardcodeado** en:  
+El carrito al que agregamos productos desde este frontend está **hardcodeado** en:  
   **`5ab6e82f-b289-4dff-8ff5-25dc0f749ee2`**  
   (Carrito preexistente en MongoDB).
 - 🛒 El botón **"Add to Cart"** en la vista [`/products`](#rutas) **agrega productos** al carrito mencionado arriba.
@@ -49,6 +49,9 @@ El proyecto comienza con esta página y provee una barra de navegación para mov
 | **POST** | `/api/carts/:cid/product/:pid` | Agrega un producto (`pid`) al carrito (`cid`) o incrementa su cantidad. |
 | **DELETE** | `/api/carts/:cid/product/:pid` | Elimina un producto (`pid`) del carrito (`cid`). |
 | **DELETE** | `/api/carts/:cid` | Elimina **todos los productos** de un carrito por su **ID (`cid`)**. |
+| **POST** | `/api/auth/login` | Realiza el login del usuario utilizando credenciales locales. |
+| **POST** | `/api/auth/register` | Registra un nuevo usuario. |
+| **GET** | `/api/auth/logout` | Finaliza la sesión activa del usuario. |
 
 ---
 
@@ -64,6 +67,6 @@ El proyecto comienza con esta página y provee una barra de navegación para mov
 | **`/realtime/carts`** | Vista **en tiempo real** de la colección `carts` (**sin detalles de productos, sólo `PID` y `cantidad`**) |
 | **`/forms/add-product`** | Formulario para **agregar** un producto a la base de datos |
 | **`/forms/delete-product`** | Formulario para **eliminar** un producto de la base de datos |
-
----
-
+| **`/login`** | Página para iniciar sesión |
+| **`/register`** | Página para registrar nuevos usuarios |
+| **`/dashboard`** | Página privada tras iniciar sesión exitosamente |
