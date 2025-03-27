@@ -15,6 +15,9 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get("/login", (req, res) => {
+    res.render("login"); 
+});
 
 router.get('/products', async (req, res) => {
     let { page = 1, limit = 10, sort = 'title', sortOrder = 'asc', filterBy = '' } = req.query;
