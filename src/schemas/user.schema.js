@@ -18,12 +18,7 @@ export const registerUserSchema = z.object({
         message: "Age must be a positive number",
         }),
 
-    cartId: z
-        .string()
-        .transform((val) => val.trim())
-        .refine((val) => /^[0-9a-fA-F\-]{36}$/.test(val), {
-        message: "cartId must be a valid UUID",
-        }),
+
 
     role: z.string().optional().default("user"),
 });
