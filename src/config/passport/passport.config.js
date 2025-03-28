@@ -1,7 +1,8 @@
+//passport.config.js
 import passport from "passport";
 
 // Load strategies
-import "./local.strategy.js";
 import "./jwt.strategy.js";
+import "./local.strategy.js";
 
 export default passport;

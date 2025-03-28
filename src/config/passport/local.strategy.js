@@ -1,3 +1,4 @@
+//local.strategy.js
 import { Strategy as LocalStrategy } from "passport-local";
 import { User } from "../../persistence/mongo/models/user.model.js";
 import bcrypt from "bcryptjs";

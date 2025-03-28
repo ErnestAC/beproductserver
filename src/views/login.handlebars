@@ -44,7 +44,7 @@
             const result = await res.json();
 
             if (res.ok) {
-            message.innerText = "✅ Login successful!";
+            message.innerText = "Logged in.";
             localStorage.setItem("token", result.token); // Save token locally
             setTimeout(() => {
                 window.location.href = "/products"; // redirect after login
@@ -53,7 +53,7 @@
             message.innerText = `❌ ${result.message || "Login failed"}`;
             }
         } catch (err) {
-            message.innerText = `❌ Error: ${err.message}`;
+            message.innerText = `Error: ${err.message}`;
         }
         });
     </script>

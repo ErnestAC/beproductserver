@@ -1,3 +1,4 @@
+//sessions.routes.js
 import { Router } from "express";
 import passport from "passport";
 import jwt from "jsonwebtoken";
@@ -52,8 +53,8 @@ router.post("/logout", (req, res) => {
     });
 });
 
-// ✅ Session status
-router.get("/me", (req, res) => {
+//Session status
+router.get("/current", (req, res) => {
     if (req.isAuthenticated()) {
         return res.json({ user: req.user });
     } else {
@@ -63,7 +64,7 @@ router.get("/me", (req, res) => {
 
 // ========== JWT-BASED ==========
 
-// ✅ JWT login with validation
+//  JWT login with validation
 router.post("/jwt/login", validateRequest(loginUserSchema), async (req, res) => {
     const { email, password } = req.body;
 
@@ -88,13 +89,13 @@ router.post("/jwt/login", validateRequest(loginUserSchema), async (req, res) => 
     }
     });
 
-    // ✅ JWT-protected route
+    //  jwt-protected route
     router.get(
     "/jwt/protected",
     passport.authenticate("jwt", { session: false }),
     (req, res) => {
         res.json({
-        message: "JWT-protected route accessed",
+        message: "jwt-protected route accessed",
         user: req.user,
         });
     }

@@ -1,3 +1,4 @@
+//server.js
 import express from "express";
 import { engine } from "express-handlebars";
 import { Server } from "socket.io";
@@ -6,6 +7,7 @@ import path from "path";
 import dotenv from "dotenv";
 import session from "express-session";
 import passport from "./config/passport/passport.config.js";
+import cookieParser from "cookie-parser";
 
 import { __dirname } from "./utils.js";
 import ProductsRoute from "./routes/api.products.routes.js";
@@ -13,7 +15,7 @@ import CartsRoute from "./routes/api.carts.routes.js";
 import homeRoute from "./routes/index.routes.js";
 import FormsRoute from "./routes/forms.routes.js";
 import RealtimeViews from "./routes/realtimeDisplay.routes.js";
-import authRoutes from "./routes/auth.routes.js";
+import authRoutes from "./routes/sessions.routes.js";
 
 import { productManager } from "./persistence/mongo/managers/product.manager.js";
 import { cartManager } from "./persistence/mongo/managers/cart.manager.js";
@@ -26,11 +28,11 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/static", express.static(path.join(__dirname, "public")));
 app.use("/img", express.static(path.join(__dirname, "public/img")));
-
 app.set("views", path.join(__dirname, "views"));
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
@@ -150,7 +152,7 @@ app.use("/", homeRoute);
 app.use("/forms", FormsRoute);
 app.use("/api/products", ProductsRoute);
 app.use("/api/carts", CartsRoute);
-app.use("/api/auth", authRoutes); // ✅ Register auth routes
+app.use("/api/sessions", authRoutes);
 app.use("/realtime/", RealtimeViews);
 
 const PORT = process.env.PORT || 8080;
