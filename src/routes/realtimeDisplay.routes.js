@@ -1,7 +1,7 @@
 import { Router } from "express";
 import passport from "../config/passport/passport.config.js";
-import { productManager } from "../persistence/mongo/managers/product.manager.js";
-import { cartManager } from "../persistence/mongo/managers/cart.manager.js";
+import { productDao } from "../persistence/mongo/dao/product.dao.js";
+import { cartDao } from "../persistence/mongo/dao/cart.dao.js";
 
 const router = Router();
 const jwtAuth = passport.authenticate("jwt", { session: false });
@@ -9,7 +9,7 @@ const jwtAuth = passport.authenticate("jwt", { session: false });
 // ✅ Protected: Real-time products view
 router.get("/products", jwtAuth, async (req, res) => {
     try {
-        const products = await productManager.getAllProducts({
+        const products = await productDao.getAllProducts({
             sort: "price",
             sortDirection: -1,
         });
@@ -24,7 +24,7 @@ router.get("/products", jwtAuth, async (req, res) => {
 // ✅ Protected: Real-time carts view
 router.get("/carts", jwtAuth, async (req, res) => {
     try {
-        const carts = await cartManager.getAllCarts();
+        const carts = await cartDao.getAllCarts();
         res.render("realTimeCarts", { carts });
     } catch (error) {
         console.error("Error in realtimecarts:", error);

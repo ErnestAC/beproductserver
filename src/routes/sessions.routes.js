@@ -4,29 +4,15 @@ import jwt from "jsonwebtoken";
 import { User } from "../persistence/mongo/models/user.model.js";
 import { validateRequest } from "../middlewares/validateRequest.js";
 import { registerUserSchema, loginUserSchema } from "../schemas/user.schema.js";
+import { userController } from "../controllers/user.controllers.js"
 
 const router = Router();
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_key";
 
+// Register new user
+router.post("/register", validateRequest(registerUserSchema), userController.registerUser);
 
-
-router.post("/register", validateRequest(registerUserSchema), async (req, res) => {
-    const { username, email, password, first_name, last_name, age, cartId, role } = req.body;
-
-    try {
-        let user = await User.findOne({ email });
-        if (user) return res.status(400).json({ message: "User already exists" });
-
-        user = new User({ username, email, password, first_name, last_name, age, cartId, role });
-        await user.save();
-
-        res.json({ message: "User registered successfully" });
-    } catch (err) {
-        res.status(500).json({ message: "Server error" });
-    }
-});
-
-// ========== SESSION-BASED ==========
+// Login with session-based Passport
 router.post("/login", validateRequest(loginUserSchema), (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
         if (err) return next(err);
@@ -42,14 +28,16 @@ router.post("/login", validateRequest(loginUserSchema), (req, res, next) => {
     })(req, res, next);
 });
 
+// Logout and clear cookie
 router.post("/logout", (req, res) => {
+    res.clearCookie("token"); // Clear JWT cookie
     req.logout((err) => {
         if (err) return res.status(500).json({ message: "Logout failed" });
         res.json({ message: "Logged out successfully" });
     });
 });
 
-// ✅ Use JWT strategy instead of req.isAuthenticated
+// Get current user using JWT from cookie
 router.get(
     "/current",
     passport.authenticate("jwt", { session: false }),
@@ -58,8 +46,7 @@ router.get(
     }
 );
 
-// ========== JWT-BASED ==========
-
+// JWT login and send token via cookie
 router.post("/jwt/login", validateRequest(loginUserSchema), async (req, res) => {
     const { email, password } = req.body;
 
@@ -73,11 +60,19 @@ router.post("/jwt/login", validateRequest(loginUserSchema), async (req, res) => 
             expiresIn: "30m",
         });
 
-        res.json({
-            message: "JWT issued",
-            token,
-            user: { id: user._id, username: user.username, email: user.email },
-        });
+        // Send token in cookie (HttpOnly)
+        res
+            .cookie("token", token, {
+                httpOnly: true,
+                secure: false, // Set to true if using HTTPS
+                sameSite: "strict",
+                maxAge: 30 * 60 * 1000, // 30 minutes
+            })
+            .json({
+                message: "JWT issued and stored in cookie",
+                user: { id: user._id, username: user.username, email: user.email },
+            });
+
     } catch (err) {
         res.status(500).json({ message: "Server error" });
     }

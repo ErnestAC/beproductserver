@@ -1,7 +1,9 @@
+// forms.routes.js
+
 import { Router } from "express";
 import passport from "../config/passport/passport.config.js";
 import { uploader } from "../utils.js";
-import { productManager } from "../persistence/mongo/managers/product.manager.js";
+import { productDao } from "../persistence/mongo/dao/product.dao.js";
 import { notifyProductChange } from "../server.js";
 
 const router = Router();
@@ -53,7 +55,7 @@ router.post('/add-product', jwtAuth, uploader.single("file"), async (req, res) =
             thumbs: [`/img/${req.file.filename}`],
         };
 
-        const result = await productManager.addProduct(newProduct);
+        const result = await productDao.addProduct(newProduct);
 
         if (result) {
             notifyProductChange();
@@ -76,7 +78,7 @@ router.get('/delete-product', jwtAuth, (req, res) => {
 router.post('/delete-product/:pid', jwtAuth, async (req, res) => {
     const { pid } = req.params;
     try {
-        const result = await productManager.deleteProduct(pid);
+        const result = await productDao.deleteProduct(pid);
         if (result) {
             notifyProductChange();
             res.redirect('/api/products');

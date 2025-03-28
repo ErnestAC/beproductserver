@@ -17,8 +17,8 @@ import FormsRoute from "./routes/forms.routes.js";
 import RealtimeViews from "./routes/realtimeDisplay.routes.js";
 import authRoutes from "./routes/sessions.routes.js";
 
-import { productManager } from "./persistence/mongo/managers/product.manager.js";
-import { cartManager } from "./persistence/mongo/managers/cart.manager.js";
+import { productDao } from "./persistence/mongo/dao/product.dao.js";
+import { cartDao } from "./persistence/mongo/dao/cart.dao.js";
 import Handlebars from "handlebars";
 
 // Load environment variables
@@ -75,7 +75,7 @@ Handlebars.registerHelper("ifCond", function (v1, operator, v2, options) {
 //  Realtime events
 export const notifyProductChange = async () => {
     try {
-        const products = await productManager.getAllProducts({ limit: 50, sort: "price", sortDirection: -1 });
+        const products = await productDao.getAllProducts({ limit: 50, sort: "price", sortDirection: -1 });
         io.emit("updateProducts", products);
     } catch (err) {
         console.error("Error notifying product change:", err);
@@ -84,7 +84,7 @@ export const notifyProductChange = async () => {
 
 export const notifyCartChange = async () => {
     try {
-        const carts = await cartManager.getAllCarts();
+        const carts = await cartDao.getAllCarts();
         io.emit("updateCarts", carts);
     } catch (err) {
         console.error("Error notifying cart change:", err);
@@ -95,14 +95,14 @@ io.on("connection", async (socket) => {
     console.log("Client connected:", socket.id);
 
     try {
-        const products = await productManager.getAllProducts({ limit: 50, sort: "stock", sortDirection: -1 });
+        const products = await productDao.getAllProducts({ limit: 50, sort: "stock", sortDirection: -1 });
         socket.emit("updateProducts", products);
     } catch (err) {
         console.error("Error sending product list:", err);
     }
 
     try {
-        const carts = await cartManager.getAllCarts();
+        const carts = await cartDao.getAllCarts();
         socket.emit("updateCarts", carts);
     } catch (err) {
         console.error("Error sending cart list:", err);
@@ -110,7 +110,7 @@ io.on("connection", async (socket) => {
 
     socket.on("requestProducts", async () => {
         try {
-            const products = await productManager.getAllProducts({ limit: 50, sort: "stock", sortDirection: -1 });
+            const products = await productDao.getAllProducts({ limit: 50, sort: "stock", sortDirection: -1 });
             socket.emit("updateProducts", products);
         } catch (err) {
             console.error("Error fetching products:", err);
@@ -119,7 +119,7 @@ io.on("connection", async (socket) => {
 
     socket.on("requestCarts", async () => {
         try {
-            const carts = await cartManager.getAllCarts();
+            const carts = await cartDao.getAllCarts();
             socket.emit("updateCarts", carts);
         } catch (err) {
             console.error("Error fetching carts:", err);

@@ -1,6 +1,6 @@
 import { request, response } from "express"
 import { v4 as uuidv4 } from 'uuid';
-import { cartManager } from "../persistence/mongo/managers/cart.manager.js";
+import { cartDao } from "../persistence/mongo/dao/cart.dao.js";
 import { notifyCartChange } from "../server.js";
 import { ProductModel } from "../persistence/mongo/models/product.model.js";
 import { Cart } from "../persistence/mongo/models/cart.model.js";
@@ -11,7 +11,7 @@ class CartControllers{
     async getCartById(req, res) {
         const { cid } = req.params;
         try {
-            const cart = await cartManager.getCartById(cid);
+            const cart = await cartDao.getCartById(cid);
             if (cart) {
                 res.json({
                     status: "success",
@@ -60,7 +60,7 @@ class CartControllers{
     async deleteCart(req, res) {
         const { cid } = req.params;
         try {
-            const deleted = await cartManager.clearCartById(cid);
+            const deleted = await cartDao.clearCartById(cid);
             if (deleted) {
                 notifyCartChange();
                 res.json({ status: "success", message: "Cart contents deleted" });
@@ -81,7 +81,7 @@ class CartControllers{
         }
 
         try {
-            const cart = await cartManager.getCartByIdMongoose(cid);
+            const cart = await cartDao.getCartByIdMongoose(cid);
             if (!cart) {
                 return res.status(404).json({ status: "error", message: "Cart not found" });
             }
@@ -105,7 +105,7 @@ class CartControllers{
     async deleteProductFromCart(req, res) {
         const { cid, pid } = req.params;
         try {
-            const cart = await cartManager.getCartByIdMongoose(cid);
+            const cart = await cartDao.getCartByIdMongoose(cid);
             if (!cart) {
                 return res.status(404).json({ status: "error", message: "Cart not found" });
             }
@@ -126,7 +126,7 @@ class CartControllers{
     async addProductToCart(req, res) {
         const { cid, pid } = req.params;
         try {
-            const updatedCart = await cartManager.addProductToCart(cid, pid);
+            const updatedCart = await cartDao.addProductToCart(cid, pid);
             notifyCartChange();
             res.json({ status: "success", payload: updatedCart });
         } catch (err) {

@@ -1,5 +1,5 @@
 
-import { productManager } from "../persistence/mongo/managers/product.manager.js";
+import { productDao } from "../persistence/mongo/dao/product.dao.js";
 import { notifyProductChange } from "../server.js";
 import { ProductModel } from "../persistence/mongo/models/product.model.js";
 import { request, response } from "express"
@@ -9,7 +9,7 @@ class ProductsControllers {
         const { pid } = req.params;
         const { killFlag } = req.body;
         try {
-            const result = await productManager.deleteProduct(pid, killFlag);
+            const result = await productDao.deleteProduct(pid, killFlag);
             if (result) {
                 notifyProductChange();
                 res.status(200).json({ status: "success", message: "Product deleted" });
@@ -24,7 +24,7 @@ class ProductsControllers {
         const { pid } = req.params;
         const productUpdate = req.body;
         try {
-            const result = await productManager.updateProduct(pid, productUpdate);
+            const result = await productDao.updateProduct(pid, productUpdate);
             if (result) {
                 notifyProductChange();
                 res.json({ status: "success", payload: result });
@@ -38,7 +38,7 @@ class ProductsControllers {
     async getProductById (req, res) {
         const { pid } = req.params;
         try {
-            const selectedProduct = await productManager.getProductById(pid);
+            const selectedProduct = await productDao.getProductById(pid);
             if (!selectedProduct) {
                 return res.status(404).json({ status: "error", message: `No product found with ID: ${pid}` });
             }
@@ -123,7 +123,7 @@ class ProductsControllers {
                 wheelArrangement
             };
     
-            const product = await productManager.addProduct(newProduct);
+            const product = await productDao.addProduct(newProduct);
             console.log(newProduct);
             if (!product) {
                 return res.status(400).json({ status: "error", message: "Invalid product data" });

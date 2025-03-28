@@ -1,20 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+<head>
     <meta charset="UTF-8" />
     <title>Login</title>
-    </head>
-    <body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        body {
+        font-family: sans-serif;
+        padding: 2rem;
+        }
+        form {
+        max-width: 300px;
+        margin: 0 auto;
+        }
+        label, input {
+        display: block;
+        width: 100%;
+        margin-bottom: 1rem;
+        }
+        #message {
+        margin-top: 1rem;
+        font-weight: bold;
+        }
+    </style>
+</head>
+<body>
     <h1>Login</h1>
 
     <form id="loginForm">
         <label for="email">Email:</label>
         <input name="email" type="email" required />
-        <br />
 
         <label for="password">Password:</label>
         <input name="password" type="password" required />
-        <br />
 
         <button type="submit">Login</button>
     </form>
@@ -35,7 +53,7 @@
         };
 
         try {
-            const res = await fetch("/api/auth/login", {
+            const res = await fetch("/api/sessions/jwt/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
@@ -44,16 +62,16 @@
             const result = await res.json();
 
             if (res.ok) {
-            message.innerText = "Logged in.";
-            localStorage.setItem("token", result.token); // Save token locally
+            message.innerText = "✅ Logged in.";
+            localStorage.setItem("token", result.token);
             setTimeout(() => {
-                window.location.href = "/products"; // redirect after login
+                window.location.href = "/products";
             }, 1000);
             } else {
             message.innerText = `❌ ${result.message || "Login failed"}`;
             }
         } catch (err) {
-            message.innerText = `Error: ${err.message}`;
+            message.innerText = `❌ Failed to login: ${err.message}`;
         }
         });
     </script>

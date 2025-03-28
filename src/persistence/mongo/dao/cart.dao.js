@@ -3,7 +3,7 @@ import { Cart } from "../models/cart.model.js";
 import { notifyCartChange } from "../../../server.js";
 import { ProductModel } from "../models/product.model.js";
 
-export class CartManager {
+export class CartDao {
     async getAllCarts() {
         try {
             return await Cart.find();
@@ -158,4 +158,4 @@ export class CartManager {
     }
 }
 
-export const cartManager = new CartManager();
+export const cartDao = new CartDao();
