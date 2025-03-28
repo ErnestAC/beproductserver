@@ -1,4 +1,4 @@
-import { productManager } from "./product.manager.js";
+import { productManager } from "../persistence/mongo/managers/product.manager.js";
 
 export const notifyProductChange = async () => {
     try {

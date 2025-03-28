@@ -1,27 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
 import { connectDB } from "../connectors/mongo.connector.js";
 import { ProductModel } from "../models/product.model.js";
-import { notifyProductChange } from "../server.js";
+import { notifyProductChange } from "../../../server.js";
+import { validateCompletenessOfProduct } from "../../../utils/productCompleteHelper.js"
 
-function validateCompletenessOfProduct(Product){
-    let result = false
-    if (Product.title &&
-        Product.handle &&
-        Product.description &&
-        Product.code &&
-        Product.price &&
-        Product.stock &&
-        Product.category &&
-        Product.wheelArrangement &&
-        Product.wheelArrangement &&
-        Product.pieces
-    ) {        
-        result = true
-    }
-
-    return result
-}
-export class ProductManager {
+export class ProductDao {
     async initialize() {
         try {
             await connectDB();
@@ -90,7 +73,9 @@ export class ProductManager {
     }
 
     async updateProduct(pid, productUpdate) {
+        console.log(pid)
         if (!Object.keys(productUpdate).length) {
+            console.log(Object.keys(productUpdate).length);
             return null;
         }
 
@@ -168,8 +153,8 @@ export class ProductManager {
     }
 }
 
-export const productManager = new ProductManager();
+export const productDao = new ProductDao();
 
-productManager.initialize().catch((error) => {
+productDao.initialize().catch((error) => {
     console.error("ProductManager initialization failed:", error);
 });

@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { wrapper } from 'axios-cookiejar-support';
+import { CookieJar } from 'tough-cookie';
 import { v4 as uuidv4 } from 'uuid';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -10,10 +12,32 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
 const API_BASE_URL = 'http://localhost:8080/api/products';
+const LOGIN_URL = 'http://localhost:8080/api/auth/login';
+
+const jar = new CookieJar();
+const client = wrapper(axios.create({ jar }));
+
+async function login() {
+    const credentials = {
+        email: "noemail2@email.com",
+        password: "sss121"
+    };
+
+    try {
+        const response = await client.post(LOGIN_URL, credentials);
+        console.log("✅ Logged in successfully");
+        return response.data;
+    } catch (error) {
+        console.error("❌ Login failed:", error.response?.data || error.message);
+        throw error;
+    }
+}
 
 async function simulateActivity() {
     try {
-        console.log("Simulating activity...");
+        await login(); // ✅ Login first
+
+        console.log("🚀 Simulating activity...");
 
         const operations = [
             { type: 'create', probability: 0.0 },
@@ -37,14 +61,14 @@ async function simulateActivity() {
                 lighting: Math.random() < 0.5,
                 wheelArrangement: `Wheel-${Math.floor(Math.random() * 3) + 1}`
             };
-            await axios.post(API_BASE_URL, product);
-            console.log("Created product");
+            await client.post(API_BASE_URL, product);
+            console.log("✅ Created product");
         }
 
         async function updateProduct() {
             try {
-                const response = await axios.get(API_BASE_URL);
-                const products = response.data.payload; // Access the 'payload' directly
+                const response = await client.get(API_BASE_URL);
+                const products = response.data.payload;
 
                 if (products && products.length > 0) {
                     const randomProduct = products[Math.floor(Math.random() * products.length)];
@@ -55,26 +79,26 @@ async function simulateActivity() {
                         stock: Math.floor(Math.random() * 50) + 5,
                         status: true
                     };
-                    await axios.put(`${API_BASE_URL}/${randomProduct.pid}`, updatedProduct); // Use 'pid' for identification
-                    console.log("Updated product:", randomProduct.pid);
+                    await client.put(`${API_BASE_URL}/${randomProduct.pid}`, updatedProduct);
+                    console.log("✅ Updated product:", randomProduct.pid);
                 }
             } catch (error) {
-                console.error("Error updating product:", error.response?.data || error.message);
+                console.error("❌ Error updating product:", error.response?.data || error.message);
             }
         }
 
         async function deleteProduct() {
             try {
-                const response = await axios.get(API_BASE_URL);
-                const products = response.data.payload; // Access the 'payload' directly
+                const response = await client.get(API_BASE_URL);
+                const products = response.data.payload;
 
                 if (products && products.length > 0) {
                     const randomProduct = products[Math.floor(Math.random() * products.length)];
-                    await axios.delete(`${API_BASE_URL}/${randomProduct.pid}`); // Use 'pid' for identification
-                    console.log("Deleted product:", randomProduct.pid);
+                    await client.delete(`${API_BASE_URL}/${randomProduct.pid}`);
+                    console.log("✅ Deleted product:", randomProduct.pid);
                 }
             } catch (error) {
-                console.error("Error deleting product:", error.response?.data || error.message);
+                console.error("❌ Error deleting product:", error.response?.data || error.message);
             }
         }
 
@@ -104,7 +128,7 @@ async function simulateActivity() {
         setInterval(performRandomOperation, Math.floor(Math.random() * 1000) + 1000);
 
     } catch (error) {
-        console.error('Error simulating activity:', error);
+        console.error('❌ Error simulating activity:', error);
     }
 }
 

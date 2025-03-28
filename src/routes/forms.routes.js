@@ -1,18 +1,37 @@
+// forms.routes.js
+
 import { Router } from "express";
-import { productManager } from "../managers/product.manager.js";
+import passport from "../config/passport/passport.config.js";
+import { uploader } from "../utils.js";
+import { productDao } from "../persistence/mongo/dao/product.dao.js";
 import { notifyProductChange } from "../server.js";
 
 const router = Router();
+const jwtAuth = passport.authenticate("jwt", { session: false });
 
-router.get('/add-product', (req, res) => {
+// ✅ GET: Render form to add product (Protected)
+router.get('/add-product', jwtAuth, (req, res) => {
     res.render('addProduct');
 });
 
-import { uploader } from "../utils.js";
-
-router.post('/add-product', uploader.single("file"), async (req, res) => {
+// ✅ POST: Submit product form (Protected)
+router.post('/add-product', jwtAuth, uploader.single("file"), async (req, res) => {
     try {
-        const { title, handle, description, stock, code, price, category, pieces, active, lighting, wheelArrangement, motorizable, status } = req.body;
+        const {
+            title,
+            handle,
+            description,
+            stock,
+            code,
+            price,
+            category,
+            pieces,
+            active,
+            lighting,
+            wheelArrangement,
+            motorizable,
+            status
+        } = req.body;
 
         if (!req.file) {
             return res.status(400).json({ message: "Error: Missing image file." });
@@ -32,11 +51,11 @@ router.post('/add-product', uploader.single("file"), async (req, res) => {
             wheelArrangement,
             motorizable: motorizable === "true",
             status: status === "true",
-            imageURL: `/img/${req.file.filename}`, // Save the image URL
+            imageURL: `/img/${req.file.filename}`,
             thumbs: [`/img/${req.file.filename}`],
         };
-        console.log("Saving product:", newProduct);
-        const result = await productManager.addProduct(newProduct);
+
+        const result = await productDao.addProduct(newProduct);
 
         if (result) {
             notifyProductChange();
@@ -50,15 +69,16 @@ router.post('/add-product', uploader.single("file"), async (req, res) => {
     }
 });
 
-
-router.get('/delete-product', (req, res) => {
+// ✅ GET: Render form to delete product (Protected)
+router.get('/delete-product', jwtAuth, (req, res) => {
     res.render('deleteProduct');
 });
 
-router.post('/delete-product/:pid', async (req, res) => {
+// ✅ POST: Handle delete (Protected)
+router.post('/delete-product/:pid', jwtAuth, async (req, res) => {
     const { pid } = req.params;
     try {
-        const result = await productManager.deleteProduct(pid);
+        const result = await productDao.deleteProduct(pid);
         if (result) {
             notifyProductChange();
             res.redirect('/api/products');

@@ -1,16 +1,17 @@
-# Proyecto de Programación Backend I
+# Proyecto de Programación Backend II
 
 ## De qué se trata este proyecto
 
 El proyecto consiste en un backend para una tienda de modelos de trenes llamada **Shopnhour**.  
 Integra una base de datos (**MongoDB**) sobre **Node.js** y **Express** para montar un servicio de backend que provee:  
+
 - Un **catálogo de productos** almacenado en la colección `products`  
 - La **gestión de carritos de compras**, almacenados en la colección `carts`  
 
 ## Alumno  
+
 **Ernesto AC**  
 
-### Proyecto de Programación Backend I  
 **Desarrollo Avanzado de Backend, Comisión 70470**  
 
 ---
@@ -18,11 +19,13 @@ Integra una base de datos (**MongoDB**) sobre **Node.js** y **Express** para mon
 ## Navegación  
 
 El proyecto comienza con esta página y provee una barra de navegación para moverse por algunas de las operaciones básicas:  
+
 - Lista de productos  
 - Gestión de carritos de compras  
 
 ### **Consideraciones**
-- 🔒 El proyecto **no implementa sesiones ni autenticación aún**, por lo que el carrito al que agregamos productos desde este frontend está **hardcodeado** en:  
+
+- 🛒 El carrito al que agregamos productos desde este frontend está **hardcodeado** en:  
   **`5ab6e82f-b289-4dff-8ff5-25dc0f749ee2`**  
   (Carrito preexistente en MongoDB).
 - 🛒 El botón **"Add to Cart"** en la vista [`/products`](#rutas) **agrega productos** al carrito mencionado arriba.
@@ -32,6 +35,7 @@ El proyecto comienza con esta página y provee una barra de navegación para mov
 ## Rutas
 
 ### **🔹 API Endpoints**
+
 | Método  | Ruta | Descripción |
 |---------|------|------------|
 | **GET**  | `/api/products/` | Devuelve todos los productos de la colección `products` en MongoDB (paginado). |
@@ -45,10 +49,14 @@ El proyecto comienza con esta página y provee una barra de navegación para mov
 | **POST** | `/api/carts/:cid/product/:pid` | Agrega un producto (`pid`) al carrito (`cid`) o incrementa su cantidad. |
 | **DELETE** | `/api/carts/:cid/product/:pid` | Elimina un producto (`pid`) del carrito (`cid`). |
 | **DELETE** | `/api/carts/:cid` | Elimina **todos los productos** de un carrito por su **ID (`cid`)**. |
+| **POST** | `/api/auth/login` | Realiza el login del usuario utilizando credenciales locales. |
+| **POST** | `/api/auth/register` | Registra un nuevo usuario. |
+| **GET** | `/api/auth/logout` | Finaliza la sesión activa del usuario. |
 
 ---
 
 ### **🔹 Vistas Disponibles**
+
 | Ruta | Descripción |
 |------|------------|
 | **`/`** | Página principal |
@@ -56,9 +64,9 @@ El proyecto comienza con esta página y provee una barra de navegación para mov
 | **`/carts`** | Vista estática de **todos** los carritos en el servidor |
 | **`/carts/:cid`** | Vista del carrito con el ID `cid` |
 | **`/realtime/products`** | Vista **en tiempo real** de la colección `products` |
-| **`/realtime/carts`** | Vista **en tiempo real** de la colección `carts` (**sin detalles de productos, solo `PID` y `cantidad`**) |
+| **`/realtime/carts`** | Vista **en tiempo real** de la colección `carts` (**sin detalles de productos, sólo `PID` y `cantidad`**) |
 | **`/forms/add-product`** | Formulario para **agregar** un producto a la base de datos |
 | **`/forms/delete-product`** | Formulario para **eliminar** un producto de la base de datos |
-
----
-
+| **`/login`** | Página para iniciar sesión |
+| **`/register`** | Página para registrar nuevos usuarios |
+| **`/dashboard`** | Página privada tras iniciar sesión exitosamente |

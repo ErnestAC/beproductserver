@@ -1,8 +1,8 @@
-import { ProductModel } from "../models/product.model.js";
+import { ProductModel } from "../persistence/mongo/models/product.model.js";
 import { Router } from "express";
-import { productManager } from "../managers/product.manager.js";
-import { cartManager } from "../managers/cart.manager.js";
-import { Cart } from "../models/cart.model.js";
+
+import { cartDao } from "../persistence/mongo/dao/cart.dao.js";
+import { Cart } from "../persistence/mongo/models/cart.model.js";
 
 const router = Router();
 
@@ -15,6 +15,9 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get("/login", (req, res) => {
+    res.render("login"); 
+});
 
 router.get('/products', async (req, res) => {
     let { page = 1, limit = 10, sort = 'title', sortOrder = 'asc', filterBy = '' } = req.query;
@@ -107,7 +110,7 @@ router.get('/carts', async (req, res) => {
 router.get('/carts/:cid', async (req, res) => {
     const { cid } = req.params;
     try {
-        const cart = await cartManager.getCartById(cid);
+        const cart = await cartDao.getCartById(cid);
         if (!cart) {
             return res.status(404).render("cart", { error: "Cart not found" });
         }
@@ -115,6 +118,12 @@ router.get('/carts/:cid', async (req, res) => {
     } catch (err) {
         res.status(500).render("cart", { error: "Failed to load cart" });
     }
+});
+
+// Logout and clear cookie (browser)
+router.get("/logout", (req, res) => {
+    res.clearCookie("token");
+    res.redirect("/login");
 });
 
 export default router;
