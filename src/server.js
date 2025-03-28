@@ -28,16 +28,21 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+//  Middlewares
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//  Static files
 app.use("/static", express.static(path.join(__dirname, "public")));
 app.use("/img", express.static(path.join(__dirname, "public/img")));
+
+//  View engine
 app.set("views", path.join(__dirname, "views"));
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 
-// setup Express Sessions
+//  Express session setup (for session-based login if needed)
 app.use(
     session({
         secret: process.env.JWT_SECRET || "this_is_not_final",
@@ -46,49 +51,37 @@ app.use(
     })
 );
 
-// ✅ Initialize Passport.js
+//  Initialize Passport.js
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Register Handlebars helpers
+//  Handlebars helpers
 Handlebars.registerHelper("eq", function (a, b) {
     return a === b;
 });
 
 Handlebars.registerHelper("ifCond", function (v1, operator, v2, options) {
     switch (operator) {
-        case "==":
-            return v1 == v2 ? options.fn(this) : options.inverse(this);
-        case "===":
-            return v1 === v2 ? options.fn(this) : options.inverse(this);
-        case "<":
-            return v1 < v2 ? options.fn(this) : options.inverse(this);
-        case "<=":
-            return v1 <= v2 ? options.fn(this) : options.inverse(this);
-        case ">":
-            return v1 > v2 ? options.fn(this) : options.inverse(this);
-        case ">=":
-            return v1 >= v2 ? options.fn(this) : options.inverse(this);
-        default:
-            return options.inverse(this);
+        case "==": return v1 == v2 ? options.fn(this) : options.inverse(this);
+        case "===": return v1 === v2 ? options.fn(this) : options.inverse(this);
+        case "<": return v1 < v2 ? options.fn(this) : options.inverse(this);
+        case "<=": return v1 <= v2 ? options.fn(this) : options.inverse(this);
+        case ">": return v1 > v2 ? options.fn(this) : options.inverse(this);
+        case ">=": return v1 >= v2 ? options.fn(this) : options.inverse(this);
+        default: return options.inverse(this);
     }
 });
 
-// Notify product change to all clients
+//  Realtime events
 export const notifyProductChange = async () => {
     try {
-        const products = await productManager.getAllProducts({
-            limit: 50,
-            sort: "price",
-            sortDirection: -1,
-        });
+        const products = await productManager.getAllProducts({ limit: 50, sort: "price", sortDirection: -1 });
         io.emit("updateProducts", products);
     } catch (err) {
         console.error("Error notifying product change:", err);
     }
 };
 
-// Notify cart change to all clients
 export const notifyCartChange = async () => {
     try {
         const carts = await cartManager.getAllCarts();
@@ -98,16 +91,11 @@ export const notifyCartChange = async () => {
     }
 };
 
-// Socket.io connection handling
 io.on("connection", async (socket) => {
     console.log("Client connected:", socket.id);
 
     try {
-        const products = await productManager.getAllProducts({
-            limit: 50,
-            sort: "stock",
-            sortDirection: -1,
-        });
+        const products = await productManager.getAllProducts({ limit: 50, sort: "stock", sortDirection: -1 });
         socket.emit("updateProducts", products);
     } catch (err) {
         console.error("Error sending product list:", err);
@@ -122,11 +110,7 @@ io.on("connection", async (socket) => {
 
     socket.on("requestProducts", async () => {
         try {
-            const products = await productManager.getAllProducts({
-                limit: 50,
-                sort: "stock",
-                sortDirection: -1,
-            });
+            const products = await productManager.getAllProducts({ limit: 50, sort: "stock", sortDirection: -1 });
             socket.emit("updateProducts", products);
         } catch (err) {
             console.error("Error fetching products:", err);
@@ -147,7 +131,7 @@ io.on("connection", async (socket) => {
     });
 });
 
-// Routes
+//  Routes
 app.use("/", homeRoute);
 app.use("/forms", FormsRoute);
 app.use("/api/products", ProductsRoute);
@@ -155,10 +139,9 @@ app.use("/api/carts", CartsRoute);
 app.use("/api/sessions", authRoutes);
 app.use("/realtime/", RealtimeViews);
 
+//  Start server
 const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
-    console.log(` `);
-    console.log(`Server started on port ${PORT}.`);
-    console.log(`http://localhost:${PORT}`);
-    console.log(` `);
+    console.log(`\nServer started on port ${PORT}.`);
+    console.log(`http://localhost:${PORT}\n`);
 });
