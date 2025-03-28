@@ -65,7 +65,7 @@
             message.innerText = "✅ Logged in.";
             localStorage.setItem("token", result.token);
             setTimeout(() => {
-                window.location.href = "/products";
+                window.location.href = "/products"; // the browser is redirected to products as a logged on user
             }, 1000);
             } else {
             message.innerText = `❌ ${result.message || "Login failed"}`;

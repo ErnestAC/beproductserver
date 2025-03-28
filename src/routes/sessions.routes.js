@@ -2,7 +2,7 @@ import { Router } from "express";
 import passport from "passport";
 import jwt from "jsonwebtoken";
 import { User } from "../persistence/mongo/models/user.model.js";
-import { validateRequest } from "../middlewares/validateRequest.js";
+import { validateRequest } from "../middlewares/validateRequest.middleware.js";
 import { registerUserSchema, loginUserSchema } from "../schemas/user.schema.js";
 import { userController } from "../controllers/user.controllers.js"
 

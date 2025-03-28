@@ -20,6 +20,13 @@
                 <a class="navbar-item is-small make-it-rounded make-it-semi" href="/">Home</a>
                 <a class="navbar-item is-small make-it-rounded make-it-semi" href="/products">Products</a>
                 <a class="navbar-item is-small make-it-rounded make-it-semi" href="/carts/5ab6e82f-b289-4dff-8ff5-25dc0f749ee2">Cart</a>
+
+                {{#if user}}
+                    <a class="navbar-item is-small make-it-rounded make-it-semi" href="/logout/">Log out</a>
+                    <a class="navbar-item is-small make-it-rounded make-it-semi" href="/current/">User</a>
+                {{else}}
+                    <a class="navbar-item is-small make-it-rounded make-it-semi" href="/login/">Log in</a>
+                {{/if}}
                 
         </div>
     </header>

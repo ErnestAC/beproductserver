@@ -2,7 +2,7 @@ import { Router } from "express";
 import { uploader } from "../utils.js";
 import passport from "../config/passport/passport.config.js";
 import { productsController } from "../controllers/product.controllers.js";
-import { validateRequest } from "../middlewares/validateRequest.js";
+import { validateRequest } from "../middlewares/validateRequest.middleware.js";
 import { createProductSchema } from "../schemas/product.schema.js";
 
 const router = Router();
