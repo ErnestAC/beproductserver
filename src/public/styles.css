@@ -715,7 +715,7 @@ textarea:focus {
 .grid-container-2c-by-1r,
 .grid-container-2c66-by-1r,
 .grid-container-3c-by-1r-special,
-.grid-container-3c-by-1r {
+.grid-container-3c-by-1r, .grid-container-6c-by-1r {
   display: grid;
   gap: .5rem;
   padding: .5rem;
@@ -735,6 +735,10 @@ textarea:focus {
 
 .grid-container-3c-by-1r {
   grid-template-columns: repeat(3, 1fr)
+}
+
+.grid-container-6c-by-1r {
+  grid-template-columns: repeat(6, 1fr)
 }
 
 .grid-item {

@@ -4,40 +4,34 @@
     <meta charset="UTF-8" />
     <title>Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-        body {
-        font-family: sans-serif;
-        padding: 2rem;
-        }
-        form {
-        max-width: 300px;
-        margin: 0 auto;
-        }
-        label, input {
-        display: block;
-        width: 100%;
-        margin-bottom: 1rem;
-        }
-        #message {
-        margin-top: 1rem;
-        font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
-    <h1>Login</h1>
+    <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top">Log in</h2>
 
-    <form id="loginForm">
-        <label class="make-it-white" for="email">Email:</label>
-        <input name="email" type="email" required />
+    <div class="make-it-white make-it-center section" id="message">
+    </div>
 
-        <label class="make-it-white" for="password">Password:</label>
-        <input name="password" type="password" required />
+    <div class="box make-it-semi-back">
 
-        <button type="submit">Login</button>
-    </form>
+        <div class="">
+            <form class="make-it-center" id="loginForm">
+                <div class="make-it-white make-it-small section" for="email">
+                    <p class="make-it-dark">E-mail</p>
+                    <input class="input make-it-small" name="email" type="email" required />
+                </div>
 
-    <div class="make-it-white" id="message"></div>
+                <div class="make-it-white make-it-small section " for="password">
+                    <p class="make-it-dark">Password</p>
+                    <input class="input make-it-small" name="password" type="password" required />
+                </div>
+
+                <button class="section button make-it-small" type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    
 
     <script>
         const form = document.getElementById("loginForm");

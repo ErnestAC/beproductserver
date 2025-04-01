@@ -1,5 +1,7 @@
-import { connectDB } from './connectors/mongo.connector.js';
-import { ProductModel } from './models/product.model.js';
+// generateProducts.js
+// 
+import { connectDB } from '../persistence/mongo/connectors/mongo.connector.js';
+import { ProductModel } from '../persistence/mongo/models/product.model.js';
 import { v4 as uuidv4 } from 'uuid';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
@@ -9,7 +11,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config({ path: path.join(__dirname, '..', '.env') }); // Explicit path to .env in root
+// Load .env from root
+dotenv.config({ path: path.join(__dirname, '../..', '.env') });
 
 // List of image URLs
 const imageUrls = [
@@ -42,6 +45,7 @@ async function generateProducts(count) {
         await connectDB();
 
         const products = [];
+
         for (let i = 0; i < count; i++) {
             const randomImageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
 
@@ -51,26 +55,28 @@ async function generateProducts(count) {
                 description: `Description of model train ${i + 1}`,
                 code: `CODE-${i + 1}`,
                 price: Math.floor(Math.random() * 300) + 10,
-                status: Math.random() < 0.9,
+                status: true,
                 stock: Math.floor(Math.random() * 50) + 1,
                 category: `Category ${Math.floor(Math.random() * 5) + 1}`,
-                thumbnails: [],
                 active: true,
                 handle: `product-${i + 1}-handle`,
-                imageURL: randomImageUrl, // Assign random image URL from list
+                imageURL: randomImageUrl,
+                thumbs: [randomImageUrl],
                 pieces: Math.floor(Math.random() * 10) + 1,
                 lighting: Math.random() < 0.5,
-                wheelArrangement: `Wheel-A${Math.floor(Math.random() * 3) + 1}`
+                motorizable: Math.random() < 0.5,
+                wheelArrangement: `Wheel-A${Math.floor(Math.random() * 3) + 1}`,
             };
+
             products.push(product);
         }
 
         await ProductModel.insertMany(products);
-        console.log(`${count} products generated and inserted successfully.`);
+        console.log(`${count} products inserted successfully.`);
     } catch (error) {
-        console.error('Error generating products:', error);
+        console.error('❌ Error generating products:', error);
     } finally {
-        mongoose.disconnect();
+        await mongoose.disconnect();
     }
 }
 
