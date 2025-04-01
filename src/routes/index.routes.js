@@ -120,6 +120,11 @@ router.get('/carts/:cid', async (req, res) => {
     }
 });
 
+// Show currently logged on user's information
+router.get("/current", (req, res) => {
+    res.render("current");
+});
+
 // Logout and clear cookie (browser)
 router.get("/logout", (req, res) => {
     res.clearCookie("token");

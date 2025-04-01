@@ -12,22 +12,25 @@
     <div class="make-it-white make-it-center section" id="message">
     </div>
 
-    <div class="box make-it-semi-back">
+    <div class="grid-container-3c-by-1r">
+        <div></div>
+        <div class="box make-it-semi-back">
 
-        <div class="">
-            <form class="make-it-center" id="loginForm">
-                <div class="make-it-white make-it-small section" for="email">
-                    <p class="make-it-dark">E-mail</p>
-                    <input class="input make-it-small" name="email" type="email" required />
-                </div>
+            <div class="">
+                <form class="make-it-center" id="loginForm">
+                    <div class="make-it-white make-it-small section" for="email">
+                        <p class="make-it-dark">E-mail</p>
+                        <input class="input make-it-small" name="email" type="email" required />
+                    </div>
 
-                <div class="make-it-white make-it-small section " for="password">
-                    <p class="make-it-dark">Password</p>
-                    <input class="input make-it-small" name="password" type="password" required />
-                </div>
+                    <div class="make-it-white make-it-small section " for="password">
+                        <p class="make-it-dark">Password</p>
+                        <input class="input make-it-small" name="password" type="password" required />
+                    </div>
 
-                <button class="section button make-it-small" type="submit">Login</button>
-            </form>
+                    <button class="section button make-it-small" type="submit">Login</button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -56,16 +59,16 @@
             const result = await res.json();
 
             if (res.ok) {
-            message.innerText = "✅ Logged in.";
+            message.innerText = "Logged in.";
             localStorage.setItem("token", result.token);
             setTimeout(() => {
                 window.location.href = "/products"; // the browser is redirected to products as a logged on user
             }, 1000);
             } else {
-            message.innerText = `❌ ${result.message || "Login failed"}`;
+            message.innerText = `${result.message || "Login failed"}`;
             }
         } catch (err) {
-            message.innerText = `❌ Failed to login: ${err.message}`;
+            message.innerText = `Failed to login: ${err.message}`;
         }
         });
     </script>

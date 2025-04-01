@@ -7,6 +7,7 @@
     <meta name="color-scheme" content="dark">
     <link rel="stylesheet" href="/static/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body class="splash-page-home make-it-normal">
 
@@ -16,27 +17,40 @@
                 <img src="/static/shopnhour_blue.png" alt="Shopnhour Store Logo" width="115px">
             </a>
         </div>
-        <div class="grid-container-6c-by-1r make-it-dark-back make-it-rounded make-it-small is-dark">
-                <a class="navbar-item is-small make-it-rounded make-it-semi" href="/">Home</a>
-                <a class="navbar-item is-small make-it-rounded make-it-semi" href="/products">Products</a>
-                <a class="navbar-item is-small make-it-rounded make-it-semi" href="/carts/5ab6e82f-b289-4dff-8ff5-25dc0f749ee2">Cart</a>
 
-                {{#if user}}
-                    <a class="navbar-item is-small make-it-rounded make-it-semi" href="/logout/">Log out</a>
-                    <a class="navbar-item is-small make-it-rounded make-it-semi" href="/current/">User</a>
-                {{else}}
-                    <a class="navbar-item is-small make-it-rounded make-it-semi" href="/login/">Log in</a>
-                {{/if}}
-                
+        <div class="grid-container-6c-by-1r make-it-dark-back make-it-rounded make-it-small is-dark">
+            <a class="navbar-item is-small make-it-rounded make-it-semi" href="/">
+                <i class="fas fa-home small-section"></i> Home
+            </a>
+            <a class="navbar-item is-small make-it-rounded make-it-semi" href="/products">
+                <i class="fas fa-box-open small-section"></i> Products
+            </a>
+            <a class="navbar-item is-small make-it-rounded make-it-semi" href="/carts/5ab6e82f-b289-4dff-8ff5-25dc0f749ee2">
+                <i class="fas fa-shopping-cart small-section"></i> Cart
+            </a>
+
+            {{#if user}}
+                <a class="navbar-item is-small make-it-rounded make-it-semi" href="/logout/">
+                    <i class="fas fa-sign-out-alt small-section"></i> Log out
+                </a>
+                <a class="navbar-item is-small make-it-rounded make-it-semi" href="/current/">
+                    <i class="fas fa-user small-section"></i> {{user.username}}
+                </a>
+            {{else}}
+                <a class="navbar-item is-small make-it-rounded make-it-semi" href="/login/">
+                    <i class="fas fa-key small-section"></i> Log in
+                </a>
+            {{/if}}
         </div>
     </header>
 
     <main>
-        {{{body}}} 
+        {{{body}}}
     </main>
 
     <footer class="content section make-it-semi make-it-small">
-        <p>&copy; 2025 Shopnhour </p>
+        <p>&copy; 2025 Shopnhour</p>
     </footer>
+
 </body>
 </html>

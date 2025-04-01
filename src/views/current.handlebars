@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>User Info</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    </head>
+    <body>
+    <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top">User Information</h2>
+    <section class="section">
+        <div class="box make-it-semi-back make-it-rounded">
+        
+        <div id="userInfo" class="content make-it-dark">Loading...</div>
+        </div>
+    </section>
+
+    <script>
+        const userInfo = document.getElementById("userInfo");
+        const token = localStorage.getItem("token");
+
+        async function loadUser() {
+        try {
+            const res = await fetch("/api/sessions/current", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+            });
+
+            if (!res.ok) {
+            throw new Error("Not authenticated");
+            }
+
+            const { user } = await res.json();
+            userInfo.innerHTML = `
+            <p class="make-it-small make-it-dark"><strong>Username:</strong> ${user.username}</p>
+            <p class="make-it-small make-it-dark"><strong>Email:</strong> ${user.email}</p>
+            <p class="make-it-small make-it-dark"><strong>First Name:</strong> ${user.first_name}</p>
+            <p class="make-it-small make-it-dark"><strong>Last Name:</strong> ${user.last_name}</p>
+            <p class="make-it-small make-it-dark"><strong>Age:</strong> ${user.age}</p>
+            <p class="make-it-small make-it-dark"><strong>Cart ID:</strong> ${user.cartId}</p>
+            <p class="make-it-small make-it-dark"><strong>Role:</strong> ${user.role}</p>
+            `;
+        } catch (err) {
+            userInfo.innerHTML = `
+            <p class="has-text-danger">⚠️ You are not logged in.</p>
+            <a href="/login" class="button is-warning mt-3">Go to Login</a>
+            `;
+        }
+        }
+
+        loadUser();
+    </script>
+</body>
+</html>

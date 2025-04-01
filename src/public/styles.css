@@ -405,6 +405,11 @@ body {
   padding: .7rem !important
 }
 
+.small-section {
+  margin: .15rem !important;
+  padding: .15rem !important
+}
+
 .cart-listitem {
   display: flex;
   align-items: center;
