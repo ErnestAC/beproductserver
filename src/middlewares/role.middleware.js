@@ -25,6 +25,6 @@ export const requireAdminOrOwner = (paramKey = "cid") => {
         return next();
     }
 
-    return res.status(403).json({ message: "Forbidden: Not your resource" });
+    return res.status(403).json({ message: "Forbidden: Resource does not belong to user" });
     };
 };

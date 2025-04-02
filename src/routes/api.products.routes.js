@@ -4,31 +4,31 @@ import passport from "../config/passport/passport.config.js";
 import { productsController } from "../controllers/product.controllers.js";
 import { validateRequest } from "../middlewares/validateRequest.middleware.js";
 import { createProductSchema } from "../schemas/product.schema.js";
+import { requireAdminOrOwner } from "../middlewares/role.middleware.js";
 
 const router = Router();
-
-// JWT authentication middleware
 const jwtAuth = passport.authenticate("jwt", { session: false });
 
-// Protected: Add a new product (Requires JWT)
+// Admin only: Add a new product
 router.post(
     "/",
     jwtAuth,
+    requireAdminOrOwner(), // Only role === 'admin'
     uploader.single("file"),
     validateRequest(createProductSchema),
     productsController.addProduct
 );
 
-// Protected: Get static products with pagination
+// Authenticated users: Get all products
 router.get("/", jwtAuth, productsController.getAllProducts);
 
-// Protected: Retrieve a specific product by PID
+// Authenticated users: Get a specific product
 router.get("/:pid", jwtAuth, productsController.getProductById);
 
-// Protected: Update a product by PID
-router.put("/:pid", jwtAuth, productsController.updateProduct);
+// Admin only: Update a product
+router.put("/:pid", jwtAuth, requireAdminOrOwner(), productsController.updateProduct);
 
-// Protected: Delete a product by PID
-router.delete("/:pid", jwtAuth, productsController.deleteProduct);
+// Admin only: Delete a product
+router.delete("/:pid", jwtAuth, requireAdminOrOwner(), productsController.deleteProduct);
 
 export default router;
