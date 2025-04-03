@@ -785,4 +785,8 @@ textarea:focus {
     background-color: #172330;
     padding: 8.5rem 1rem 3rem 1rem !important;
   }
+
+  .grid-container-3c-by-1r{
+    grid-template-columns: repeat(1, 1fr)
+  }
 }
