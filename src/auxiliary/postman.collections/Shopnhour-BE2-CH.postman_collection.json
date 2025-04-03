@@ -1,0 +1,740 @@
+{
+	"info": {
+		"_postman_id": "13e9c6a5-e54c-4c50-afef-dd7443a551d8",
+		"name": "Shopnhour-BE2-CH",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41017891"
+	},
+	"item": [
+		{
+			"name": "Deprecated - Refresh JWT session token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Y2Y4ZDgwYmYwMjU1ZmUwYzBkOGMyYiIsImlhdCI6MTc0MTY1NjM0NiwiZXhwIjoxNzQyMjYxMTQ2fQ._nVhFK9IRZgSh-t1vu0xr24BUjovjgv9bGoBWo1T59I\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/refresh",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"refresh"
+					],
+					"query": [
+						{
+							"key": "{ \"token\": \"YOUR_REFRESH_TOKEN_HERE\" }",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a product",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "title",
+							"value": "Test data entry - Test",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "Something something",
+							"type": "text"
+						},
+						{
+							"key": "code",
+							"value": "A1AA",
+							"type": "text"
+						},
+						{
+							"key": "price",
+							"value": "150",
+							"type": "text"
+						},
+						{
+							"key": "stock",
+							"value": "12",
+							"type": "text"
+						},
+						{
+							"key": "category",
+							"value": "blueprints",
+							"type": "text"
+						},
+						{
+							"key": "thumbs",
+							"value": "[xyz,abc,def,123]",
+							"type": "text"
+						},
+						{
+							"key": "pieces",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "handle",
+							"value": "New product created from API EP",
+							"type": "text"
+						},
+						{
+							"key": "wheelArrangement",
+							"value": "NAP",
+							"type": "text"
+						},
+						{
+							"key": "lighting",
+							"value": "false",
+							"type": "text"
+						},
+						{
+							"key": "motorizable",
+							"value": "true",
+							"type": "text"
+						},
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/ernest/Desktop/xz/2017-07-26 12.48.23.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/products/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						""
+					]
+				},
+				"description": "Saves a product in a \"database\""
+			},
+			"response": []
+		},
+		{
+			"name": "Get all products",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTRmNzhiNDY2NTFhMjBmODhhNmY5YiIsImVtYWlsIjoibm9lbWFpbDdAZW1haWwuY29tIiwiaWF0IjoxNzQzMTI2NDYzLCJleHAiOjE3NDMxMzAwNjN9.BtGyTQPUmezwoJokMQEXfhxW0gqXzFY-S9bbE81bV0k",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"pid\":1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get product by ID",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/products/e2e0f1ae-9172-423d-b6ec-d37d9ad80b87",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						"e2e0f1ae-9172-423d-b6ec-d37d9ad80b87"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all products limited to 5",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"pid\":1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/products/?limit=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						""
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update a product by ID",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"title\": \"Model MOG99\",\r\n\"description\": \"Simulated description 66e5e364-5\",\r\n\"code\": \"SIM-e0168a\",\r\n\"price\": 999,\r\n\"status\": true,\r\n\"stock\": 9999,\r\n\"category\": \"Simulated Category 2\",\r\n\"thumbnails\": [],\r\n\"handle\": \"simulated-product-cf5b26-handle\",\r\n\"pieces\": 1,\r\n\"lighting\": false,\r\n\"wheelArrangement\":\"Wheel-3\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/products/65114cbf-77d0-4112-bf96-8a5eae4fadaf",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						"65114cbf-77d0-4112-bf96-8a5eae4fadaf"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "6",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a product by ID",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/products/4298b865-3b92-42f2-ba92-004eb00df82a",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						"4298b865-3b92-42f2-ba92-004eb00df82a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all carts",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTRmNzhiNDY2NTFhMjBmODhhNmY5YiIsImVtYWlsIjoibm9lbWFpbDdAZW1haWwuY29tIiwiaWF0IjoxNzQzMTI3MDU2LCJleHAiOjE3NDMxMzA2NTZ9.bdwMVw79rQEWHE-zIwMObDX0Kpw8R_hkUBl0KWkFgJE",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/carts/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"carts",
+						""
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "price",
+							"disabled": true
+						},
+						{
+							"key": "sortOrder",
+							"value": "desc",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "Authorization",
+							"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTRmNzhiNDY2NTFhMjBmODhhNmY5YiIsImVtYWlsIjoibm9lbWFpbDdAZW1haWwuY29tIiwiaWF0IjoxNzQzMTI1OTMwLCJleHAiOjE3NDMxMjk1MzB9.NL42qZBBdQ8IEO7dLEZC-6ZZCAiS6gemyR5c7AJs5SM",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get carts by ID",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/carts/5ab6e82f-b289-4dff-8ff5-25dc0f749ee2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"carts",
+						"5ab6e82f-b289-4dff-8ff5-25dc0f749ee2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new cart to get ID",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/carts/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"carts",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add item to cart by ID",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/carts/adcf8a94-7411-4973-9f5f-e35fedf32220/product/65114cbf-77d0-4112-bf96-8a5eae4fadaf",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"carts",
+						"adcf8a94-7411-4973-9f5f-e35fedf32220",
+						"product",
+						"65114cbf-77d0-4112-bf96-8a5eae4fadaf"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put a cart in the collection with body data",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"products\": [\r\n               {\r\n                   \"pid\": \"4eb41587-6d4d-409b-9659-c4a1a5d63203\",\r\n                   \"quantity\": 5\r\n               },\r\n               {\r\n                   \"pid\":\"765287c2-0b46-4e7a-b87f-a78b9b4fa4f6\",\r\n                   \"quantity\": 3\r\n               }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/carts",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"carts"
+					],
+					"query": [
+						{
+							"key": "quantity",
+							"value": "11",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update item quantity in a cart",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"quantity\": 90}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/carts/5ab6e82f-b289-4dff-8ff5-25dc0f749ee2/product/1e76fee0-d5fb-412b-bf05-85735733a566",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"carts",
+						"5ab6e82f-b289-4dff-8ff5-25dc0f749ee2",
+						"product",
+						"1e76fee0-d5fb-412b-bf05-85735733a566"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete cart contents by cart ID",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/carts/:cid",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"carts",
+						":cid"
+					],
+					"variable": [
+						{
+							"key": "cid",
+							"value": "5ab6e82f-b289-4dff-8ff5-25dc0f749ee2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete product from cart by CID\\PID",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/carts/:cid/products/:pid",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"carts",
+						":cid",
+						"products",
+						":pid"
+					],
+					"variable": [
+						{
+							"key": "cid",
+							"value": "b2ffb13f-f5c2-4a37-81be-38a2100f81e8"
+						},
+						{
+							"key": "pid",
+							"value": "04faba10-442a-49cb-9f79-507dfbaf51f8a"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register - Create user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"dogadmin2\",\r\n    \"email\":\"noemai20@email.com\",\r\n    \"password\":\"somepw\",\r\n    \"first_name\":\"john\",\r\n    \"last_name\":\"tester\",\r\n    \"age\":100\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/sessions/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"sessions",
+						"register"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "doguser",
+							"disabled": true
+						},
+						{
+							"key": "email",
+							"value": "email@email.com",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "hellnodd12",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deprecated: Log in local",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"youremail7@email.com\",\r\n    \"password\": \"somepw\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/sessions/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"sessions",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Log in with JWT",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"youremail7@email.com\",\r\n    \"password\": \"somepw\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/sessions/jwt/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"sessions",
+						"jwt",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Who am I",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/sessions/current",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"sessions",
+						"current"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Log out",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/sessions/logout",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"sessions",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
