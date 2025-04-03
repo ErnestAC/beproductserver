@@ -677,7 +677,7 @@ textarea:focus {
   background-color: rgba(163, 172, 182, .999) !important
 }
 
-.make-it-dark make-it-small {
+.make-it-dark make-it-small  make-it-small {
   color: #172330 !important
 }
 
@@ -743,7 +743,7 @@ textarea:focus {
 }
 
 .grid-container-3c-by-1r-special{
-  width: 70% !important;
+  grid-template-columns: repeat(3, 1fr)
 }
 
 .grid-container-2c66-by-1r {
@@ -752,11 +752,19 @@ textarea:focus {
 }
 
 .grid-container-3c-by-1r {
-  grid-template-columns: repeat(3, 1fr)
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-container-5c-by-1r {
+  grid-template-columns: repeat(5, 1fr);
 }
 
 .grid-container-6c-by-1r {
-  grid-template-columns: repeat(5, 1fr)
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.grid-container-7c-by-1r {
+  grid-template-columns: repeat(7, 1fr) !important;
 }
 
 .grid-item {
