@@ -4,56 +4,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-    <title>Delete Product</title>
+    <title>Delete Products</title>
     <meta name="color-scheme" content="dark">
 </head>
 <body>
-    <h2 class=" section make-it-white">Delete a Product</h2>
+    <h2 class=" section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Delete Products</h2>
 
-    <form class="section" id="deleteForm">
-        <label class="make-it-white make-it-normal" for="pid">Product ID:</label>
-        <input type="text" id="pid" name="pid" required>
+    <p id="resultMessage" class="has-text-centered make-it-white section"></p>
 
-        <br>
-        <br>
-        
-        <button class="button is-small" type="submit">Delete Product</button>
-    </form>
+    <section class="section">
+        <form id="deleteForm">
+            <div id="productList"></div>
+            <div class="buttons mt-4">
+                <button class="button is-danger" type="submit">Delete Selected</button>
+                <a class="button is-light" href="/admin">Cancel</a>
+            </div>
+        </form>
+    </section>
 
-    <p id="resultMessage">{{resultMessage}}</p>
+    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+        <button class="pagination-previous" id="prevPage">Previous</button>
+        <button class="pagination-next" id="nextPage">Next</button>
+    </nav>
+
 
     <script>
-        document.getElementById("deleteForm").addEventListener("submit", async function(event) {
-            event.preventDefault(); 
+        let currentPage = 1;
+        const limit = 10;
 
-            const pid = document.getElementById("pid").value;
-            const killFlag = true
+        async function fetchProducts(page = 1) {
+            const res = await fetch(`/api/products?page=${page}&limit=${limit}`);
+            const data = await res.json();
 
-            try {
-                const response = await fetch(`/api/products/${pid}`, {
-                    method: "DELETE",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ killFlag }) 
-                });
+            const productList = document.getElementById("productList");
+            productList.innerHTML = "";
 
-                const data = await response.json();
-                document.getElementById("resultMessage").textContent = data.message;
+            if (!data.payload || data.payload.length === 0) {
+                productList.innerHTML = "<p>No products found.</p>";
+                return;
+            }
 
-                if (response.ok) {
-                    document.getElementById("deleteForm").reset(); 
-                }
-            } catch (error) {
-                console.error("Error deleting product:", error);
-                document.getElementById("resultMessage").textContent = "Failed to delete product.";
+            data.payload.forEach(product => {
+                const box = document.createElement("div");
+                box.className = "box is-flex is-align-items-center";
+
+                box.innerHTML = `
+                    <input type="checkbox" name="selectedPIDs" value="${product.pid}" class="mr-3" />
+                    <img src="${product.imageURL}" alt="${product.title}" width="50" class="mr-3">
+                    <strong>${product.title}</strong> — <span class="ml-2">Price: $${product.price}</span>
+                `;
+                productList.appendChild(box);
+            });
+
+            document.getElementById("prevPage").disabled = !data.hasPrevPage;
+            document.getElementById("nextPage").disabled = !data.hasNextPage;
+        }
+
+        document.getElementById("prevPage").addEventListener("click", () => {
+            if (currentPage > 1) {
+                currentPage--;
+                fetchProducts(currentPage);
             }
         });
-    </script>
 
-    <div class="section make-it-semi-back make-it-normal ">
-        <a href="/">View Products - Static</a> 
-        <b>|</b>
-        <a href="/realtimeproducts">View Products - Real-time</a>
-    </div>
-    
+        document.getElementById("nextPage").addEventListener("click", () => {
+            currentPage++;
+            fetchProducts(currentPage);
+        });
+
+        document.getElementById("deleteForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const selected = [...document.querySelectorAll("input[name='selectedPIDs']:checked")].map(cb => cb.value);
+
+            if (selected.length === 0) {
+                document.getElementById("resultMessage").textContent = "Please select at least one product to delete.";
+                return;
+            }
+
+            let successCount = 0;
+
+            for (const pid of selected) {
+                try {
+                    const res = await fetch(`/api/products/${pid}`, {
+                        method: "DELETE",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ killFlag: true })
+                    });
+
+                    if (res.ok) successCount++;
+                } catch (err) {
+                    console.error(`Error deleting product ${pid}:`, err);
+                }
+            }
+
+            document.getElementById("resultMessage").textContent = `${successCount} product(s) deleted.`;
+            fetchProducts(currentPage);
+        });
+
+        fetchProducts(currentPage);
+    </script>
 </body>
 </html>

@@ -7,6 +7,7 @@ import { productDao } from "../persistence/mongo/dao/product.dao.js";
 import { notifyProductChange } from "../server.js";
 import { requireAdminOnly } from "../middlewares/role.middleware.js";
 
+
 const router = Router();
 const jwtAuth = passport.authenticate("jwt", { session: false });
 
