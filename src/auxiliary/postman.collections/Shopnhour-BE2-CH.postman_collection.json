@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Y2Y4ZDgwYmYwMjU1ZmUwYzBkOGMyYiIsImlhdCI6MTc0MTY1NjM0NiwiZXhwIjoxNzQyMjYxMTQ2fQ._nVhFK9IRZgSh-t1vu0xr24BUjovjgv9bGoBWo1T59I\"\r\n}\r\n",
+					"raw": "{\r\n    \"token\": \"ANOTHERBEARERTOKEN\"\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
