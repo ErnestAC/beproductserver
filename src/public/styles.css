@@ -656,11 +656,10 @@ textarea:focus {
   font-size: 1rem !important;
 }
 
-. {
+.make-it-small {
   font-family: Roboto, Arial, Helvetica, sans-serif;
   font-size: 0.7rem !important;
 }
-
 
 .make-it-white {
   color: #fff !important
@@ -678,7 +677,7 @@ textarea:focus {
   background-color: rgba(163, 172, 182, .999) !important
 }
 
-.make-it-dark {
+.make-it-dark make-it-small {
   color: #172330 !important
 }
 
