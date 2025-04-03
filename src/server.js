@@ -21,6 +21,7 @@ import authRoutes from "./routes/sessions.routes.js";
 import { productDao } from "./persistence/mongo/dao/product.dao.js";
 import { cartDao } from "./persistence/mongo/dao/cart.dao.js";
 import Handlebars from "handlebars";
+// import cors from 'cors'
 
 // Load environment variables
 dotenv.config();
@@ -34,6 +35,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(jwtViewAuth);
+// app.use(cors);
 
 //  Static files
 app.use("/static", express.static(path.join(__dirname, "public")));

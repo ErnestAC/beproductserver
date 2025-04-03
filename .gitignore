@@ -3,3 +3,4 @@
 /src/public/img/*.**
 *.backup
 .env
+src/views/deleteProduct copy.handlebars

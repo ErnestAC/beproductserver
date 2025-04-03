@@ -1,3 +1,7 @@
+// index.routes.js
+import passport from "../config/passport/passport.config.js";
+import { requireAdminOrOwner } from "../middlewares/role.middleware.js";
+
 import { ProductModel } from "../persistence/mongo/models/product.model.js";
 import { Router } from "express";
 
@@ -5,6 +9,8 @@ import { cartDao } from "../persistence/mongo/dao/cart.dao.js";
 import { Cart } from "../persistence/mongo/models/cart.model.js";
 
 const router = Router();
+const jwtAuth = passport.authenticate("jwt", { session: false });
+
 
 router.get('/', async (req, res) => {
     try {
@@ -58,7 +64,7 @@ router.get('/products', async (req, res) => {
 });
 
 
-router.get('/carts', async (req, res) => {
+router.get('/carts', jwtAuth, requireAdminOrOwner(), async (req, res) => {
     try {
         let { limit = 10, page = 1, sort = 'createdAt', sortOrder = 'desc' } = req.query;
         limit = Math.max(1, Number(limit) || 10);
@@ -107,7 +113,7 @@ router.get('/carts', async (req, res) => {
 });
 
 
-router.get('/carts/:cid', async (req, res) => {
+router.get('/carts/:cid', jwtAuth, requireAdminOrOwner(), async (req, res) => {
     const { cid } = req.params;
     try {
         const cart = await cartDao.getCartById(cid);
@@ -120,10 +126,20 @@ router.get('/carts/:cid', async (req, res) => {
     }
 });
 
+// Show currently logged on user's information
+router.get("/current", jwtAuth, (req, res) => {
+    res.render("current");
+});
+
 // Logout and clear cookie (browser)
-router.get("/logout", (req, res) => {
+router.get("/logout", jwtAuth, (req, res) => {
     res.clearCookie("token");
     res.redirect("/login");
+});
+
+// Admin console
+router.get("/admin", jwtAuth, requireAdminOrOwner(), (req, res) => {
+    res.render("admin");
 });
 
 export default router;

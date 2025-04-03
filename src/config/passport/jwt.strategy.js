@@ -24,7 +24,7 @@ const jwtOptions = {
 
 const strategy = new JwtStrategy(jwtOptions, async (payload, done) => {
   try {
-    console.log(" JWT payload:", payload);
+    // console.log(" User authenticated:", payload);
 
     const user = await User.findById(payload.id);
     if (user) {

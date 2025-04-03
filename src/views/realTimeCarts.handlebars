@@ -32,17 +32,17 @@
                     <div class="grid-container">
                         ${paginatedCarts.map(cart => `
                             <div class="box make-it-white-back">
-                                <h5 class="make-it-dark-back make-it-white make-it-center make-it-rounded-top make-it-small">Cart ${cart.cid}</h5>
-                                <table class="table make-it-dark is-hoverable is-fullwidth">
+                                <h5 class="make-it-dark-back make-it-white make-it-center make-it-rounded-top ">Cart ${cart.cid}</h5>
+                                <table class="table make-it-dark make-it-small  is-hoverable is-fullwidth">
                                     <thead>
-                                        <tr class="make-it-semi-back make-it-small make-it-rounded">
+                                        <tr class="make-it-semi-back  make-it-rounded">
                                             <th>PID</th>
                                             <th>Quantity</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         ${cart.products.map(product => `
-                                            <tr class="make-it-small">
+                                            <tr class="">
                                                 <td>${product.pid}</td>
                                                 <td>${product.quantity}</td>
                                             </tr>
@@ -75,15 +75,15 @@
     </script>
 </head>
 <body>
-    <div class="section make-it-dark make-it-white-back">Cart List - Realtime display</div>
+    <h2 class=" section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Cart List - Realtime display</h2>
     <div class="section">
         <div id="cartList">
             {{#each carts}}
                 <div class="box make-it-white-back">
-                    <h5 class="make-it-dark-back make-it-white make-it-center make-it-rounded-top make-it-small">Cart {{cid}}</h5>
-                    <table class="table make-it-dark is-hoverable is-fullwidth">
+                    <h5 class="make-it-dark-back make-it-white make-it-center make-it-rounded-top ">Cart {{cid}}</h5>
+                    <table class="table make-it-dark make-it-small  is-hoverable is-fullwidth">
                         <thead>
-                            <tr class="make-it-semi-back make-it-small make-it-rounded">
+                            <tr class="make-it-semi-back  make-it-rounded">
                                 <th>PID</th>
                                 <th>Quantity</th>
                                 <th>Title</th>
@@ -92,7 +92,7 @@
                         </thead>
                         <tbody>
                             {{#each products}}
-                                <tr class="make-it-small">
+                                <tr class="">
                                     <td>{{pid}}</td>
                                     <td>{{quantity}}</td>
                                     <td>{{title}}</td>
@@ -108,7 +108,7 @@
         <!-- Dropdown to select items per page -->
         <div class="field has-addons section">
             <div class="control">
-                <div class="select make-it-small">
+                <div class="select is-small">
                     <select id="itemsPerPageDropdown">
                         <option value="6" selected>6 carts per page</option>
                         <option value="12">12 carts per page</option>
@@ -117,18 +117,18 @@
                 </div>
             </div>
             <div class="control">
-                <button class="button make-it-small" onclick="applyItemsPerPage()">Apply</button>
+                <button class="button is-small  " onclick="applyItemsPerPage()">Apply</button>
             </div>
         </div>
 
         <br>
         <div class="grid-container-3c-by-1r make-it-rounded make-it-white-back make-it-dark">
-            <button class="button make-it-small" onclick="changePage(-1)">Prev</button>
-            <div class="content make-it-dark make-it-semi-back make-it-small make-it-rounded make-it-center section" id="cartCount"></div>
-            <button class="button make-it-small" onclick="changePage(1)">Next</button>
+            <button class="button is-small  " onclick="changePage(-1)">Prev</button>
+            <div class="content make-it-dark make-it-small  make-it-semi-back  make-it-rounded make-it-center section" id="cartCount"></div>
+            <button class="button is-small  " onclick="changePage(1)">Next</button>
         </div>
         
-        <div class="content make-it-dark make-it-rounded-top make-it-semi-back make-it-small rt-general-page-footer" id="paginationInfo"></div>
+        <div class="content make-it-dark make-it-rounded-top make-it-semi-back  rt-general-page-footer" id="paginationInfo"></div>
     </div>
 </body>
 </html>

@@ -4,40 +4,37 @@
     <meta charset="UTF-8" />
     <title>Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-        body {
-        font-family: sans-serif;
-        padding: 2rem;
-        }
-        form {
-        max-width: 300px;
-        margin: 0 auto;
-        }
-        label, input {
-        display: block;
-        width: 100%;
-        margin-bottom: 1rem;
-        }
-        #message {
-        margin-top: 1rem;
-        font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
-    <h1>Login</h1>
+    <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top">Log in</h2>
 
-    <form id="loginForm">
-        <label for="email">Email:</label>
-        <input name="email" type="email" required />
+    <div class="make-it-white make-it-center section" id="message">
+    </div>
 
-        <label for="password">Password:</label>
-        <input name="password" type="password" required />
+    <div class="grid-container-3c-by-1r">
+        <div></div>
+        <div class="box make-it-semi-back">
 
-        <button type="submit">Login</button>
-    </form>
+            <div class="">
+                <form class="make-it-center" id="loginForm">
+                    <div class="make-it-white  section" for="email">
+                        <p class="make-it-dark">E-mail</p>
+                        <input class="input " name="email" type="email" required />
+                    </div>
 
-    <div id="message"></div>
+                    <div class="make-it-white  section " for="password">
+                        <p class="make-it-dark">Password</p>
+                        <input class="input " name="password" type="password" required />
+                    </div>
+
+                    <button class="section button " type="submit">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    
 
     <script>
         const form = document.getElementById("loginForm");
@@ -62,16 +59,16 @@
             const result = await res.json();
 
             if (res.ok) {
-            message.innerText = "✅ Logged in.";
+            message.innerText = "Logged in.";
             localStorage.setItem("token", result.token);
             setTimeout(() => {
                 window.location.href = "/products"; // the browser is redirected to products as a logged on user
             }, 1000);
             } else {
-            message.innerText = `❌ ${result.message || "Login failed"}`;
+            message.innerText = `${result.message || "Login failed"}`;
             }
         } catch (err) {
-            message.innerText = `❌ Failed to login: ${err.message}`;
+            message.innerText = `Failed to login: ${err.message}`;
         }
         });
     </script>

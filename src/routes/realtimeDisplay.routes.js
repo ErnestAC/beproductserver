@@ -2,12 +2,13 @@ import { Router } from "express";
 import passport from "../config/passport/passport.config.js";
 import { productDao } from "../persistence/mongo/dao/product.dao.js";
 import { cartDao } from "../persistence/mongo/dao/cart.dao.js";
+import { requireAdminOrOwner } from "../middlewares/role.middleware.js";
 
 const router = Router();
 const jwtAuth = passport.authenticate("jwt", { session: false });
 
-// ✅ Protected: Real-time products view
-router.get("/products", jwtAuth, async (req, res) => {
+// Protected: Real-time products view (Admin only)
+router.get("/products", jwtAuth, requireAdminOrOwner(), async (req, res) => {
     try {
         const products = await productDao.getAllProducts({
             sort: "price",
@@ -21,8 +22,8 @@ router.get("/products", jwtAuth, async (req, res) => {
     }
 });
 
-// ✅ Protected: Real-time carts view
-router.get("/carts", jwtAuth, async (req, res) => {
+// Protected: Real-time carts view (Admin only)
+router.get("/carts", jwtAuth, requireAdminOrOwner(), async (req, res) => {
     try {
         const carts = await cartDao.getAllCarts();
         res.render("realTimeCarts", { carts });

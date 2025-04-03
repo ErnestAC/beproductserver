@@ -58,6 +58,15 @@ body {
   margin: 0
 }
 
+.navbar-item{
+  display: inline-block;
+  min-width: 6.8rem !important;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
 .cart-count {
   background-color: rgba(97, 110, 124, .999);
   color: #fff;
@@ -105,7 +114,7 @@ body {
   padding: .2rem .5rem;
   font-size: .9rem;
   position: relative;
-  width: 3rem
+  width: 8rem
 }
 
 .logo-back {
@@ -401,8 +410,18 @@ body {
 }
 
 .section {
-  margin: .3rem !important;
-  padding: .7rem !important
+  margin: .2rem !important;
+  padding: .6rem !important
+}
+
+.mid-section {
+  margin: .4rem !important;
+  padding: .4rem !important
+}
+
+.small-section {
+  margin: .15rem !important;
+  padding: .15rem !important
 }
 
 .cart-listitem {
@@ -642,7 +661,6 @@ textarea:focus {
   font-size: 0.7rem !important;
 }
 
-
 .make-it-white {
   color: #fff !important
 }
@@ -659,7 +677,7 @@ textarea:focus {
   background-color: rgba(163, 172, 182, .999) !important
 }
 
-.make-it-dark {
+.make-it-dark make-it-small  make-it-small {
   color: #172330 !important
 }
 
@@ -715,7 +733,7 @@ textarea:focus {
 .grid-container-2c-by-1r,
 .grid-container-2c66-by-1r,
 .grid-container-3c-by-1r-special,
-.grid-container-3c-by-1r {
+.grid-container-3c-by-1r, .grid-container-6c-by-1r {
   display: grid;
   gap: .5rem;
   padding: .5rem;
@@ -725,7 +743,7 @@ textarea:focus {
 }
 
 .grid-container-3c-by-1r-special{
-  width: 70% !important;
+  grid-template-columns: repeat(3, 1fr)
 }
 
 .grid-container-2c66-by-1r {
@@ -734,7 +752,19 @@ textarea:focus {
 }
 
 .grid-container-3c-by-1r {
-  grid-template-columns: repeat(3, 1fr)
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-container-5c-by-1r {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.grid-container-6c-by-1r {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.grid-container-7c-by-1r {
+  grid-template-columns: repeat(7, 1fr) !important;
 }
 
 .grid-item {
@@ -758,4 +788,29 @@ textarea:focus {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around
+}
+
+
+
+@media (max-width: 1279px) {
+  body {
+    background-size: cover;
+    background-position: center;
+    background-repeat: repeat-x;
+    background-attachment: fixed;
+    background-color: #172330;
+    padding: 8.5rem 1rem 3rem 1rem !important;
+  }
+
+  .grid-container-3c-by-1r{
+    grid-template-columns: repeat(1, 1fr)
+  }
+
+  .logo-image {
+    border-radius: 20%;
+    padding: .2rem .5rem;
+    font-size: .9rem;
+    position: relative;
+    width: 6rem
+  }
 }

@@ -1,31 +1,32 @@
-//api.carts.routes.js
+// api.carts.routes.js
 
 import { Router } from "express";
 import passport from "../config/passport/passport.config.js";
 import { cartController } from "../controllers/cart.controllers.js";
+import { requireAdminOrOwner } from "../middlewares/role.middleware.js";
 
 const router = Router();
 const jwtAuth = passport.authenticate("jwt", { session: false });
 
-// Protected: Retrieve all carts
-router.get("/", jwtAuth, cartController.getAllCarts);
+// Admin only: Retrieve all carts
+router.get("/", jwtAuth, requireAdminOrOwner(), cartController.getAllCarts);
 
-// Protected: Retrieve a specific cart by CID
-router.get("/:cid", jwtAuth, cartController.getCartById);
+// Admin or cart owner: Retrieve a specific cart
+router.get("/:cid", jwtAuth, requireAdminOrOwner("cid"), cartController.getCartById);
 
-// Protected: Add a product to a cart
-router.post("/:cid/product/:pid", jwtAuth, cartController.addProductToCart);
+// Admin or cart owner: Add a product to a cart
+router.post("/:cid/product/:pid", jwtAuth, requireAdminOrOwner("cid"), cartController.addProductToCart);
 
-// Protected: Update quantity of a product in a cart
-router.patch("/:cid/product/:pid", jwtAuth, cartController.updateProductInCart);
+// Admin or cart owner: Update quantity of a product in a cart
+router.patch("/:cid/product/:pid", jwtAuth, requireAdminOrOwner("cid"), cartController.updateProductInCart);
 
-// Protected: Delete a cart by CID
-router.delete("/:cid", jwtAuth, cartController.deleteCart);
+// Admin or cart owner: Delete a cart
+router.delete("/:cid", jwtAuth, requireAdminOrOwner("cid"), cartController.deleteCart);
 
-// Protected: Remove a specific product from a cart
-router.delete("/:cid/products/:pid", jwtAuth, cartController.deleteProductFromCart);
+// Admin or cart owner: Remove a product from a cart
+router.delete("/:cid/products/:pid", jwtAuth, requireAdminOrOwner("cid"), cartController.deleteProductFromCart);
 
-// Protected: Create a new cart
+// Any user: Create a new cart
 router.post("/", jwtAuth, cartController.createCart);
 
 export default router;
