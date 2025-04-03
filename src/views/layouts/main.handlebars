@@ -11,33 +11,33 @@
 </head>
 <body class="splash-page-home make-it-normal">
 
-    <header class="title-bar-container other-bar is-frozen make-it-semi-back make-it-normal is-small grid-container-2c-by-1r">
+    <header class="title-bar-container other-bar is-frozen make-it-semi-back make-it-normal  grid-container-2c-by-1r">
         <div class="navbar-brand">
             <a class="navbar-item" href="/">
                 <img src="/static/shopnhour_blue.png" alt="Shopnhour Store Logo" width="115px">
             </a>
         </div>
 
-        <div class="grid-container-6c-by-1r make-it-dark-back make-it-rounded  is-dark">
-            <a class="navbar-item is-small make-it-rounded make-it-semi" href="/">
+        <div class="grid-container-6c-by-1r make-it-dark-back make-it-rounded small-section">
+            <a class="navbar-item  make-it-rounded make-it-semi mid-section" href="/">
                 <i class="fas fa-home small-section"></i> Home
             </a>
-            <a class="navbar-item is-small make-it-rounded make-it-semi" href="/products">
+            <a class="navbar-item  make-it-rounded make-it-semi mid-section" href="/products">
                 <i class="fas fa-box-open small-section"></i> Products
             </a>
-            <a class="navbar-item is-small make-it-rounded make-it-semi" href="/carts/5ab6e82f-b289-4dff-8ff5-25dc0f749ee2">
+            <a class="navbar-item  make-it-rounded make-it-semi mid-section" href="/carts/5ab6e82f-b289-4dff-8ff5-25dc0f749ee2">
                 <i class="fas fa-shopping-cart small-section"></i> Cart
             </a>
 
             {{#if user}}
-                <a class="navbar-item is-small make-it-rounded make-it-semi" href="/logout/">
+                <a class="navbar-item  make-it-rounded make-it-semi mid-section" href="/logout/">
                     <i class="fas fa-sign-out-alt small-section"></i> Log out
                 </a>
-                <a class="navbar-item is-small make-it-rounded make-it-semi" href="/current/">
+                <a class="navbar-item  make-it-rounded make-it-semi mid-section" href="/current/">
                     <i class="fas fa-user small-section"></i> {{user.username}}
                 </a>
             {{else}}
-                <a class="navbar-item is-small make-it-rounded make-it-semi" href="/login/">
+                <a class="navbar-item  make-it-rounded make-it-semi mid-section" href="/login/">
                     <i class="fas fa-key small-section"></i> Log in
                 </a>
             {{/if}}

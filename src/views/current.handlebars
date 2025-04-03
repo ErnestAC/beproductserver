@@ -5,48 +5,59 @@
     <title>User Info</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-    </head>
-    <body>
+</head>
+<body>
     <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top">User Information</h2>
+
     <section class="section">
         <div class="box make-it-semi-back make-it-rounded">
-        
-        <div id="userInfo" class="content make-it-dark">Loading...</div>
+            <div id="userInfo" class="content make-it-dark">Loading...</div>
+            <div id="adminButtonContainer" class="mt-4"></div>
         </div>
     </section>
 
     <script>
         const userInfo = document.getElementById("userInfo");
+        const adminButtonContainer = document.getElementById("adminButtonContainer");
         const token = localStorage.getItem("token");
 
         async function loadUser() {
-        try {
-            const res = await fetch("/api/sessions/current", {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-            });
+            try {
+                const res = await fetch("/api/sessions/current", {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
 
-            if (!res.ok) {
-            throw new Error("Not authenticated");
-            }
+                if (!res.ok) {
+                    throw new Error("Not authenticated");
+                }
 
-            const { user } = await res.json();
-            userInfo.innerHTML = `
-            <p class=" make-it-dark"><strong>Username:</strong> ${user.username}</p>
-            <p class=" make-it-dark"><strong>Email:</strong> ${user.email}</p>
-            <p class=" make-it-dark"><strong>First Name:</strong> ${user.first_name}</p>
-            <p class=" make-it-dark"><strong>Last Name:</strong> ${user.last_name}</p>
-            <p class=" make-it-dark"><strong>Age:</strong> ${user.age}</p>
-            <p class=" make-it-dark"><strong>Cart ID:</strong> ${user.cartId}</p>
-            <p class=" make-it-dark"><strong>Role:</strong> ${user.role}</p>
-            `;
-        } catch (err) {
-            userInfo.innerHTML = `
-            <p class="has-text-danger">⚠️ You are not logged in.</p>
-            <a href="/login" class="button is-warning mt-3">Go to Login</a>
-            `;
-        }
+                const { user } = await res.json();
+
+                userInfo.innerHTML = `
+                    <p><strong>Username:</strong> ${user.username}</p>
+                    <p><strong>Email:</strong> ${user.email}</p>
+                    <p><strong>First Name:</strong> ${user.first_name}</p>
+                    <p><strong>Last Name:</strong> ${user.last_name}</p>
+                    <p><strong>Age:</strong> ${user.age}</p>
+                    <p><strong>Cart ID:</strong> ${user.cartId}</p>
+                    <p><strong>Role:</strong> ${user.role}</p>
+                `;
+
+                if (user.role === "admin") {
+                    adminButtonContainer.innerHTML = `
+                        <a href="/admin" class="button is-primary is-light">
+                            Go to Admin Panel
+                        </a>
+                    `;
+                }
+            } catch (err) {
+                userInfo.innerHTML = `
+                    <p class="has-text-danger">⚠️ You are not logged in.</p>
+                    <a href="/login" class="button is-warning mt-3">Go to Login</a>
+                `;
+            }
         }
 
         loadUser();

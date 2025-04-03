@@ -5,17 +5,18 @@ import passport from "../config/passport/passport.config.js";
 import { uploader } from "../utils.js";
 import { productDao } from "../persistence/mongo/dao/product.dao.js";
 import { notifyProductChange } from "../server.js";
+import { requireAdminOnly } from "../middlewares/role.middleware.js";
 
 const router = Router();
 const jwtAuth = passport.authenticate("jwt", { session: false });
 
-// ✅ GET: Render form to add product (Protected)
-router.get('/add-product', jwtAuth, (req, res) => {
+//  GET: Render form to add product (Admin only)
+router.get('/add-product', jwtAuth, requireAdminOnly(), (req, res) => {
     res.render('addProduct');
 });
 
-// ✅ POST: Submit product form (Protected)
-router.post('/add-product', jwtAuth, uploader.single("file"), async (req, res) => {
+//  POST: Submit product form (Admin only)
+router.post('/add-product', jwtAuth, requireAdminOnly(), uploader.single("file"), async (req, res) => {
     try {
         const {
             title,
@@ -69,13 +70,13 @@ router.post('/add-product', jwtAuth, uploader.single("file"), async (req, res) =
     }
 });
 
-// ✅ GET: Render form to delete product (Protected)
-router.get('/delete-product', jwtAuth, (req, res) => {
+//  GET: Render form to delete product (Admin only)
+router.get('/delete-product', jwtAuth, requireAdminOnly(), (req, res) => {
     res.render('deleteProduct');
 });
 
-// ✅ POST: Handle delete (Protected)
-router.post('/delete-product/:pid', jwtAuth, async (req, res) => {
+//  POST: Handle delete (Admin only)
+router.post('/delete-product/:pid', jwtAuth, requireAdminOnly(), async (req, res) => {
     const { pid } = req.params;
     try {
         const result = await productDao.deleteProduct(pid);
