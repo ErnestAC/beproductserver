@@ -28,3 +28,12 @@ export const requireAdminOrOwner = (paramKey = "cid") => {
     return res.status(403).json({ message: "Forbidden: Resource does not belong to user" });
     };
 };
+
+export const requireAdminOnly = () => {
+    return (req, res, next) => {
+        if (req.user?.role === "admin") {
+            return next();
+        }
+        return res.status(403).send("Unauthorized: Admins only");
+    };
+};

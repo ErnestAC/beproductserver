@@ -642,7 +642,7 @@ textarea:focus {
   font-size: 1rem !important;
 }
 
-.make-it-small {
+. {
   font-family: Roboto, Arial, Helvetica, sans-serif;
   font-size: 0.7rem !important;
 }
@@ -743,7 +743,7 @@ textarea:focus {
 }
 
 .grid-container-6c-by-1r {
-  grid-template-columns: repeat(6, 1fr)
+  grid-template-columns: repeat(5, 1fr)
 }
 
 .grid-item {

@@ -17,12 +17,12 @@
                 <!-- Sorting Options -->
                 <div class="grid-container-2c66-by-1r make-it-semi-back make-it-normal make-it-rounded section">
                     <div class="column is-10">
-                        <div class="make-it-semi-back make-it-small make-it-center">
+                        <div class="make-it-semi-back  make-it-center">
                             <div class="make-it-semi-back make-it-normal make-it-center section">Sort by</div>
-                            <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=cid&sortOrder=asc">Cart ID Asc</a>
-                            <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=cid&sortOrder=desc">Cart ID Desc</a>
-                            <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=products&sortOrder=asc">Products in Cart Asc</a>
-                            <a class="button make-it-small" href="?page=1&limit={{limit}}&sort=products&sortOrder=desc">Products in Cart Desc</a>
+                            <a class="button " href="?page=1&limit={{limit}}&sort=cid&sortOrder=asc">Cart ID Asc</a>
+                            <a class="button " href="?page=1&limit={{limit}}&sort=cid&sortOrder=desc">Cart ID Desc</a>
+                            <a class="button " href="?page=1&limit={{limit}}&sort=products&sortOrder=asc">Products in Cart Asc</a>
+                            <a class="button " href="?page=1&limit={{limit}}&sort=products&sortOrder=desc">Products in Cart Desc</a>
                         </div>
                     </div>
 
@@ -30,14 +30,14 @@
                     <div class="column is-10">
                         <div class="make-it-semi-back make-it-normal make-it-center">
                             <div class="make-it-semi-back make-it-normal make-it-center section">Items per page</div>
-                            <div class="select make-it-small">
+                            <div class="select ">
                                 <select id="limit-select">
                                     <option value="10">10</option>
                                     <option value="20">20</option>
                                     <option value="50">50</option>
                                 </select>
                             </div>
-                            <button class="button is-link make-it-small" onclick="applyLimit()">Apply</button>
+                            <button class="button is-link " onclick="applyLimit()">Apply</button>
                         </div>
                     </div>
                 </div>
@@ -45,14 +45,14 @@
                 <!-- Pagination Controls -->
                 <div class="column is-10">
                     <div class="make-it-dark-back is-centered grid-container-3c-by-1r" role="navigation" aria-label="pagination">
-                        <a class="button section make-it-small" 
+                        <a class="button section " 
                             href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}">Prev page</a>
 
-                        <div class="section make-it-center make-it-rounded make-it-semi-back make-it-small make-it-white">
+                        <div class="section make-it-center make-it-rounded make-it-semi-back  make-it-white">
                             Page {{currentPage}} of {{totalPages}}
                         </div>
 
-                        <a class="button section make-it-small" 
+                        <a class="button section " 
                             href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}">Next page</a>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                 {{#if carts.length}}
                     {{#each carts}}
                         <div class="column is-12-mobile is-12-desktop">
-                            <div class="card make-it-small">
+                            <div class="card ">
                                 <div class="section">
                                     <div class="make-it-dark-back section make-it-rounded-top make-it-white">
                                         <b>Cart ID:</b> {{this.cid}}

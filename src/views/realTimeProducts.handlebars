@@ -42,7 +42,7 @@
                     </thead>
                     <tbody>
                         ${paginatedProducts.map(product => `
-                            <tr class="make-it-small">
+                            <tr class="">
                                 <td class="make-it-center"><img src="${product.imageURL}" width="28px"></td>
                                 <td>${product.pid}</td>
                                 <td>${product.title}</td>
@@ -87,7 +87,7 @@
         <!-- Dropdown for items per page -->
         <div class="field is-inline-block">
             <div class="control">
-                <div class="select make-it-small">
+                <div class="select ">
                     <select id="itemsPerPageDropdown">
                         <option value="10" selected>10 products per page</option>
                         <option value="20">20 products per page</option>
@@ -96,17 +96,17 @@
                 </div>
             </div>
         </div>
-        <button class="button make-it-small" onclick="updateItemsPerPage()">Apply</button>
+        <button class="button " onclick="updateItemsPerPage()">Apply</button>
 
         <br><br>
         
         <div class="grid-container-3c-by-1r make-it-rounded make-it-white-back make-it-dark">
-            <button class="button make-it-small" onclick="changePage(-1)">Prev</button>
-            <div class="content make-it-dark make-it-semi-back make-it-small make-it-rounded make-it-center section" id="productCount"></div>
-            <button class="button make-it-small" onclick="changePage(1)">Next</button>
+            <button class="button " onclick="changePage(-1)">Prev</button>
+            <div class="content make-it-dark make-it-semi-back  make-it-rounded make-it-center section" id="productCount"></div>
+            <button class="button " onclick="changePage(1)">Next</button>
         </div>
         
-        <div class="content make-it-dark make-it-rounded-top make-it-semi-back make-it-small rt-general-page-footer" id="paginationInfo"></div>
+        <div class="content make-it-dark make-it-rounded-top make-it-semi-back  rt-general-page-footer" id="paginationInfo"></div>
     </div>
 </body>
 </html>

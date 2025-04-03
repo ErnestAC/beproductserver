@@ -33,13 +33,13 @@
 
             const { user } = await res.json();
             userInfo.innerHTML = `
-            <p class="make-it-small make-it-dark"><strong>Username:</strong> ${user.username}</p>
-            <p class="make-it-small make-it-dark"><strong>Email:</strong> ${user.email}</p>
-            <p class="make-it-small make-it-dark"><strong>First Name:</strong> ${user.first_name}</p>
-            <p class="make-it-small make-it-dark"><strong>Last Name:</strong> ${user.last_name}</p>
-            <p class="make-it-small make-it-dark"><strong>Age:</strong> ${user.age}</p>
-            <p class="make-it-small make-it-dark"><strong>Cart ID:</strong> ${user.cartId}</p>
-            <p class="make-it-small make-it-dark"><strong>Role:</strong> ${user.role}</p>
+            <p class=" make-it-dark"><strong>Username:</strong> ${user.username}</p>
+            <p class=" make-it-dark"><strong>Email:</strong> ${user.email}</p>
+            <p class=" make-it-dark"><strong>First Name:</strong> ${user.first_name}</p>
+            <p class=" make-it-dark"><strong>Last Name:</strong> ${user.last_name}</p>
+            <p class=" make-it-dark"><strong>Age:</strong> ${user.age}</p>
+            <p class=" make-it-dark"><strong>Cart ID:</strong> ${user.cartId}</p>
+            <p class=" make-it-dark"><strong>Role:</strong> ${user.role}</p>
             `;
         } catch (err) {
             userInfo.innerHTML = `
