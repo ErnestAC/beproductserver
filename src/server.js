@@ -17,6 +17,7 @@ import homeRoute from "./routes/index.routes.js";
 import FormsRoute from "./routes/forms.routes.js";
 import RealtimeViews from "./routes/realtimeDisplay.routes.js";
 import authRoutes from "./routes/sessions.routes.js";
+import methodOverride from "method-override";
 
 import { productDao } from "./persistence/mongo/dao/product.dao.js";
 import { cartDao } from "./persistence/mongo/dao/cart.dao.js";
@@ -34,6 +35,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(jwtViewAuth);
+app.use(methodOverride("_method")); // for UI delete requests
 
 // Static files
 app.use("/static", express.static(path.join(__dirname, "public")));
