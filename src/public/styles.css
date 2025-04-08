@@ -183,7 +183,6 @@ body {
 .card-content-container,
 .card-picture-container,
 .card-title-container {
-  color: #fff;
   padding: 1rem .9rem;
   position: relative
 }
@@ -192,7 +191,6 @@ body {
 .card-category-badge-prebuilt,
 .card-category-badge-specials,
 .card-category-badge-usersubmission {
-  border-radius: 7px;
   padding: 0.5rem;
   font-size: 0.8rem !important;
   position: relative;
@@ -216,7 +214,7 @@ body {
 }
 
 .card-category-badge-prebuilt {
-  background-color: rgba(10, 70, 70, .999);
+  background-color: rgba(21, 31, 43, 0.999);
   color: #fff
 }
 
@@ -792,7 +790,7 @@ textarea:focus {
 
 
 
-@media (max-width: 1279px) {
+@media (max-width: 1024px) {
   body {
     background-size: cover;
     background-position: center;

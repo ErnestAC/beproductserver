@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product List</title>
     <meta name="color-scheme" content="dark">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
     <h2 class=" section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Product List - Static view</h2>
@@ -83,7 +82,7 @@
                 {{#if products.length}}
                     {{#each products}}
                         <div class="column is-12-mobile is-3-desktop">
-                            <div class="make-it-semi-back make-it-rounded-top card-title-container make-it-dark">
+                            <div class="make-it-rounded-top card-title-container make-it-white-back make-it-left">
                                 <div>
                                     {{this.title}}
                                 </div>
@@ -93,7 +92,7 @@
                                     <div class="make-it-rounded">
                                         <img src={{this.imageURL}} alt={{this.title}}>
                                     </div>
-                                    <div class="card-category-badge-prebuilt">
+                                    <div class="card-category-badge-prebuilt make-it-left make-it-rounded">
                                             {{this.category}}
                                     </div>
                                     <div class="columns make-it-white-back make-it-rounded make-it-dark make-it-small section">
@@ -160,7 +159,7 @@
                         });
 
                         if (response.ok) {
-                            alert(`${product.title} added to your cart.`);
+                            console.log("added product to cart")
                         } else {
                             const err = await response.json();
                             alert(`Failed to add to cart: ${err.message}`);
@@ -185,7 +184,7 @@
                     }
 
                     localStorage.setItem("guestCart", JSON.stringify(cart));
-                    alert(`${product.title} added to guest cart.`);
+                    console.log("added product to cart")
                 }
             });
         });
