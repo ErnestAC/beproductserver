@@ -9,7 +9,12 @@
 </head>
 <body>
     <h2 class=" section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Product List - Static view</h2>
-    
+
+    <script>
+        const isLoggedIn = {{#if user}}true{{else}}false{{/if}};
+        const userCartId = {{#if user}}"{{user.cartId}}"{{else}}null{{/if}};
+    </script>
+
     <!-- Sorting and Pagination Controls at the top -->
     <section class="section">
         <div class="container make-it-dark">
@@ -69,7 +74,6 @@
                         </ul>
                     </div>
                 </div>
-                
     </section>
 
     <!-- Product List -->
@@ -83,20 +87,16 @@
                                 <div>
                                     {{this.title}}
                                 </div>
-
                             </div>
                             <div class="make-it-semi-back">
-
                                 <div class="section">
-
                                     <div class="make-it-rounded">
                                         <img src={{this.imageURL}} alt={{this.title}}>
                                     </div>
                                     <div class="card-category-badge-prebuilt">
                                             {{this.category}}
                                     </div>
-                                    <div class="columns make-it-white-back make-it-rounded make-it-dark make-it-small   section">
-
+                                    <div class="columns make-it-white-back make-it-rounded make-it-dark make-it-small section">
                                         <div class="column is-6 make-it-left">
                                             <p><b>Price:</b>${{this.price}}</p>
                                             <p><b>Stock:</b> {{this.stock}}</p>
@@ -106,24 +106,17 @@
                                         <div class="column is-6 make-it-center">
                                             <p><b>Motor:</b> {{#if this.motorizable}} Yes {{else}} No {{/if}}</p>
                                             <p><b>Lights:</b> {{#if this.lighting}} Yes {{else}} No {{/if}}</p>
-                                            
                                         </div>
                                     </div>
+                                    <div class="make-it-right section">
+                                        <button 
+                                          class="button is-small is-warning add-to-cart-btn" 
+                                          data-product='{{{stringify this}}}'>
+                                          Add to Cart
+                                        </button>
+                                    </div>
                                 </div>
-
-                                <!-- Add to Cart Button (POST) -->
-                                <form id="addToCartForm-{{this.pid}}" action="/api/carts/5ab6e82f-b289-4dff-8ff5-25dc0f749ee2/product/{{this.pid}}" method="POST" style="display: none;">
-                                    <input type="hidden" name="pid" value="{{this.pid}}">
-                                    <input type="hidden" name="quantity" value="1">
-                                </form>
-
-
-                                <div class="make-it-dark make-it-small   section make-it-center">PID: {{this.pid}}</div>
-
-
-{{!--                                 <div class="make-it-right section">
-                                    <button class="button is-small   is-warning" onclick="document.getElementById('addToCartForm-{{this.pid}}').submit();">Add to cart</button>
-                                </div> --}}
+                                <div class="make-it-dark make-it-small section make-it-center">PID: {{this.pid}}</div>
                             </div>
                         </div>
                     {{/each}}
@@ -141,15 +134,61 @@
         </div>
     </section>
 
-    <!-- Script for handling limit change -->
     <script>
         function applyLimit() {
             const selectedLimit = document.getElementById('limit-select').value;
             const urlParams = new URLSearchParams(window.location.search);
             urlParams.set('limit', selectedLimit);
-            urlParams.set('page', 1); // Reset to first page when changing limit
+            urlParams.set('page', 1);
             window.location.search = urlParams.toString();
         }
+
+        document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
+            button.addEventListener("click", async () => {
+                const product = JSON.parse(button.getAttribute("data-product"));
+
+                if (isLoggedIn && userCartId) {
+                    try {
+                        const token = localStorage.getItem("token");
+                        const response = await fetch(`/api/carts/${userCartId}/product/${product.pid}`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${token}`
+                            },
+                            body: JSON.stringify({ quantity: 1 })
+                        });
+
+                        if (response.ok) {
+                            alert(`${product.title} added to your cart.`);
+                        } else {
+                            const err = await response.json();
+                            alert(`Failed to add to cart: ${err.message}`);
+                        }
+                    } catch (err) {
+                        alert("Error adding product to cart.");
+                        console.error(err);
+                    }
+                } else {
+                    let cart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+                    const existing = cart.find(item => item.pid === product.pid);
+
+                    if (existing) {
+                        existing.quantity += 1;
+                    } else {
+                        cart.push({
+                            pid: product.pid,
+                            title: product.title,
+                            price: product.price,
+                            quantity: 1
+                        });
+                    }
+
+                    localStorage.setItem("guestCart", JSON.stringify(cart));
+                    alert(`${product.title} added to guest cart.`);
+                }
+            });
+        });
     </script>
 </body>
 </html>

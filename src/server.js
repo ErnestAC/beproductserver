@@ -1,4 +1,4 @@
-//server.js
+// server.js
 import express from "express";
 import { engine } from "express-handlebars";
 import { Server } from "socket.io";
@@ -9,8 +9,8 @@ import session from "express-session";
 import passport from "./config/passport/passport.config.js";
 import cookieParser from "cookie-parser";
 import { jwtViewAuth } from "./middlewares/jwtViewAuth.middleware.js";
-
 import { __dirname } from "./utils.js";
+
 import ProductsRoute from "./routes/api.products.routes.js";
 import CartsRoute from "./routes/api.carts.routes.js";
 import homeRoute from "./routes/index.routes.js";
@@ -20,33 +20,31 @@ import authRoutes from "./routes/sessions.routes.js";
 
 import { productDao } from "./persistence/mongo/dao/product.dao.js";
 import { cartDao } from "./persistence/mongo/dao/cart.dao.js";
-import Handlebars from "handlebars";
-// import cors from 'cors'
 
-// Load environment variables
+import Handlebars from "handlebars";
+
 dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-//  Middlewares
+// Middleware
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(jwtViewAuth);
-// app.use(cors);
 
-//  Static files
+// Static files
 app.use("/static", express.static(path.join(__dirname, "public")));
 app.use("/img", express.static(path.join(__dirname, "public/img")));
 
-//  View engine
+// View engine setup
 app.set("views", path.join(__dirname, "views"));
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 
-//  Express session setup (for session-based login if needed)
+// Session setup
 app.use(
     session({
         secret: process.env.JWT_SECRET || "this_is_not_final",
@@ -55,15 +53,12 @@ app.use(
     })
 );
 
-//  Initialize Passport.js
+// Passport.js setup
 app.use(passport.initialize());
 app.use(passport.session());
 
-//  Handlebars helpers
-Handlebars.registerHelper("eq", function (a, b) {
-    return a === b;
-});
-
+// Handlebars helpers
+Handlebars.registerHelper("eq", (a, b) => a === b);
 Handlebars.registerHelper("ifCond", function (v1, operator, v2, options) {
     switch (operator) {
         case "==": return v1 == v2 ? options.fn(this) : options.inverse(this);
@@ -75,8 +70,11 @@ Handlebars.registerHelper("ifCond", function (v1, operator, v2, options) {
         default: return options.inverse(this);
     }
 });
+Handlebars.registerHelper("stringify", function (context) {
+    return JSON.stringify(context);
+});
 
-//  Realtime events
+// Real-time handlers
 export const notifyProductChange = async () => {
     try {
         const products = await productDao.getAllProducts({ limit: 50, sort: "price", sortDirection: -1 });
@@ -135,13 +133,13 @@ io.on("connection", async (socket) => {
     });
 });
 
-// Special stuff for front end with Handlebars
+// Expose logged-in user to views
 app.use((req, res, next) => {
     res.locals.user = req.user || null;
     next();
 });
 
-//  Routes
+// Routes
 app.use("/", homeRoute);
 app.use("/forms", FormsRoute);
 app.use("/api/products", ProductsRoute);
@@ -149,7 +147,7 @@ app.use("/api/carts", CartsRoute);
 app.use("/api/sessions", authRoutes);
 app.use("/realtime/", RealtimeViews);
 
-//  Start server
+// Start server
 const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
     console.log(`\nServer started on port ${PORT}.`);

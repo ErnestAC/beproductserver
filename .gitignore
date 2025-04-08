@@ -2,5 +2,5 @@
 /connectors
 /src/public/img/*.**
 *.backup
-.env
+.env*
 src/views/deleteProduct copy.handlebars

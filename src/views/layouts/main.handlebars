@@ -11,7 +11,7 @@
 </head>
 <body class="splash-page-home make-it-normal">
 
-    <header class="title-bar-container other-bar is-frozen make-it-semi-back make-it-normal  grid-container-2c-by-1r">
+    <header class="title-bar-container other-bar is-frozen make-it-semi-back make-it-normal grid-container-2c-by-1r">
         <div class="navbar-brand">
             <a class="navbar-item" href="/">
                 <img class="logo-image" src="/static/shopnhour_blue.png" alt="Shopnhour Store Logo" width="115px">
@@ -20,25 +20,32 @@
 
         <div class="grid-container-6c-by-1r make-it-dark-back make-it-rounded small-section">
             <div class="grid-container-2c-by-1r">
-                <a class="navbar-item  make-it-rounded make-it-semi " href="/products">
+                <a class="navbar-item make-it-rounded make-it-semi" href="/products">
                     <span><i class="fas fa-box-open small-section"></i></span><p>Products</p>
                 </a>
-                <a class="navbar-item  make-it-rounded make-it-semi " href="/carts/5ab6e82f-b289-4dff-8ff5-25dc0f749ee2">
-                    <span><i class="fas fa-shopping-cart small-section"></i></span><p>Cart</p>
-                </a>
+
+                {{#if user}}
+                    <a class="navbar-item make-it-rounded make-it-semi" href="/carts/{{user.cartId}}">
+                        <span><i class="fas fa-shopping-cart small-section"></i></span><p>Cart</p>
+                    </a>
+                {{else}}
+                    <a class="navbar-item make-it-rounded make-it-semi" href="/guest-cart">
+                        <span><i class="fas fa-shopping-cart small-section"></i></span><p>Cart</p>
+                    </a>
+                {{/if}}
             </div>
 
             {{#if user}}
                 <div class="grid-container-2c-by-1r">
-                    <a class="navbar-item  make-it-rounded make-it-semi " href="/current/">
-                        <span><i class="fas fa-user small-section"> </i></span> <p>{{user.username}}</p>
+                    <a class="navbar-item make-it-rounded make-it-semi" href="/current/">
+                        <span><i class="fas fa-user small-section"></i></span><p>{{user.username}}</p>
                     </a>
-                    <a class="navbar-item  make-it-rounded make-it-semi " href="/logout/">
+                    <a class="navbar-item make-it-rounded make-it-semi" href="/logout/">
                         <span><i class="fas fa-sign-out-alt small-section"></i></span><p>Log out</p>
                     </a>
                 </div>
             {{else}}
-                <a class="navbar-item  make-it-rounded make-it-semi " href="/login/">
+                <a class="navbar-item make-it-rounded make-it-semi" href="/login/">
                     <i class="fas fa-key small-section"></i> Login
                 </a>
             {{/if}}
@@ -49,7 +56,7 @@
         {{{body}}}
     </main>
 
-    <footer class="content section make-it-semi ">
+    <footer class="content section make-it-semi">
         <p>&copy; 2025 Shopnhour</p>
     </footer>
 

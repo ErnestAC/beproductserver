@@ -1,44 +1,61 @@
-{{#if cart.products.length}}
-    <div class="box cart-products">
-        
-        <div class="make-it-semi-back make-it-rounded-top section make-it-normal make-it-dark">
-            Cart Details - {{cart.cid}}
-        </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Cart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+</head>
+<body>
+    <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">
+        Your Cart
+    </h2>
 
-        <table width="100%" class="section ">
-            <thead>
-                <tr>
-                    <th class="make-it-center"></th>
-                    <th></th>
-                    <th>Product Code</th>
-                    <th>Description</th>
-                    <th class="make-it-center">Pieces</th>
-                    <th class="make-it-center">Price/u</th>
-                    <th class="make-it-center">Quantity</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each cart.products}}
-                <tr>
-                    <td class="section" width="64px"><img src="{{this.imageURL}}"  alt="{{this.title}}"></td>
-                    <td class="make-it-dark make-it-small  ">{{this.title}} <br> <a class="make-it-semi">({{this.pid}})</a></td>
-                    <td class="make-it-dark make-it-small  ">{{this.code}}</td>
-                    <td>{{this.description}}</td>
-                    <td class="make-it-center">{{this.pieces}}</td>
-                    <td class="make-it-center">${{this.price}}</td>
-                    <td class="make-it-center">x{{this.quantity}}</td>
+    <section class="section">
+        {{#if cart.products.length}}
+            <div class="box cart-products">
+                <div class="make-it-semi-back make-it-rounded-top section make-it-normal make-it-dark">
+                    Cart Details - {{cart.cid}}
+                </div>
 
-
-
-
-
-                    
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
-    </div>
-{{else}}
-    <p class="make-it-white make-it-center">Your cart is empty.</p>
-    <p class="make-it-white make-it-center">Go to <a class="make-it-white" href="/products"><b>/products</b></a> to start adding</p>
-{{/if}}
+                <table class="table is-fullwidth is-striped">
+                    <thead>
+                        <tr>
+                            <th class="make-it-center"></th>
+                            <th>Title / PID</th>
+                            <th>Product Code</th>
+                            <th>Description</th>
+                            <th class="make-it-center">Pieces</th>
+                            <th class="make-it-center">Price/u</th>
+                            <th class="make-it-center">Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each cart.products}}
+                            <tr>
+                                <td class="section" width="64px">
+                                    <img src="{{this.imageURL}}" alt="{{this.title}}" />
+                                </td>
+                                <td class="make-it-dark make-it-small">
+                                    {{this.title}}<br />
+                                    <a class="make-it-semi">({{this.pid}})</a>
+                                </td>
+                                <td class="make-it-dark make-it-small">{{this.code}}</td>
+                                <td>{{this.description}}</td>
+                                <td class="make-it-center">{{this.pieces}}</td>
+                                <td class="make-it-center">${{this.price}}</td>
+                                <td class="make-it-center">x{{this.quantity}}</td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        {{else}}
+            <p class="make-it-white make-it-center">Your cart is empty.</p>
+            <p class="make-it-white make-it-center">
+                Go to <a class="make-it-white" href="/products"><b>/products</b></a> to start adding.
+            </p>
+        {{/if}}
+    </section>
+</body>
+</html>
