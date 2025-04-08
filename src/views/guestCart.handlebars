@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Guest Cart</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="color-scheme" content="dark" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+<link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+<h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">
+    Guest Cart
+</h2>
+
+<section class="section">
+    <div id="guestCartContainer" class="box cart-products is-hidden">
+    <div class="make-it-semi-back make-it-rounded-top section make-it-normal make-it-dark">
+        Cart Details - Guest
+    </div>
+
+    <table class="table is-fullwidth is-striped">
+        <thead>
+        <tr>
+            <th class="make-it-center"></th>
+            <th>Title</th>
+            <th>Description</th>
+            <th class="make-it-center">Price/u</th>
+            <th class="make-it-center">Quantity</th>
+            <th class="make-it-center">Actions</th>
+        </tr>
+        </thead>
+        <tbody id="guestCartTableBody">
+        <!-- Filled by JS -->
+        </tbody>
+    </table>
+    </div>
+
+    <div id="emptyGuestMessage" class="make-it-white make-it-center">
+    Your cart is empty.<br />
+    Go to <a class="make-it-white" href="/products"><b>/products</b></a> to start adding.
+    </div>
+</section>
+
+<script>
+    const cartContainer = document.getElementById("guestCartContainer");
+    const tableBody = document.getElementById("guestCartTableBody");
+    const emptyMessage = document.getElementById("emptyGuestMessage");
+
+    function renderCart() {
+    const cart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+    tableBody.innerHTML = "";
+
+    if (cart.length === 0) {
+        emptyMessage.classList.remove("is-hidden");
+        cartContainer.classList.add("is-hidden");
+        return;
+    }
+
+    emptyMessage.classList.add("is-hidden");
+    cartContainer.classList.remove("is-hidden");
+
+    cart.forEach((item, index) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+        <td><img src="${item.imageURL || '/static/placeholder.png'}" alt="${item.title}" width="50"></td>
+        <td class="make-it-dark make-it-small">${item.title}</td>
+        <td>${item.description || '—'}</td>
+        <td class="make-it-center">$${item.price}</td>
+        <td class="make-it-center">x${item.quantity}</td>
+        <td class="make-it-center">
+            <button class="button is-danger is-small" onclick="removeItem(${index})">Remove</button>
+        </td>
+        `;
+        tableBody.appendChild(row);
+    });
+    }
+
+    function removeItem(index) {
+    const cart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+    cart.splice(index, 1);
+    localStorage.setItem("guestCart", JSON.stringify(cart));
+    renderCart();
+    }
+
+    renderCart();
+</script>
+</body>
+</html>

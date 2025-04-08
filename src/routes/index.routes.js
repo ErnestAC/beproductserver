@@ -137,6 +137,11 @@ router.get("/logout", jwtAuth, (req, res) => {
     res.redirect("/login");
 });
 
+// Guest cart route (accessible without login)
+router.get("/guest-cart", (req, res) => {
+    res.render("guestCart");
+});
+
 // Admin console
 router.get("/admin", jwtAuth, requireAdminOrOwner(), (req, res) => {
     res.render("admin");
