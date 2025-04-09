@@ -45,19 +45,18 @@
                 </div>
 
                 <!-- Pagination Controls -->
-                <div class="column is-10">
-                    <div class="make-it-dark-back is-centered make-it-rounded-top grid-container-3c-by-1r-special" role="navigation" aria-label="pagination">
+                <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-3c-by-1r-special" role="navigation" aria-label="pagination">
                         <!-- Previous Page Link -->
-                        <a class="button is-small  section " 
+                        <a class="button is-small   " 
                         href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
                         {{#if (eq currentPage 1)}}disabled{{/if}}>Prev page</a>
 
-                        <div class="section make-it-center make-it-rounded make-it-semi-back  make-it-dark">
+                        <div class="make-it-center make-it-rounded make-it-semi-back  make-it-dark small-section make-it-small">
                             Page {{currentPage}} of {{totalPages}}
                         </div>
 
                         <!-- Next Page Link -->
-                        <a class="button is-small  section " 
+                        <a class="button is-small   " 
                         href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
                         {{#if (eq currentPage totalPages)}}disabled{{/if}}>Next page</a>
 
@@ -71,7 +70,6 @@
                                 </li>
                             {{/each}}
                         </ul>
-                    </div>
                 </div>
     </section>
 
@@ -109,9 +107,9 @@
                                     </div>
                                     <div class="make-it-right section">
                                         <button 
-                                          class="button is-small is-warning add-to-cart-btn" 
-                                          data-product='{{{stringify this}}}'>
-                                          Add to Cart
+                                            class="button is-small is-warning add-to-cart-btn" 
+                                            data-product='{{{stringify this}}}'>
+                                            Add to Cart
                                         </button>
                                     </div>
                                 </div>
@@ -123,13 +121,6 @@
                     <p class="has-text-centered make-it-white section">No products found in the database.</p>
                 {{/if}}
             </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <section class="rt-general-page-footer make-it-semi-back make-it-normal make-it-dark">
-        <div class="content">
-            <div>Total Items: {{totalItems}} - Total Pages: {{totalPages}}</div>
         </div>
     </section>
 
