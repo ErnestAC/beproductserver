@@ -1,20 +1,15 @@
 // user.controllers.js
-import { userDao } from "../persistence/mongo/dao/user.dao.js";
-import { cartDao } from "../persistence/mongo/dao/cart.dao.js";
+import { userService } from "../services/user.services.js";
 
 class UserControllers {
     async registerUser(req, res) {
         const { username, email, password, first_name, last_name, age, role } = req.body;
 
         try {
-            const existingUser = await userDao.getUserByEmail(email);
+            const existingUser = await userService.getUserByEmail(email);
             if (existingUser) {
                 return res.status(400).json({ message: "User already exists" });
             }
-
-            // Create a new cart and get its cid
-            const newCart = await cartDao.addCart();
-            const cartId = newCart.cid;
 
             const userData = {
                 username,
@@ -23,11 +18,10 @@ class UserControllers {
                 first_name,
                 last_name,
                 age,
-                role,
-                cartId
+                role
             };
 
-            const newUser = await userDao.createUser(userData);
+            const newUser = await userService.createUser(userData);
 
             res.json({ message: "User registered successfully", userId: newUser._id });
         } catch (err) {
