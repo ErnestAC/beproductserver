@@ -1,11 +1,8 @@
 // src/services/cart.services.js
 import { cartDao } from "../persistence/mongo/dao/cart.dao.js";
+import { cartController } from "../controllers/cart.controllers.js";
 
 class CartService {
-    async createCart() {
-        return await cartDao.addCart();
-    }
-
     async getCartById(cid) {
         return await cartDao.getCartById(cid);
     }
@@ -29,6 +26,11 @@ class CartService {
             }
         }
         return await this.getCartById(userCartId);
+    }
+
+    // Fixed version (corrected)
+    async purchaseCart(cid) {
+        return await cartDao.purchaseCart(cid);
     }
 }
 

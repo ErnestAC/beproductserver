@@ -1,104 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Cart</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="color-scheme" content="dark" />
+    <meta charset="UTF-8" />
+    <title>Cart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-<h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">
-    Your Cart
-</h2>
+    <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">
+        Your Cart
+    </h2>
 
-<section class="section">
-    {{#if cart.products.length}}
-    <div class="box cart-products">
-        <div class="make-it-semi-back make-it-rounded-top section make-it-normal make-it-dark">
-        Cart Details - {{cart.cid}}
-        </div>
+    <section class="section">
+        {{#if cart.products.length}}
+            <div class="box cart-products">
+                <div class="make-it-semi-back make-it-rounded-top section make-it-normal make-it-dark">
+                    Cart Details - {{cart.cid}}
+                </div>
 
-        <table class="table is-fullwidth is-striped">
-        <thead>
-            <tr>
-            <th></th>
-            <th>Title / PID</th>
-            <th>Code</th>
-            <th>Description</th>
-            <th>Pieces</th>
-            <th>Price</th>
-            <th>Qty</th>
-            <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each cart.products}}
-            <tr data-pid="{{this.pid}}">
-                <td width="64px"><img src="{{this.imageURL}}" alt="{{this.title}}" /></td>
-                <td>{{this.title}}<br /><span class="make-it-small">({{this.pid}})</span></td>
-                <td>{{this.code}}</td>
-                <td>{{this.description}}</td>
-                <td class="make-it-center">{{this.pieces}}</td>
-                <td class="make-it-center">${{this.price}}</td>
-                <td class="make-it-center">x{{this.quantity}}</td>
-                <td class="make-it-center">
-                <button class="button is-danger is-small" onclick="removeItem('{{../cart.cid}}', '{{this.pid}}')">
-                    Remove
-                </button>
-                </td>
-            </tr>
-            {{/each}}
-        </tbody>
-        </table>
+                <table class="table is-fullwidth is-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Title / PID</th>
+                            <th>Code</th>
+                            <th>Description</th>
+                            <th>Pieces</th>
+                            <th>Price</th>
+                            <th>Qty</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each cart.products}}
+                        <tr data-pid="{{this.pid}}">
+                            <td width="64px"><img src="{{this.imageURL}}" alt="{{this.title}}" /></td>
+                            <td>{{this.title}}<br /><span class="make-it-small">({{this.pid}})</span></td>
+                            <td>{{this.code}}</td>
+                            <td>{{this.description}}</td>
+                            <td class="make-it-center">{{this.pieces}}</td>
+                            <td class="make-it-center">${{this.price}}</td>
+                            <td class="make-it-center">x{{this.quantity}}</td>
+                            <td class="make-it-center">
+                                <button class="button is-danger is-small" onclick="removeItem('{{../cart.cid}}', '{{this.pid}}')">
+                                    Remove
+                                </button>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
 
-        <div class="section has-text-centered">
-        <button class="button is-warning is-small" onclick="emptyCart('{{cart.cid}}')">🧹 Empty Cart</button>
-        </div>
-    </div>
-    {{else}}
-    <p class="make-it-white make-it-center">Your cart is empty.</p>
-    <p class="make-it-white make-it-center">
-        Go to <a class="make-it-white" href="/products"><b>/products</b></a> to start adding.
-    </p>
-    {{/if}}
-</section>
+                <div class="section has-text-centered">
+                    <button class="button is-warning is-small" onclick="emptyCart('{{cart.cid}}')">🧹 Empty Cart</button>
+                    <button class="button is-success is-small" onclick="purchaseCart('{{cart.cid}}')">💳 Purchase</button>
+                </div>
+            </div>
+        {{else}}
+            <p class="make-it-white make-it-center">Your cart is empty.</p>
+            <p class="make-it-white make-it-center">
+                Go to <a class="make-it-white" href="/products"><b>/products</b></a> to start adding.
+            </p>
+        {{/if}}
+    </section>
 
-<script>
-    async function removeItem(cid, pid) {
-    if (!confirm("Are you sure you want to remove this item?")) return;
-    try {
-        const res = await fetch(`/api/carts/${cid}/products/${pid}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        });
-        if (res.ok) {
-        location.reload();
-        } else {
-        alert("Failed to remove item from cart.");
+    <script>
+        async function removeItem(cid, pid) {
+            if (!confirm("Are you sure you want to remove this item?")) return;
+            try {
+                const res = await fetch(`/api/carts/${cid}/products/${pid}`, {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                });
+                if (res.ok) {
+                    location.reload();
+                } else {
+                    alert("Failed to remove item from cart.");
+                }
+            } catch (err) {
+                console.error("Remove error:", err);
+                alert("Something went wrong.");
+            }
         }
-    } catch (err) {
-        console.error("Remove error:", err);
-        alert("Something went wrong.");
-    }
-    }
 
-    async function emptyCart(cid) {
-    if (!confirm("Are you sure you want to empty the cart?")) return;
-    try {
-        const res = await fetch(`/api/carts/${cid}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        });
-        if (res.ok) {
-        location.reload();
-        } else {
-        alert("Failed to empty cart.");
+        async function emptyCart(cid) {
+            if (!confirm("Are you sure you want to empty the cart?")) return;
+            try {
+                const res = await fetch(`/api/carts/${cid}`, {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                });
+                if (res.ok) {
+                    location.reload();
+                } else {
+                    alert("Failed to empty cart.");
+                }
+            } catch (err) {
+                console.error("Empty error:", err);
+                alert("Something went wrong.");
+            }
         }
-    } catch (err) {
-        console.error("Empty error:", err);
-        alert("Something went wrong.");
-    }
-    }
-</script>
+
+        async function purchaseCart(cid) {
+            if (!confirm("Proceed to purchase?")) return;
+            try {
+                const res = await fetch(`/api/carts/${cid}/purchase`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                });
+                if (res.ok) {
+                    const result = await res.json();
+                    alert(result.message || "Purchase completed!");
+                    location.reload(); // Optionally redirect to an order confirmation page
+                } else {
+                    const error = await res.json();
+                    alert(error.message || "Failed to complete purchase.");
+                }
+            } catch (err) {
+                console.error("Purchase error:", err);
+                alert("Something went wrong during purchase.");
+            }
+        }
+    </script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 //ticket.dao.js
 import { v4 as uuidv4 } from "uuid";
-import { Ticket } from "../models/ticket.model.js";
+import { ticket as Ticket } from "../models/ticket.model.js";
 import { ProductModel } from "../models/product.model.js";
 
 export class TicketDao {
@@ -13,17 +13,19 @@ export class TicketDao {
         }
     }    
 
-    async addTicket() {
+    async addTicket({ amount, purchaser }) {
         try {
             const newTicket = new Ticket({
-                cid: uuidv4(),
-                products: [],
+                code: uuidv4(),
+                amount,
+                purchaser,
+                purchase_datetime: new Date()
             });
+    
             await newTicket.save();
-        
             return newTicket;
         } catch (err) {
-            console.error("error adding ticket:", err);
+            console.error("Error adding ticket:", err);
             throw err;
         }
     }

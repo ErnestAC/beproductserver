@@ -804,8 +804,7 @@ textarea:focus {
     background-position: center;
     background-repeat: repeat-x;
     background-attachment: fixed;
-    background-color: #6E7271;
-    padding: 8.5rem 1rem 3rem 1rem !important;
+    padding: 8.5rem 1rem 4rem 1rem !important;
   }
 
   .grid-container-3c-by-1r{

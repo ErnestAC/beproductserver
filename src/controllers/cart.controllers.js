@@ -7,6 +7,7 @@ import { ProductModel } from "../persistence/mongo/models/product.model.js";
 import { Cart } from "../persistence/mongo/models/cart.model.js";
 import { cartService } from "../services/cart.services.js";
 import { errorLog } from "../utils/errorLog.js";
+import { ticketService } from "../services/ticket.services.js";
 
 class CartControllers {
     async getCartById(req, res) {
@@ -148,6 +149,23 @@ class CartControllers {
             res.status(500).json({ status: "error", message: "Server error" });
         }
     }
+    async purchaseCart(req = request, res = response) {
+        try {
+            const { cid } = req.params;
+            const cart = await cartService.getCartById(cid);
+            if (!cart) return res.status(404).json({ status: "Error", message: `Cart ${cid} was not found.` });
+        
+                const total = await cartService.purchaseCart(cid);
+                const ticket = await ticketService.createTicket(total, req.user.email);
+        
+                res.status(200).json({ status: "ok", ticket });
+            } catch (error) {
+                errorLog(error, req);
+                res.status(500).json({ status: "Erro", msg: "Error interno del servidor" });
+            }
+        }
 }
+
+
 
 export const cartController = new CartControllers();

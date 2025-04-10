@@ -176,6 +176,63 @@ export class CartDao {
             throw err;
         }
     }
+
+    // Purchase (checkout)
+    async purchaseCart(cid) {
+        try {
+            const cart = await Cart.findOne({ cid });
+            if (!cart) {
+                throw new Error(`Cart with ID ${cid} not found.`);
+            }
+    
+            // Check stock and reduce stock of purchased products
+            const productsPurchased = [];
+            const productsNotPurchased = [];
+    
+            for (let cartItem of cart.products) {
+                const product = await ProductModel.findOne({ pid: cartItem.pid });
+                
+                if (!product) {
+                    productsNotPurchased.push({
+                        pid: cartItem.pid,
+                        reason: "Product not found"
+                    });
+                    continue;
+                }
+    
+                if (product.stock >= cartItem.quantity) {
+                    product.stock -= cartItem.quantity;
+                    await product.save();
+    
+                    productsPurchased.push({
+                        pid: product.pid,
+                        quantity: cartItem.quantity,
+                        price: product.price
+                    });
+                } else {
+                    productsNotPurchased.push({
+                        pid: product.pid,
+                        reason: "Insufficient stock"
+                    });
+                }
+            }
+    
+            cart.products = productsNotPurchased.map(item => ({ pid: item.pid, quantity: 1 }));
+            await cart.save();
+            notifyCartChange();
+    
+            return {
+                purchased: productsPurchased,
+                notPurchased: productsNotPurchased,
+                total: productsPurchased.reduce((acc, item) => acc + (item.quantity * item.price), 0)
+            };
+    
+        } catch (err) {
+            console.error("Error processing purchase:", err);
+            throw err;
+        }
+    }
+    
 }
 
 export const cartDao = new CartDao();

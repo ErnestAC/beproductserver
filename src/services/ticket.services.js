@@ -1,18 +1,17 @@
-import { v4 as uuid } from "uuid";
-import { TicketDao } from "../persistence/mongo/dao/ticket.dao";
+// src/services/ticket.services.js
+import { ticketDao } from "../persistence/mongo/dao/ticket.dao.js";
 
 class TicketService {
-    async createTicket(amount, userMail) {
-        const newTicket = {
-            code: uuid,
-            purchaser: userMail,
-            amount
-        };
-        
-        const ticket = await TicketDao.addTicket(newTicket);
-
-        return ticket;
+    async createTicket(amount, purchaserEmail) {
+        if (typeof amount !== "number") {
+            throw new Error("Invalid amount passed to ticket creation");
+        }
+    
+        return await ticketDao.addTicket({
+            amount,
+            purchaser: purchaserEmail
+        });
     }
 }
 
-export const ticketService = new TicketService
+export const ticketService = new TicketService();
