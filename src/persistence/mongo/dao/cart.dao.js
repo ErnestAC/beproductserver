@@ -65,33 +65,31 @@ export class CartDao {
         try {
             const cart = await Cart.findOne({ cid: cartId });
             if (!cart) return null;
-    
+
             const cartObject = cart.toObject();
-    
             const productIds = cartObject.products.map(p => p.pid);
-    
             const productsMap = new Map();
+
             if (productIds.length > 0) {
                 const products = await ProductModel.find({ pid: { $in: productIds } });
                 products.forEach(product => {
                     productsMap.set(product.pid, product);
                 });
             }
-    
+
             cartObject.products.forEach(product => {
                 const productDetails = productsMap.get(product.pid);
                 if (productDetails) {
                     Object.assign(product, productDetails.toObject());
                 }
             });
-    
+
             return cartObject; 
         } catch (err) {
             console.error("error retrieving cart by id:", err);
             throw err;
         }
     }
-    
 
     async getCartByIdMongoose(cartId) {
         try {
@@ -106,24 +104,20 @@ export class CartDao {
         try {
             const sortCriteria = {};
             
-            // Check if sort is provided, then apply sortOrder
             if (sort && sortOrder) {
-                sortCriteria[sort] = sortOrder === 'desc' ? -1 : 1;  // Descending if 'desc', ascending if 'asc'
+                sortCriteria[sort] = sortOrder === 'desc' ? -1 : 1;
             }
-    
-            // Return the query object with skip, limit, and sort applied
+
             return Cart.find()
                 .skip((page - 1) * limit)
                 .limit(limit)
                 .sort(sortCriteria)
-                .populate('products.pid');  // Populate the 'pid' in 'products' field with product details
+                .populate('products.pid');
         } catch (err) {
             console.error("Error retrieving carts:", err);
             throw err;
         }
     }
-    
-    
 
     async deleteCartById(cartId) {
         try {
@@ -146,14 +140,39 @@ export class CartDao {
             if (!cart) {
                 throw Error(`cart with id ${cartId} not found`);
             }
-    
+
             cart.products = [];
-    
+
             await cart.save();
             notifyCartChange(); 
             return cart;
         } catch (err) {
             console.error("error clearing cart contents:", err);
+            throw err;
+        }
+    }
+
+    // New method added here
+    async deleteProductFromCart(cid, pid) {
+        try {
+            const cart = await Cart.findOne({ cid });
+            if (!cart) {
+                throw new Error(`Cart with ID ${cid} not found.`);
+            }
+
+            const productIndex = cart.products.findIndex(item => item.pid === pid);
+            if (productIndex === -1) {
+                throw new Error(`Product with ID ${pid} not found in cart.`);
+            }
+
+            cart.products.splice(productIndex, 1);
+            await cart.save();
+
+            notifyCartChange();
+            return cart;
+
+        } catch (err) {
+            console.error("Error deleting product from cart:", err);
             throw err;
         }
     }
