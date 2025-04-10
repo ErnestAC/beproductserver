@@ -7,7 +7,7 @@ class TicketService {
         const ticket = await ticketDao.addTicket({
             amount,
             purchaser,
-            purchasedProducts: purchased,
+            purchased: purchased,
             notPurchased: notPurchased
         });
 

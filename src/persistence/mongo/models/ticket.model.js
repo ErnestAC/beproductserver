@@ -23,11 +23,11 @@ const ticketSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    purchasedProducts: {
+    purchased: {
         type: Array,
         default: []
     },
-    notPurchasedProducts: {
+    notPurchased: {
         type: Array,
         default: []
     }
