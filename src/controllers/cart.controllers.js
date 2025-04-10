@@ -159,13 +159,13 @@ class CartControllers {
                 return res.status(404).json({ status: "error", message: `Cart ${cid} was not found.` });
             }
 
-            const { total, purchasedProducts, notPurchasedProducts } = await cartService.purchaseCart(cid);
+            const { purchased, notPurchased, total } = await cartService.purchaseCart(cid);
 
             const ticket = await ticketService.createTicket({
                 amount: total,
                 purchaser: req.user.email,
-                purchasedProducts,
-                notPurchasedProducts
+                purchased,
+                notPurchased
             });
 
             res.status(200).json({ status: "success", ticket });

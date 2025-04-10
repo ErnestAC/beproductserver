@@ -13,7 +13,7 @@ export class TicketDao {
         }
     }    
 
-    async addTicket({ amount, purchaser, purchasedProducts = [], notPurchasedProducts = [] }) {
+    async addTicket({ amount, purchaser, purchased = [], notPurchased = [] }) {
         try {
             if (typeof amount !== 'number') {
                 console.warn("Invalid 'amount' received in addTicket:", amount);
@@ -24,8 +24,8 @@ export class TicketDao {
                 amount,
                 purchaser,
                 purchase_datetime: new Date(),
-                purchasedProducts,
-                notPurchasedProducts
+                purchased,
+                notPurchased
             });
     
             await newTicket.save();
@@ -35,7 +35,7 @@ export class TicketDao {
             throw err;
         }
     }
-    
+
     async addProductToTicket(cid, pid) {
         try {
             const product = await ProductModel.findOne({ pid });

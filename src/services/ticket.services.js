@@ -3,14 +3,14 @@ import { ticketDao } from "../persistence/mongo/dao/ticket.dao.js";
 import { TicketDTO } from "../dto/ticket.dto.js";
 
 class TicketService {
-    async createTicket({ amount, purchaser, purchasedProducts = [], notPurchasedProducts = [] }) {
+    async createTicket({ amount, purchaser, purchased = [], notPurchased = [] }) {
 
-
+        console.log({ amount, purchaser, purchased , notPurchased  });
         const ticket = await ticketDao.addTicket({
             amount,
             purchaser,
-            purchasedProducts,
-            notPurchasedProducts
+            purchased,
+            notPurchased
         });
 
         return new TicketDTO(ticket.toObject ? ticket.toObject() : ticket);
