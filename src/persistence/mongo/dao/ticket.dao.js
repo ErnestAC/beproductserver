@@ -123,7 +123,7 @@ export class TicketDao {
                 .skip((page - 1) * limit)
                 .limit(limit)
                 .sort(sortCriteria)
-                .populate('products.pid');  // Populate the 'pid' in 'products' field with product details
+                .populate('purchased.pid');  // Populate the 'pid' in 'products' field with product details
         } catch (err) {
             console.error("Error retrieving tickets:", err);
             throw err;

@@ -6,11 +6,11 @@ export class TicketDTO {
         this.amount = ticket.amount;
         this.purchaser = ticket.purchaser;
         this.purchase_datetime = ticket.purchase_datetime;
-        this.purchasedProducts = ticket.purchasedProducts?.map(prod => ({
+        this.purchased = ticket.purchased?.map(prod => ({
             pid: prod.pid,
             quantity: prod.quantity
         })) || [];
-        this.notPurchasedProducts = ticket.notPurchasedProducts?.map(prod => ({
+        this.notpurchased = ticket.notpurchased?.map(prod => ({
             pid: prod.pid,
             quantity: prod.quantity
         })) || [];

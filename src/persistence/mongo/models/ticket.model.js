@@ -1,7 +1,7 @@
 // ticket.model.js
-
 import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 const ticketCollection = "ticket";
 
@@ -23,14 +23,16 @@ const ticketSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    purchased: {
+    purchasedProducts: {
         type: Array,
         default: []
     },
-    notPurchased: {
+    notPurchasedProducts: {
         type: Array,
         default: []
     }
 });
+
+ticketSchema.plugin(mongoosePaginate);
 
 export const ticket = mongoose.model(ticketCollection, ticketSchema);

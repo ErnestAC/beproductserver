@@ -13,6 +13,7 @@ import { __dirname } from "./utils.js";
 
 import ProductsRoute from "./routes/api.products.routes.js";
 import CartsRoute from "./routes/api.carts.routes.js";
+import TicketsRoute from "./routes/api.tickets.routes.js";
 import homeRoute from "./routes/index.routes.js";
 import FormsRoute from "./routes/forms.routes.js";
 import RealtimeViews from "./routes/realtimeDisplay.routes.js";
@@ -146,6 +147,7 @@ app.use("/", homeRoute);
 app.use("/forms", FormsRoute);
 app.use("/api/products", ProductsRoute);
 app.use("/api/carts", CartsRoute);
+app.use("/api/tickets", TicketsRoute);
 app.use("/api/sessions", authRoutes);
 app.use("/realtime/", RealtimeViews);
 

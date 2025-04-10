@@ -753,8 +753,7 @@ textarea:focus {
 }
 
 .grid-container-2c66-by-1r {
-  grid-template-columns: 70% 30%;
-  margin: 2rem 2rem 2rem 2rem !important;
+  grid-template-columns: 15% 85%;
 }
 
 .grid-container-3c-by-1r {
@@ -812,10 +811,9 @@ textarea:focus {
   }
 
   .logo-image {
-    border-radius: 20%;
-    padding: .2rem .5rem;
+
     font-size: .9rem;
     position: relative;
-    width: 6rem
+    width: 5rem
   }
 }

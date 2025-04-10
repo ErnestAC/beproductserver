@@ -15,37 +15,10 @@
     </script>
 
     <!-- Sorting and Pagination Controls at the top -->
-    <section class="section">
-        <div class="container make-it-dark">
-            <div class="columns is-multiline is-centered">
-                <!-- controls -->
-                <div class="grid-container-2c66-by-1r make-it-semi-back  make-it-rounded section">
-                    <!-- Sorting Options -->
-                        <div class="make-it-semi-back grid-container-6c-by-1r make-it-center make-it-small">
-                            <a class="navbar-item is-small " href="?page=1&limit={{limit}}&sort=title&sortOrder=desc">Title desc</a>
-                            <a class="navbar-item is-small " href="?page=1&limit={{limit}}&sort=price&sortOrder=asc">Price asc</a>
-                            <a class="navbar-item is-small " href="?page=1&limit={{limit}}&sort=price&sortOrder=desc">Price desc</a>
-                            <a class="navbar-item is-small " href="?page=1&limit={{limit}}&sort=stock&sortOrder=asc">Stock asc</a>
-                            <a class="navbar-item is-small " href="?page=1&limit={{limit}}&sort=stock&sortOrder=desc">Stock desc</a>
-                        </div>
-
-                    <!-- Limit Dropdown -->
-                    <div class="">
-                        <div class="grid-container-2c-by-1r make-it-semi-back make-it-normal make-it-center">
-                            <div class="select is-small">
-                                <select id="limit-select">
-                                    <option value="10" {{#if (eq limit '10')}}selected{{/if}}>10</option>
-                                    <option value="20" {{#if (eq limit '20')}}selected{{/if}}>20</option>
-                                    <option value="50" {{#if (eq limit '50')}}selected{{/if}}>50</option>
-                                </select>
-                            </div>
-                            <button class="button is-small  is-warning " onclick="applyLimit()">Apply</button>
-                        </div>
-                    </div>
-                </div>
+    <section class="">
 
                 <!-- Pagination Controls -->
-                <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-3c-by-1r-special" role="navigation" aria-label="pagination">
+                <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-6c-by-1r" role="navigation" aria-label="pagination">
                         <!-- Previous Page Link -->
                         <a class="button is-small   " 
                         href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
@@ -79,7 +52,7 @@
             <div class="columns is-multiline is-centered">
                 {{#if products.length}}
                     {{#each products}}
-                        <div class="column is-12-mobile is-2-desktop">
+                        <div class="column is-12-mobile is-3-desktop">
                             <div class="make-it-rounded-top card-title-container make-it-white-back make-it-left">
                                 <div>
                                     {{this.title}}
