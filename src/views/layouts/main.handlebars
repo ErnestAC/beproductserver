@@ -18,18 +18,18 @@
             </a>
         </div>
 
-        <div class="grid-container-6c-by-1r make-it-dark-back make-it-rounded small-section">
+        <div class="grid-container-6c-by-1r make-it-rounded small-section">
             <div class="grid-container-2c-by-1r">
-                <a class="navbar-item make-it-rounded make-it-semi" href="/products">
+                <a class="navbar-item make-it-rounded make-it-dark" href="/products">
                     <span><i class="fas fa-box-open small-section"></i></span><p>Products</p>
                 </a>
 
                 {{#if user}}
-                    <a class="navbar-item make-it-rounded make-it-semi" href="/carts/{{user.cartId}}">
+                    <a class="navbar-item make-it-rounded make-it-dark" href="/carts/{{user.cartId}}">
                         <span><i class="fas fa-shopping-cart small-section"></i></span><p>Cart</p>
                     </a>
                 {{else}}
-                    <a class="navbar-item make-it-rounded make-it-semi" href="/guest-cart">
+                    <a class="navbar-item make-it-rounded make-it-dark" href="/guest-cart">
                         <span><i class="fas fa-shopping-cart small-section"></i></span><p>Cart</p>
                     </a>
                 {{/if}}
@@ -37,15 +37,15 @@
 
             {{#if user}}
                 <div class="grid-container-2c-by-1r">
-                    <a class="navbar-item make-it-rounded make-it-semi" href="/current/">
+                    <a class="navbar-item make-it-rounded make-it-dark" href="/current/">
                         <span><i class="fas fa-user small-section"></i></span><p>{{user.username}}</p>
                     </a>
-                    <a class="navbar-item make-it-rounded make-it-semi" href="/logout/">
+                    <a class="navbar-item make-it-rounded make-it-dark" href="/logout/">
                         <span><i class="fas fa-sign-out-alt small-section"></i></span><p>Log out</p>
                     </a>
                 </div>
             {{else}}
-                <a class="navbar-item make-it-rounded make-it-semi" href="/login/">
+                <a class="navbar-item make-it-rounded make-it-dark" href="/login/">
                     <i class="fas fa-key small-section"></i> Login
                 </a>
             {{/if}}

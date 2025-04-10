@@ -8,7 +8,7 @@ a:active,
 a:hover,
 a:link,
 a:visited {
-  color: #172330
+  color: #484b4a !important
 }
 
 body {
@@ -16,13 +16,13 @@ body {
   background-position: center;
   background-repeat: repeat-x;
   background-attachment: fixed;
-  background-color: #172330;
+  background-color: #384D48;
   padding: 5.5rem 1rem 4rem 1rem !important;
 }
 
 .App,
 .App-header {
-  color: #fff;
+  color: #384D48;
   font-family: Roboto, Arial, Helvetica, sans-serif
 }
 
@@ -33,7 +33,7 @@ body {
 }
 
 .App-header {
-  background-color: #172330;
+  background-color: #6E7271;
   min-height: 1rem;
   display: flex;
   flex-direction: column;
@@ -45,7 +45,7 @@ body {
 .cart-icon,
 .logo-container,
 .navbar-right {
-  color: #172330;
+  color: #6E7271;
   text-decoration: none;
   margin: .1rem;
   position: relative;
@@ -214,7 +214,7 @@ body {
 }
 
 .card-category-badge-prebuilt {
-  background-color: rgba(21, 31, 43, 1);
+  background-color: #384D48;
   color: #fff
 }
 
@@ -336,7 +336,7 @@ body {
   display: flex;
   width: 100%;
   position: relative;
-  background-color: #172330;
+  background-color: #6E7271;
   padding: .5rem;
 }
 
@@ -344,14 +344,14 @@ body {
 .title-bar-container {
   font-family: Roboto, Arial, Helvetica, sans-serif;
   font-size: 1rem;
-  background-color: #172330;
+  background-color: #6E7271;
   padding: 1rem;
   color: #fff !important
 }
 
 .subtitle-bar-container {
   font-size: 1.2rem !important;
-  background-color: #172330 !important
+  background-color: #6E7271 !important
 }
 
 .sort-bar {
@@ -472,7 +472,7 @@ body {
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
-  background-color: #172330 !important;
+  background-color: #6E7271 !important;
   padding: 0.7rem;
   z-index: 1;
 }
@@ -502,7 +502,7 @@ body {
 .generic-title-container {
   flex-direction: rows;
   justify-content: left;
-  background-color: #172330 !important
+  background-color: #6E7271 !important
 }
 
 .general-page-log-in-box {
@@ -526,7 +526,7 @@ body {
   justify-content: space-between;
   align-items: top;
   flex-wrap: wrap;
-  background-color: #172330 !important;
+  background-color: #6E7271 !important;
   padding: 1rem 1rem .7rem;
   border-radius: .35rem;
   margin-bottom: 0rem
@@ -574,11 +574,11 @@ body {
 }
 
 .navbar-burger span {
-  background-color: #172330 !important
+  background-color: #6E7271 !important
 }
 
 .navbar-link::after {
-  border-color: #172330 !important
+  border-color: #6E7271 !important
 }
 
 :focus,
@@ -590,14 +590,14 @@ body {
 .button:focus-visible,
 :focus,
 :focus-visible {
-  color: #172330 !important;
-  border-color: #172330 !important
+  color: #6E7271 !important;
+  border-color: #6E7271 !important
 }
 
 input:focus,
 textarea:focus {
-  color: #172330 !important;
-  border-color: #172330
+  color: #6E7271 !important;
+  border-color: #6E7271
 }
 
 .modal,
@@ -660,27 +660,35 @@ textarea:focus {
 }
 
 .make-it-white {
-  color: #fff !important
+  color: #E2E2E2 !important
 }
 
 .make-it-white-back {
-  background-color: #fff !important
+  background-color: #E2E2E2 !important
+}
+
+.make-it-light {
+  color: #E2E2E2 !important
+}
+
+.make-it-light-back {
+  background-color: #E2E2E2 !important
 }
 
 .make-it-semi {
-  color: rgba(163, 172, 182, .999) !important
+  color: #ACAD94 !important
 }
 
 .make-it-semi-back {
-  background-color: rgba(163, 172, 182, .999) !important
+  background-color: #ACAD94 !important
 }
 
 .make-it-dark make-it-small  make-it-small {
-  color: #172330 !important
+  color: #6E7271 !important
 }
 
 .make-it-dark-back {
-  background-color: #172330 !important
+  background-color: #6E7271 !important
 }
 
 .make-it-left {
@@ -766,10 +774,10 @@ textarea:focus {
 }
 
 .grid-item {
-  background-color: #172330;
+  background-color: #6E7271;
   padding: 20px;
   text-align: center;
-  border: 1px solid #172330;
+  border: 1px solid #6E7271;
   border-radius: 8px
 }
 
@@ -796,7 +804,7 @@ textarea:focus {
     background-position: center;
     background-repeat: repeat-x;
     background-attachment: fixed;
-    background-color: #172330;
+    background-color: #6E7271;
     padding: 8.5rem 1rem 3rem 1rem !important;
   }
 
