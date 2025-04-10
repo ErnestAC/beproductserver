@@ -114,7 +114,7 @@ body {
   padding: .2rem .5rem;
   font-size: .9rem;
   position: relative;
-  width: 8rem
+  width: 6.5rem
 }
 
 .logo-back {
@@ -651,7 +651,7 @@ textarea:focus {
 
 .make-it-normal {
   font-family: Roboto, Arial, Helvetica, sans-serif;
-  font-size: 1rem !important;
+  font-size: 0.85rem !important;
 }
 
 .make-it-small {
@@ -683,12 +683,12 @@ textarea:focus {
   background-color: #ACAD94 !important
 }
 
-.make-it-dark make-it-small  make-it-small {
-  color: #6E7271 !important
+.make-it-dark {
+  color: #363838 !important
 }
 
 .make-it-dark-back {
-  background-color: #6E7271 !important
+  background-color: #363838 !important
 }
 
 .make-it-left {

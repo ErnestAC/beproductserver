@@ -11,7 +11,7 @@
 </head>
 <body class="splash-page-home make-it-normal">
 
-    <header class="title-bar-container other-bar is-frozen make-it-semi-back make-it-normal grid-container-2c66-by-1r">
+    <header class="title-bar-container other-bar is-frozen make-it-semi-back make-it-normal grid-container-2c66-by-1r ">
         <div class="navbar-brand">
             <a class="navbar-item" href="/">
                 <img class="logo-image" src="/static/shopnhour_blue.png" alt="Shopnhour Store Logo">
@@ -21,16 +21,16 @@
         <div class="grid-container-2c-by-1r make-it-rounded small-section make-it-small">
             <div class="grid-container-2c-by-1r">
                 <a class="navbar-item make-it-rounded make-it-dark" href="/products">
-                    <span><i class="fas fa-box-open small-section"></i></span><p>Products</p>
+                    <p>Products</p>
                 </a>
 
                 {{#if user}}
                     <a class="navbar-item make-it-rounded make-it-dark" href="/carts/{{user.cartId}}">
-                        <span><i class="fas fa-shopping-cart small-section"></i></span><p>Cart</p>
+                        <p>Cart</p>
                     </a>
                 {{else}}
                     <a class="navbar-item make-it-rounded make-it-dark" href="/guest-cart">
-                        <span><i class="fas fa-shopping-cart small-section"></i></span><p>Cart</p>
+                        </span><p>Cart</p>
                     </a>
                 {{/if}}
             </div>
@@ -41,13 +41,15 @@
                         <span><i class="fas fa-user small-section"></i></span><p>{{user.username}}</p>
                     </a>
                     <a class="navbar-item make-it-rounded make-it-dark" href="/logout/">
-                        <span><i class="fas fa-sign-out-alt small-section"></i></span><p>Log out</p>
+                        <p>Log out</p>
                     </a>
                 </div>
             {{else}}
-                <a class="navbar-item make-it-rounded make-it-dark" href="/login/">
-                    <i class="fas fa-key small-section"></i><p>Log in</p>
-                </a>
+                <div class="grid-container-2c-by-1r">
+                    <a class="navbar-item make-it-rounded make-it-dark" href="/login/">
+                        <p>Log in</p>
+                    </a>
+                </div>
             {{/if}}
         </div>
     </header>
