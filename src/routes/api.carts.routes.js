@@ -3,7 +3,7 @@
 import { Router } from "express";
 import passport from "../config/passport/passport.config.js";
 import { cartController } from "../controllers/cart.controllers.js";
-import { requireAdminOrOwner } from "../middlewares/role.middleware.js";
+import { requireAdminOnly, requireAdminOrOwner, requireOwner, requireRole } from "../middlewares/role.middleware.js";
 
 const router = Router();
 const jwtAuth = passport.authenticate("jwt", { session: false });
@@ -27,6 +27,9 @@ router.delete("/:cid", jwtAuth, requireAdminOrOwner("cid"), cartController.delet
 router.delete("/:cid/products/:pid", jwtAuth, requireAdminOrOwner("cid"), cartController.deleteProductFromCart);
 
 // Any user: Create a new cart
-router.post("/", jwtAuth, cartController.createCart);
+router.post("/", requireAdminOnly, jwtAuth, cartController.createCart);
+
+// Use POST method for purchase! - admin is not allowed to purchase!
+router.post("/:cid/purchase", jwtAuth, requireOwner("cid"), requireRole("user"), cartController.purchaseCart);
 
 export default router;

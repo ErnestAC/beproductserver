@@ -8,15 +8,17 @@ import dotenv from "dotenv";
 import session from "express-session";
 import passport from "./config/passport/passport.config.js";
 import cookieParser from "cookie-parser";
-import { jwtViewAuth } from "./middlewares/jwtViewAuth.middleware.js";
+import { jwtViewAuth } from "./middlewares/auth.middleware.js";
 import { __dirname } from "./utils.js";
 
 import ProductsRoute from "./routes/api.products.routes.js";
 import CartsRoute from "./routes/api.carts.routes.js";
+import TicketsRoute from "./routes/api.tickets.routes.js";
 import homeRoute from "./routes/index.routes.js";
 import FormsRoute from "./routes/forms.routes.js";
 import RealtimeViews from "./routes/realtimeDisplay.routes.js";
 import authRoutes from "./routes/sessions.routes.js";
+import methodOverride from "method-override";
 
 import { productDao } from "./persistence/mongo/dao/product.dao.js";
 import { cartDao } from "./persistence/mongo/dao/cart.dao.js";
@@ -34,6 +36,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(jwtViewAuth);
+app.use(methodOverride("_method")); // for UI delete requests
 
 // Static files
 app.use("/static", express.static(path.join(__dirname, "public")));
@@ -144,6 +147,7 @@ app.use("/", homeRoute);
 app.use("/forms", FormsRoute);
 app.use("/api/products", ProductsRoute);
 app.use("/api/carts", CartsRoute);
+app.use("/api/tickets", TicketsRoute);
 app.use("/api/sessions", authRoutes);
 app.use("/realtime/", RealtimeViews);
 

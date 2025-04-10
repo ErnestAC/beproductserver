@@ -1,12 +1,14 @@
 // index.routes.js
 import passport from "../config/passport/passport.config.js";
-import { requireAdminOrOwner } from "../middlewares/role.middleware.js";
+import { requireAdminOrOwner, requireRole } from "../middlewares/role.middleware.js";
 
 import { ProductModel } from "../persistence/mongo/models/product.model.js";
 import { Router } from "express";
 
 import { cartDao } from "../persistence/mongo/dao/cart.dao.js";
 import { Cart } from "../persistence/mongo/models/cart.model.js";
+
+import { ticket } from "../persistence/mongo/models/ticket.model.js";
 
 const router = Router();
 const jwtAuth = passport.authenticate("jwt", { session: false });
@@ -146,5 +148,40 @@ router.get("/guest-cart", (req, res) => {
 router.get("/admin", jwtAuth, requireAdminOrOwner(), (req, res) => {
     res.render("admin");
 });
+
+router.get('/tickets', jwtAuth, requireRole("admin"), async (req, res) => {
+    try {
+        let { limit = 10, page = 1, sort = 'purchase_datetime', sortOrder = 'desc' } = req.query;
+        limit = Math.max(1, Number(limit) || 10);
+        page = Math.max(1, Number(page));
+        const sortDirection = sortOrder === 'desc' ? -1 : 1;
+
+        const options = {
+            page,
+            limit,
+            sort: { [sort]: sortDirection },
+            lean: true
+        };
+
+        const result = await ticket.paginate({}, options);
+
+        res.render("ticketsStatic", {
+            tickets: result.docs,
+            currentPage: result.page,
+            totalPages: result.totalPages,
+            prevPage: result.prevPage,
+            nextPage: result.nextPage,
+            hasPrevPage: result.hasPrevPage,
+            hasNextPage: result.hasNextPage,
+            limit,
+            sort,
+            sortOrder
+        });
+    } catch (err) {
+        console.error("Error rendering tickets:", err);
+        res.status(500).send("Error rendering tickets");
+    }
+});
+
 
 export default router;

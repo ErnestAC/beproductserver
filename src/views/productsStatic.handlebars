@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product List</title>
     <meta name="color-scheme" content="dark">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
     <h2 class=" section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Product List - Static view</h2>
@@ -16,49 +15,21 @@
     </script>
 
     <!-- Sorting and Pagination Controls at the top -->
-    <section class="section">
-        <div class="container make-it-dark">
-            <div class="columns is-multiline is-centered">
-                <!-- controls -->
-                <div class="grid-container-2c66-by-1r make-it-semi-back  make-it-rounded section">
-                    <!-- Sorting Options -->
-                        <div class="make-it-semi-back grid-container-6c-by-1r make-it-center make-it-small">
-                            <a class="navbar-item is-small " href="?page=1&limit={{limit}}&sort=title&sortOrder=desc">Title desc</a>
-                            <a class="navbar-item is-small " href="?page=1&limit={{limit}}&sort=price&sortOrder=asc">Price asc</a>
-                            <a class="navbar-item is-small " href="?page=1&limit={{limit}}&sort=price&sortOrder=desc">Price desc</a>
-                            <a class="navbar-item is-small " href="?page=1&limit={{limit}}&sort=stock&sortOrder=asc">Stock asc</a>
-                            <a class="navbar-item is-small " href="?page=1&limit={{limit}}&sort=stock&sortOrder=desc">Stock desc</a>
-                        </div>
-
-                    <!-- Limit Dropdown -->
-                    <div class="">
-                        <div class="grid-container-2c-by-1r make-it-semi-back make-it-normal make-it-center">
-                            <div class="select is-small">
-                                <select id="limit-select">
-                                    <option value="10" {{#if (eq limit '10')}}selected{{/if}}>10</option>
-                                    <option value="20" {{#if (eq limit '20')}}selected{{/if}}>20</option>
-                                    <option value="50" {{#if (eq limit '50')}}selected{{/if}}>50</option>
-                                </select>
-                            </div>
-                            <button class="button is-small  is-warning " onclick="applyLimit()">Apply</button>
-                        </div>
-                    </div>
-                </div>
+    <section class="">
 
                 <!-- Pagination Controls -->
-                <div class="column is-10">
-                    <div class="make-it-dark-back is-centered make-it-rounded-top grid-container-3c-by-1r-special" role="navigation" aria-label="pagination">
+                <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-6c-by-1r" role="navigation" aria-label="pagination">
                         <!-- Previous Page Link -->
-                        <a class="button is-small  section " 
+                        <a class="button is-small   " 
                         href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
                         {{#if (eq currentPage 1)}}disabled{{/if}}>Prev page</a>
 
-                        <div class="section make-it-center make-it-rounded make-it-semi-back  make-it-dark">
+                        <div class="make-it-center make-it-rounded make-it-semi-back  make-it-dark small-section make-it-small">
                             Page {{currentPage}} of {{totalPages}}
                         </div>
 
                         <!-- Next Page Link -->
-                        <a class="button is-small  section " 
+                        <a class="button is-small   " 
                         href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
                         {{#if (eq currentPage totalPages)}}disabled{{/if}}>Next page</a>
 
@@ -72,31 +43,32 @@
                                 </li>
                             {{/each}}
                         </ul>
-                    </div>
                 </div>
     </section>
 
     <!-- Product List -->
     <section class="section">
-        <div class="container">
+        <div class="">
             <div class="columns is-multiline is-centered">
                 {{#if products.length}}
                     {{#each products}}
                         <div class="column is-12-mobile is-3-desktop">
-                            <div class="make-it-semi-back make-it-rounded-top card-title-container make-it-dark">
+                            <div class="card-title-container make-it-dark-back make-it-left make-it-white">
                                 <div>
                                     {{this.title}}
                                 </div>
                             </div>
                             <div class="make-it-semi-back">
-                                <div class="section">
+                                <div class="small-section">
                                     <div class="make-it-rounded">
                                         <img src={{this.imageURL}} alt={{this.title}}>
                                     </div>
-                                    <div class="card-category-badge-prebuilt">
+                                    <div class="card-category-badge-prebuilt make-it-left make-it-rounded">
                                             {{this.category}}
                                     </div>
-                                    <div class="columns make-it-white-back make-it-rounded make-it-dark make-it-small section">
+                                    <br>
+                                    <div class="columns make-it-white-back make-it-rounded make-it-dark make-it-small small-section">
+                                        
                                         <div class="column is-6 make-it-left">
                                             <p><b>Price:</b>${{this.price}}</p>
                                             <p><b>Stock:</b> {{this.stock}}</p>
@@ -110,9 +82,9 @@
                                     </div>
                                     <div class="make-it-right section">
                                         <button 
-                                          class="button is-small is-warning add-to-cart-btn" 
-                                          data-product='{{{stringify this}}}'>
-                                          Add to Cart
+                                            class="button is-small is-warning add-to-cart-btn" 
+                                            data-product='{{{stringify this}}}'>
+                                            Add to Cart
                                         </button>
                                     </div>
                                 </div>
@@ -124,13 +96,6 @@
                     <p class="has-text-centered make-it-white section">No products found in the database.</p>
                 {{/if}}
             </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <section class="rt-general-page-footer make-it-semi-back make-it-normal make-it-dark">
-        <div class="content">
-            <div>Total Items: {{totalItems}} - Total Pages: {{totalPages}}</div>
         </div>
     </section>
 
@@ -160,7 +125,7 @@
                         });
 
                         if (response.ok) {
-                            alert(`${product.title} added to your cart.`);
+                            console.log("added product to cart")
                         } else {
                             const err = await response.json();
                             alert(`Failed to add to cart: ${err.message}`);
@@ -185,7 +150,7 @@
                     }
 
                     localStorage.setItem("guestCart", JSON.stringify(cart));
-                    alert(`${product.title} added to guest cart.`);
+                    console.log("added product to cart")
                 }
             });
         });
