@@ -8,7 +8,7 @@ import dotenv from "dotenv";
 import session from "express-session";
 import passport from "./config/passport/passport.config.js";
 import cookieParser from "cookie-parser";
-import { jwtViewAuth } from "./middlewares/jwtViewAuth.middleware.js";
+import { jwtViewAuth } from "./middlewares/auth.middleware.js";
 import { __dirname } from "./utils.js";
 
 import ProductsRoute from "./routes/api.products.routes.js";
