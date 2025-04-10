@@ -13,10 +13,9 @@
 
     <section class="section">
         {{#if cart.products.length}}
+
             <div class="box cart-products">
-                <div class="make-it-semi-back make-it-rounded-top section make-it-normal make-it-dark">
-                    Cart Details - {{cart.cid}}
-                </div>
+
 
                 <table class="table is-fullwidth is-striped">
                     <thead>
@@ -51,10 +50,9 @@
                     </tbody>
                 </table>
 
-                <div class="section has-text-centered">
-                    <button class="button is-warning is-small" onclick="emptyCart('{{cart.cid}}')">🧹 Empty Cart</button>
-                    <button class="button is-success is-small" onclick="purchaseCart('{{cart.cid}}')">💳 Purchase</button>
-                </div>
+            <div class="make-it-rounded-top small-section make-it-small make-it-semi make-it-right">
+                    Cart ID: {{cart.cid}}
+            </div>
             </div>
         {{else}}
             <p class="make-it-white make-it-center">Your cart is empty.</p>
@@ -122,5 +120,9 @@
             }
         }
     </script>
+    <div class=" section">
+        <button class="button is-warning is-small" onclick="emptyCart('{{cart.cid}}')">Empty Cart</button>
+        <button class="button is-success is-small" onclick="purchaseCart('{{cart.cid}}')">Purchase</button>
+    </div>
 </body>
 </html>
