@@ -1,19 +1,26 @@
 import mongoose from "mongoose";
+import { v4 as uuidv4 } from "uuid";
 
 const ticketCollection = "ticket";
 
 const ticketSchema = new mongoose.Schema({
-    code: {
+    tid: {
         type: String,
-        required: true,
+        default: uuidv4,
         unique: true
     },
-    purchase_datatime: {
+    purchase_datetime: {
         type: Date,
-        default: Date.now(),
+        default: Date.now
     },
-    amount: Number,
-    purchaser: String
+    amount: {
+        type: Number,
+        required: true
+    },
+    purchaser: {
+        type: String,
+        required: true
+    }
 });
 
 export const ticket = mongoose.model(ticketCollection, ticketSchema);

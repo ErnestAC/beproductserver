@@ -221,11 +221,8 @@ export class CartDao {
             await cart.save();
             notifyCartChange();
     
-            return {
-                purchased: productsPurchased,
-                notPurchased: productsNotPurchased,
-                total: productsPurchased.reduce((acc, item) => acc + (item.quantity * item.price), 0)
-            };
+            return productsPurchased.reduce((acc, item) => acc + (item.quantity * item.price), 0)
+            
     
         } catch (err) {
             console.error("Error processing purchase:", err);
