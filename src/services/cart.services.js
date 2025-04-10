@@ -86,7 +86,7 @@ class CartService {
         cart.products = notPurchased;
         await cart.save();
 
-        return total;
+        return { purchased, notPurchased, total };
     }
 }
 

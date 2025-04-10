@@ -149,23 +149,31 @@ class CartControllers {
             res.status(500).json({ status: "error", message: "Server error" });
         }
     }
+
     async purchaseCart(req = request, res = response) {
         try {
             const { cid } = req.params;
+
             const cart = await cartService.getCartById(cid);
-            if (!cart) return res.status(404).json({ status: "Error", message: `Cart ${cid} was not found.` });
-        
-                const total = await cartService.purchaseCart(cid);
-                const ticket = await ticketService.createTicket(total, req.user.email);
-        
-                res.status(200).json({ status: "ok", ticket });
-            } catch (error) {
-                errorLog(error, req);
-                res.status(500).json({ status: "Erro", msg: "Error interno del servidor" });
+            if (!cart) {
+                return res.status(404).json({ status: "error", message: `Cart ${cid} was not found.` });
             }
+
+            const { total, purchasedProducts, notPurchasedProducts } = await cartService.purchaseCart(cid);
+
+            const ticket = await ticketService.createTicket({
+                amount: total,
+                purchaser: req.user.email,
+                purchasedProducts,
+                notPurchasedProducts
+            });
+
+            res.status(200).json({ status: "success", ticket });
+        } catch (error) {
+            errorLog(error, req);
+            res.status(500).json({ status: "error", message: "Internal server error" });
         }
+    }
 }
-
-
 
 export const cartController = new CartControllers();

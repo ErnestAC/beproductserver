@@ -13,23 +13,29 @@ export class TicketDao {
         }
     }    
 
-async addTicket({ amount, purchaser }) {
-    try {
-        const newTicket = new Ticket({
-            code: uuidv4(),
-            amount,
-            purchaser,
-            purchase_datetime: new Date()
-        });
-
-        await newTicket.save();
-        return newTicket;
-    } catch (err) {
-        console.error("Error adding ticket:", err);
-        throw err;
+    async addTicket({ amount, purchaser, purchasedProducts = [], notPurchasedProducts = [] }) {
+        try {
+            if (typeof amount !== 'number') {
+                console.warn("Invalid 'amount' received in addTicket:", amount);
+            }
+    
+            const newTicket = new Ticket({
+                code: uuidv4(),
+                amount,
+                purchaser,
+                purchase_datetime: new Date(),
+                purchasedProducts,
+                notPurchasedProducts
+            });
+    
+            await newTicket.save();
+            return newTicket;
+        } catch (err) {
+            console.error("Error adding ticket:", err);
+            throw err;
+        }
     }
-}
-
+    
     async addProductToTicket(cid, pid) {
         try {
             const product = await ProductModel.findOne({ pid });

@@ -1,3 +1,5 @@
+// ticket.model.js
+
 import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 
@@ -20,6 +22,14 @@ const ticketSchema = new mongoose.Schema({
     purchaser: {
         type: String,
         required: true
+    },
+    purchasedProducts: {
+        type: Array,
+        default: []
+    },
+    notPurchasedProducts: {
+        type: Array,
+        default: []
     }
 });
 

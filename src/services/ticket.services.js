@@ -1,17 +1,19 @@
 // src/services/ticket.services.js
 import { ticketDao } from "../persistence/mongo/dao/ticket.dao.js";
+import { TicketDTO } from "../dto/ticket.dto.js";
 
 class TicketService {
-    async createTicket(amount, purchaserEmail) {
-        console.log(amount)
-        if (typeof amount !== "number") {
-            throw new Error("Invalid amount passed to ticket creation");
-        }
-    
-        return await ticketDao.addTicket({
+    async createTicket({ amount, purchaser, purchasedProducts = [], notPurchasedProducts = [] }) {
+
+
+        const ticket = await ticketDao.addTicket({
             amount,
-            purchaser: purchaserEmail
+            purchaser,
+            purchasedProducts,
+            notPurchasedProducts
         });
+
+        return new TicketDTO(ticket.toObject ? ticket.toObject() : ticket);
     }
 }
 
