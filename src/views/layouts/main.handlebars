@@ -11,7 +11,7 @@
 </head>
 <body class="splash-page-home make-it-normal">
 
-    <header class="title-bar-container other-bar is-frozen make-it-semi-back make-it-normal grid-container-2c66-by-1r ">
+    <header class="title-bar-container other-bar is-frozen make-it-semi-back make-it-normal grid-container-3c-by-1r-special ">
         <div class="navbar-brand">
             <a class="navbar-item" href="/">
                 <img class="logo-image" src="/static/shopnhour_blue.png" alt="Shopnhour Store Logo">
@@ -20,11 +20,23 @@
 
         <div class="grid-container-3c-by-1r-special make-it-rounded small-section make-it-normal">
             <div></div>
-            <div class="grid-container-2c-by-1r">
+            <div class="grid-container-3c-by-1r-special">
                 <a class="navbar-item make-it-rounded make-it-dark" href="/products">
                     <span><i class="fas fa-box-open small-section"></i>Products</span>
                 </a>
-
+                {{#if user}}
+                    <div class="">
+                        <a class="navbar-item make-it-rounded make-it-dark" href="/current/">
+                            <span><i class="fas fa-user small-section"></i>{{user.username}}</span>
+                        </a>
+                    </div>
+                {{else}}
+                <div class="">
+                    <a class="navbar-item make-it-rounded make-it-dark" href="/login/">
+                        <span><i class="fas fa-key small-section"></i>Log in</span>
+                    </a>
+                </div>
+                {{/if}}
                 {{#if user}}
                     <a class="navbar-item make-it-rounded make-it-dark" href="/carts/{{user.cartId}}">
                         <span><i class="fas fa-shopping-cart small-section"></i>Cart</span>
@@ -34,24 +46,10 @@
                         <span><i class="fas fa-shopping-cart small-section"></i>Cart</span>
                     </a>
                 {{/if}}
+
             </div>
 
-            {{#if user}}
-                <div class="grid-container-2c-by-1r">
-                    <a class="navbar-item make-it-rounded make-it-dark" href="/current/">
-                        <span><i class="fas fa-user small-section"></i>{{user.username}}</span>
-                    </a>
-                    <a class="navbar-item make-it-rounded make-it-dark" href="/logout/">
-                        <span><i class="fas fa-sign-out-alt small-section"></i>Log out</span>
-                    </a>
-                </div>
-            {{else}}
-            <div class="grid-container-2c-by-1r">
-                <a class="navbar-item make-it-rounded make-it-dark" href="/login/">
-                    <span><i class="fas fa-key small-section"></i>Log in</span>
-                </a>
-            </div>
-            {{/if}}
+
         </div>
     </header>
 

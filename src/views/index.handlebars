@@ -10,17 +10,16 @@
 <body>
     <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top">Proyecto de Programación Backend II</h2>
 
-    <!-- Main Content Section -->
     <section class="section make-it-normal">
         <div class="container">
             <div class="make-it-rounded make-it-semi-back make-it-normal make-it-left">
                 <p class="card-title-container make-it-white make-it-dark-back">Sobre este proyecto</p>
                 <br>
-                <p class="section ">
+                <p class="section">
                     El proyecto consiste en un backend para una tienda ficticia llamada <b>'Shopnhour'</b> que vende modelos de trenes. 
-                    Integra una base de datos (Mongo) sobre Node y Express para montar un servicio de backend que 
-                    provee un catálogo de productos y la gestión de carritos de compras. El catálogo de productos 
-                    es almacenado en Mongo en la colección 'products' y los carritos en la colección 'carts'.
+                    Integra una base de datos (MongoDB) sobre Node.js y Express para montar un servicio de backend que 
+                    provee un catálogo de productos, gestión de carritos de compras y generación de tickets. 
+                    Se utiliza autenticación mediante JWT, diferenciando usuarios comunes y administradores.
                 </p>
                 <br>
             </div>
@@ -28,54 +27,63 @@
             <div class="columns is-multiline section">
                 <div class="column is-6 make-it-white">
                     <p class="card-title-container make-it-white make-it-rounded-top make-it-dark-back">> Navegación y uso</p>
-                    <div class="section make-it-semi-back make-it-dark make-it-small  make-it-rounded-bottom">
-                        - N/A
+                    <div class="section make-it-semi-back make-it-dark make-it-small make-it-rounded-bottom">
+                        <ul>
+                            <li><b>/</b> - Página principal (esta página).</li>
+                            <li><b>/products</b> - Catálogo completo de productos.</li>
+                            <li><b>/carts</b> - Vista estática de todos los carritos (requiere autenticación).</li>
+                            <li><b>/carts/:cid</b> - Vista detallada de un carrito específico (requiere autenticación).</li>
+                            <li><b>/realtime/products</b> - Vista en tiempo real de productos (actualización WebSocket).</li>
+                            <li><b>/realtime/carts</b> - Vista en tiempo real de carritos (sin detalles de producto).</li>
+                            <li><b>/forms/add-product</b> - Formulario para agregar productos.</li>
+                            <li><b>/forms/delete-product</b> - Formulario para eliminar productos.</li>
+                            <li><b>/login</b> - Página de inicio de sesión.</li>
+                            <li><b>/register</b> - Registro de nuevos usuarios.</li>
+                            <li><b>/current</b> - Vista de usuario autenticado.</li>
+                            <li><b>/admin</b> - Panel de administración (requiere rol `admin`).</li>
+                            <li><b>/guest-cart</b> - Carrito accesible sin iniciar sesión.</li>
+                            <li><b>/tickets</b> - Vista de tickets generados (solo administradores).</li>
+                        </ul>
                     </div>
                 </div>
 
                 <div class="column is-6 make-it-white">
-                    <p class="card-title-container make-it-white make-it-rounded-top make-it-dark-back">> Rutas</p>
-                    <div class=" make-it-dark make-it-small  make-it-rounded-bottom make-it-semi-back">
+                    <p class="card-title-container make-it-white make-it-rounded-top make-it-dark-back">> Rutas API</p>
+                    <div class="make-it-dark make-it-small make-it-rounded-bottom make-it-semi-back section">
+                        <p><b>GET /api/products</b> - Obtiene todos los productos (paginado, ordenado, filtrado).</p>
+                        <p><b>GET /api/products/:pid</b> - Devuelve un producto por su `pid`.</p>
+                        <p><b>POST /api/products</b> - Crea un nuevo producto.</p>
+                        <p><b>PUT /api/products/:pid</b> - Actualiza un producto existente.</p>
+                        <p><b>DELETE /api/products/:pid</b> - Elimina o desactiva un producto (`killFlag`).</p>
 
-                        <div class="section">
-                            <br>
-                            <p class="make-it-normal make-it-dark">Vistas</p>
-                            <br>
-                            <p><b>/</b> - Esta página.</p>
-                            <p><a href="/products" class="make-it-dark"><b>/products</b> - Catálogo de productos completo.</p></a>
-                            <p><a href="/carts" class="make-it-dark"><b>/carts</b></a> - Vista estática de todos los carritos en el servidor.</p>
-                            <p><a href="/carts/5ab6e82f-b289-4dff-8ff5-25dc0f749ee2" class="make-it-dark"><b>/carts/cid</b></a> - Vista del carrito por ID.</p>
-                            <p><a href="/realtime/products" class="make-it-dark"><b>/realtime/products</b></a> - Vista en tiempo real de la colección de objetos en 'products'.</p>
-                            <p><a href="/realtime/carts" class="make-it-dark"><b>/realtime/carts</b></a> - Vista en tiempo real de la colección de objetos en 'carts' sin detalle por producto (sólo PID y cantidad).</p>
-                            <p><a href="/forms/add-product" class="make-it-dark"><b>/forms/add-product</b></a> - Formulario para testear la habilidad de agregar un producto a la base de datos.</p>
-                            <p><a href="/forms/delete-product" class="make-it-dark"><b>/forms/delete-product</b></a> - Formulario para testear la habilidad de eliminar un producto de la base de datos.</p>
-                        </div>
+                        <hr>
 
-                        <div class="section make-it-rounded">
-                            <p class="make-it-normal">API endpoints</p>
-                            <br>
-                            <p><b>GET /api/products/ - </b> Trae todos los datos de la colección 'products' en Mongo en modo paginado.</p>
-                            <p><b>GET /api/products/pid - </b> Trae un producto por su ID único, pid.</p>
-                            <p><b>POST /api/products/ - </b> Crea un producto usando los parámetros pasados en el body del request con un ID único.</p>
-                            <p><b>PUT /api/products/pid - </b> Modifica un registro existente por ID único.</p>
-                            <p><b>DELETE /api/products/pid - </b> Marca como eliminado o elimina un registro. Usa el parámetro booleano en body <b>killFlag</b> para cambiar el comportamiento.</p>
-                            <p><b>GET /api/carts/ - </b> Devuelve todos los carritos disponibles con la información de cada producto.</p>
-                            <p><b>POST /api/carts/ - </b> Crea un nuevo carrito con un ID único y retorna su ID. Si se le pasan parametros por body crea un carro con los productos indicados.</p>
-                            <p><b>GET /api/carts/cid - </b> Lista los contenidos del carrito por ID (cid) con información agregada de los productos en este.</p>
-                            <p><b>DELETE /api/carts/cid - </b> Elimina todos los contenidos del carrito por cid.</p>
-                            <p><b>POST /api/carts/cid/product/pid - </b> Agrega el producto con el pid pasado o incrementa su cantidad en el carrito con el cid pasado.</p>
-                            <p><b>PATCH /api/carts/cid/product/pid - </b> Modifica el campo quantity de un producto en un carrito. Usa el valor pasado por body con la key 'quantity'.</p>
-                            <p><b>DELETE /api/carts/cid/product/pid - </b> Elimina el producto con el pid pasado del carrito pasado por pid.</p>
-                            
-                            <br>
-                        </div>
-                        
+                        <p><b>GET /api/carts</b> - Obtiene todos los carritos (admin/owner).</p>
+                        <p><b>POST /api/carts</b> - Crea un nuevo carrito.</p>
+                        <p><b>GET /api/carts/:cid</b> - Obtiene el contenido de un carrito.</p>
+                        <p><b>POST /api/carts/:cid/product/:pid</b> - Agrega un producto al carrito.</p>
+                        <p><b>PATCH /api/carts/:cid/product/:pid</b> - Actualiza la cantidad de un producto.</p>
+                        <p><b>DELETE /api/carts/:cid/product/:pid</b> - Elimina un producto del carrito.</p>
+                        <p><b>DELETE /api/carts/:cid</b> - Elimina todos los productos del carrito.</p>
+                        <p><b>POST /api/carts/:cid/purchase</b> - Procesa una compra y genera un ticket.</p>
+
+                        <hr>
+
+                        <p><b>GET /api/tickets</b> - Devuelve todos los tickets (solo admin).</p>
+                        <p><b>GET /api/tickets/:tid</b> - Devuelve un ticket específico por `tid`.</p>
+
+                        <hr>
+
+                        <p><b>POST /api/auth/login</b> - Login de usuario.</p>
+                        <p><b>POST /api/auth/register</b> - Registro de nuevo usuario.</p>
+                        <p><b>GET /api/auth/logout</b> - Logout de sesión.</p>
+                        <p><b>GET /api/sessions/current</b> - Información del usuario autenticado.</p>
                     </div>
-                    
                 </div>
-                <div class="column is-12 make-it-semi  make-it-center section">
+
+                <div class="column is-12 make-it-semi make-it-center section">
                     <br>
-                    <p>Ernesto AC - <b>Proyecto de Programación Backend II: Desarrollo Avanzado de Backend, comisión 70460</b></p>
+                    <p>Ernesto AC - <b>Proyecto de Programación Backend II: Desarrollo Avanzado de Backend, Comisión 70470</b></p>
                 </div>
             </div>
         </div>

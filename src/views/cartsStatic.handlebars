@@ -14,34 +14,7 @@
     <section class="section">
         <div class="container make-it-dark">
             <div class="columns is-multiline is-centered">
-                <!-- Sorting Options -->
-                <div class="grid-container-2c66-by-1r make-it-semi-back make-it-normal make-it-rounded section">
-                    <div class="column is-10">
-                        <div class="make-it-semi-back  make-it-center">
-                            <div class="make-it-semi-back make-it-normal make-it-center section">Sort by</div>
-                            <a class="button " href="?page=1&limit={{limit}}&sort=cid&sortOrder=asc">Cart ID Asc</a>
-                            <a class="button " href="?page=1&limit={{limit}}&sort=cid&sortOrder=desc">Cart ID Desc</a>
-                            <a class="button " href="?page=1&limit={{limit}}&sort=products&sortOrder=asc">Products in Cart Asc</a>
-                            <a class="button " href="?page=1&limit={{limit}}&sort=products&sortOrder=desc">Products in Cart Desc</a>
-                        </div>
-                    </div>
-
-                    <!-- Limit Dropdown -->
-                    <div class="column is-10">
-                        <div class="make-it-semi-back make-it-normal make-it-center">
-                            <div class="make-it-semi-back make-it-normal make-it-center section">Items per page</div>
-                            <div class="select ">
-                                <select id="limit-select">
-                                    <option value="10">10</option>
-                                    <option value="20">20</option>
-                                    <option value="50">50</option>
-                                </select>
-                            </div>
-                            <button class="button is-link " onclick="applyLimit()">Apply</button>
-                        </div>
-                    </div>
-                </div>
-
+ 
                 <!-- Pagination Controls -->
                 <div class="column is-10">
                     <div class="make-it-dark-back is-centered grid-container-3c-by-1r" role="navigation" aria-label="pagination">
@@ -61,13 +34,13 @@
     </section>
 
     <!-- Cart List -->
-    <section class="section">
-        <div class="container">
+    <section class="">
+        <div class="">
             <div class="columns is-multiline is-centered">
                 {{#if carts.length}}
                     {{#each carts}}
                         <div class="column is-12-mobile is-12-desktop">
-                            <div class="card ">
+                            <div class="card">
                                 <div class="section">
                                     <div class="make-it-dark-back section make-it-rounded-top make-it-white">
                                         <b>Cart ID:</b> {{this.cid}}
@@ -82,7 +55,7 @@
                                                 <th>Quantity</th>
                                             </tr>
                                             {{#each this.products}}
-                                                <tr class="table is-striped">
+                                                <tr class="table is-striped make-it-small">
                                                     <td>
                                                         {{#if this.productDetails.imageURL}}
                                                             <img src="{{this.productDetails.imageURL}}" alt="{{this.productDetails.title}}" width="50">
@@ -109,7 +82,7 @@
                                             {{/each}}
                                         </table>
                                     </div>
-                                    <div class="make-it-semi-back make-it-dark make-it-small  make-it-rounded section">
+                                    <div class="make-it-semi-back make-it-dark make-it-small  make-it-rounded-bottom section">
                                         <strong>Products in Cart:</strong> {{this.products.length}}
                                     </div>
                                 </div>
