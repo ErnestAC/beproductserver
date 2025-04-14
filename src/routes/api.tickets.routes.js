@@ -4,14 +4,14 @@
 import { Router } from "express";
 import passport from "../config/passport/passport.config.js";
 import { ticketController } from "../controllers/ticket.controllers.js";
-import { requireAdminOnly, requireRole } from "../middlewares/role.middleware.js";
+import { requireRole } from "../middlewares/role.middleware.js";
 
 const router = Router();
 const jwtAuth = passport.authenticate("jwt", { session: false });
 
 // Admin-only routes
 router.get("/", jwtAuth, requireRole("admin"), ticketController.getAllTickets);
-router.get("/:tid", jwtAuth, requireAdminOnly, ticketController.getTicketById);
-router.delete("/:tid", jwtAuth, requireAdminOnly, ticketController.deleteTicketById);
+router.get("/:tid", jwtAuth, requireRole("admin"), ticketController.getTicketById);
+router.delete("/:tid", jwtAuth, requireRole("admin"), ticketController.deleteTicketById);
 
 export default router;
