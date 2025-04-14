@@ -9,12 +9,19 @@
 <body>
     <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top">User menu</h2>
 
-    <section class="section">
-        <div class="box make-it-semi-back make-it-rounded">
-            <div id="userInfo" class="content make-it-dark">Loading...</div>
-            <div id="adminButtonContainer" class="mt-4"></div>
-            <div class="mt-4">
-                <a href="/logout" class="button is-danger is-light">Logout</a>
+    <section class="">
+        <div class="section make-it-light-back make-it-small">
+            <div id="userInfo" class="box make-it-dark">
+                Loading...
+            </div>
+            <div class="grid-container-3c-by-1r">
+                <div></div>
+                <div class="">
+                    <a href="/logout" class="navbar-item is-warning make-it-normal button">Logout</a>
+                </div>
+                <div id="adminButtonContainer" class="">
+                    
+                </div>
             </div>
         </div>
     </section>
@@ -50,7 +57,7 @@
 
                 if (user.role === "admin") {
                     adminButtonContainer.innerHTML = `
-                        <a href="/admin" class="button is-primary is-light">
+                        <a href="/admin" class="navbar-item make-it-normal button">
                             Go to Admin Panel
                         </a>
                     `;
