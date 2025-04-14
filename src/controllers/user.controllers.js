@@ -23,7 +23,11 @@ class UserControllers {
 
             const newUser = await userService.createUser(userData);
 
-            res.json({ message: "User registered successfully", userId: newUser._id });
+            // newUser is already a UserDTO
+            res.status(201).json({
+                message: "User registered successfully",
+                user: newUser // Clean and safe for client
+            });
         } catch (err) {
             console.error("Error registering user:", err);
             res.status(500).json({ message: "Server error" });

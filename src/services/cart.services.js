@@ -7,6 +7,10 @@ class CartService {
         return await cartDao.getCartById(cid);
     }
 
+    async createCart() {
+        return await cartDao.addCart();
+    }
+
     async addProductToCart(cid, pid) {
         return await cartDao.addProductToCart(cid, pid);
     }
