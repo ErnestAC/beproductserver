@@ -1,9 +1,10 @@
 // src/controllers/ticket.controllers.js
 
 import { ticketService } from "../services/ticket.services.js";
-import { errorLog } from "../utils/errorLog.js";
+import { errorLog } from "../utils/errorLog.util.js";
 
 class TicketController {
+    
     async getAllTickets(req, res) {
         try {
             const page = parseInt(req.query.page) || 1;

@@ -5,7 +5,7 @@ import { notifyCartChange } from "../server.js";
 import { ProductModel } from "../persistence/mongo/models/product.model.js";
 import { Cart } from "../persistence/mongo/models/cart.model.js";
 import { cartService } from "../services/cart.services.js";
-import { errorLog } from "../utils/errorLog.js";
+import { errorLog } from "../utils/errorLog.util.js";
 import { ticketService } from "../services/ticket.services.js";
 
 class CartControllers {

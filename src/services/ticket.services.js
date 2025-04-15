@@ -1,6 +1,7 @@
 // src/services/ticket.services.js
 import { ticketDao } from "../persistence/mongo/dao/ticket.dao.js";
 import { TicketDTO } from "../dto/ticket.dto.js";
+import { sendEmail } from "../utils/email.util.js";
 
 class TicketService {
     async createTicket({ amount, purchaser, purchased = [], notPurchased = [] }) {
@@ -10,7 +11,11 @@ class TicketService {
             purchased: purchased,
             notPurchased: notPurchased
         });
-
+        await sendEmail({
+            to: "shopnhour.store@gmail.com",
+            subject: "Your Order Confirmation",
+            html: "<h1>Thank you for your purchase!</h1><p>Your ticket ID is XYZ123</p>"
+        }); // change this to use the customer's email.
         return new TicketDTO(ticket.toObject ? ticket.toObject() : ticket);
     }
 
