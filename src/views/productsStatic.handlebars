@@ -14,13 +14,13 @@
         const userCartId = {{#if user}}"{{user.cartId}}"{{else}}null{{/if}};
     </script>
 
-    <!-- Sorting and Pagination Controls at the top -->
+    <!-- Pagination Controls -->
     <section class="">
 
                 <!-- Pagination Controls -->
-                <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-6c-by-1r" role="navigation" aria-label="pagination">
+                <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-3c-by-1r-special" role="navigation" aria-label="pagination">
                         <!-- Previous Page Link -->
-                        <a class="button is-small   " 
+                        <a class="navbar-item make-it-rounded make-it-left" 
                         href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
                         {{#if (eq currentPage 1)}}disabled{{/if}}>Prev page</a>
 
@@ -29,7 +29,7 @@
                         </div>
 
                         <!-- Next Page Link -->
-                        <a class="button is-small   " 
+                        <a class="navbar-item make-it-rounded make-it-right" 
                         href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
                         {{#if (eq currentPage totalPages)}}disabled{{/if}}>Next page</a>
 
@@ -52,7 +52,7 @@
             <div class="columns is-multiline is-centered">
                 {{#if products.length}}
                     {{#each products}}
-                        <div class="column is-6-mobile is-2-desktop">
+                        <div class="column is-12-mobile is-3-desktop">
                             <div class="card-title-container make-it-dark-back make-it-left make-it-white">
                                 <div>
                                     {{this.title}}
@@ -88,7 +88,7 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="make-it-dark make-it-small section make-it-center">PID: {{this.pid}}</div>
+                                
                             </div>
                         </div>
                     {{/each}}
