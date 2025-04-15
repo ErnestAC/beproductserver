@@ -20,7 +20,7 @@
                 <!-- Pagination Controls -->
                 <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-3c-by-1r-special" role="navigation" aria-label="pagination">
                         <!-- Previous Page Link -->
-                        <a class="navbar-item make-it-rounded make-it-left" 
+                        <a class="navbar-item make-it-rounded make-it-left make-it-small" 
                         href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
                         {{#if (eq currentPage 1)}}disabled{{/if}}>Prev page</a>
 
@@ -29,7 +29,7 @@
                         </div>
 
                         <!-- Next Page Link -->
-                        <a class="navbar-item make-it-rounded make-it-right" 
+                        <a class="navbar-item make-it-rounded make-it-right make-it-small" 
                         href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
                         {{#if (eq currentPage totalPages)}}disabled{{/if}}>Next page</a>
 
@@ -82,7 +82,7 @@
                                     </div>
                                     <div class="make-it-right section">
                                         <button 
-                                            class="button is-small is-warning add-to-cart-btn" 
+                                            class="button is-small is-warning make-it-normal" 
                                             data-product='{{{stringify this}}}'>
                                             Add to Cart
                                         </button>

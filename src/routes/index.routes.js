@@ -28,7 +28,7 @@ router.get("/login", (req, res) => {
 });
 
 router.get('/products', async (req, res) => {
-    let { page = 1, limit = 4, sort = 'title', sortOrder = 'asc', filterBy = '' } = req.query;
+    let { page = 1, limit = 12, sort = 'title', sortOrder = 'asc', filterBy = '' } = req.query;
 
     page = Math.max(1, Number(page));
     limit = Math.max(1, Number(limit));
