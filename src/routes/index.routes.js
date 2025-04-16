@@ -9,10 +9,10 @@ import { cartDao } from "../persistence/mongo/dao/cart.dao.js";
 import { Cart } from "../persistence/mongo/models/cart.model.js";
 
 import { ticket } from "../persistence/mongo/models/ticket.model.js";
+import { ProductDTO } from "../dto/product.dto.js"; // 🔧 Added
 
 const router = Router();
 const jwtAuth = passport.authenticate("jwt", { session: false });
-
 
 router.get('/', async (req, res) => {
     try {
@@ -41,13 +41,15 @@ router.get('/products', async (req, res) => {
             page,
             limit,
             sort: { [sort]: sortDirection },
-            lean: true // Convert Mongoose docs to plain JS objects
+            lean: true
         };
 
         const result = await ProductModel.paginate(query, options);
 
+        const dtoProducts = result.docs.map(p => new ProductDTO(p)); // 🔧 Convert to DTO
+
         res.render('productsStatic', {
-            products: result.docs,
+            products: dtoProducts, // 🔧 Use DTOs
             currentPage: result.page,
             totalPages: result.totalPages,
             prevPage: result.prevPage,
@@ -73,17 +75,15 @@ router.get('/carts', jwtAuth, requireAdminOrOwner(), async (req, res) => {
         page = Math.max(1, Number(page));
         const sortDirection = sortOrder === 'desc' ? -1 : 1;
 
-        // Fetch carts without population
         const options = {
             page,
             limit,
             sort: { [sort]: sortDirection },
-            lean: true // Convert Mongoose docs to plain JS objects
+            lean: true
         };
 
         const result = await Cart.paginate({}, options);
 
-        // Manually populate product details
         for (let cart of result.docs) {
             for (let item of cart.products) {
                 const product = await ProductModel.findOne({ pid: item.pid }).lean();
@@ -128,23 +128,19 @@ router.get('/carts/:cid', jwtAuth, requireAdminOrOwner(), async (req, res) => {
     }
 });
 
-// Show currently logged on user's information
 router.get("/current", jwtAuth, (req, res) => {
     res.render("current");
 });
 
-// Logout and clear cookie (browser)
 router.get("/logout", jwtAuth, (req, res) => {
     res.clearCookie("token");
     res.redirect("/login");
 });
 
-// Guest cart route (accessible without login)
 router.get("/guest-cart", (req, res) => {
     res.render("guestCart");
 });
 
-// Admin console
 router.get("/admin", jwtAuth, requireAdminOrOwner(), (req, res) => {
     res.render("admin");
 });
@@ -182,6 +178,5 @@ router.get('/tickets', jwtAuth, requireRole("admin"), async (req, res) => {
         res.status(500).send("Error rendering tickets");
     }
 });
-
 
 export default router;
