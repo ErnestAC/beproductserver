@@ -7,43 +7,38 @@
     <meta name="color-scheme" content="dark">
 </head>
 <body>
-    <h2 class=" section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Product List - Static view</h2>
+    <h2 class=" section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Products</h2>
 
     <script>
         const isLoggedIn = {{#if user}}true{{else}}false{{/if}};
         const userCartId = {{#if user}}"{{user.cartId}}"{{else}}null{{/if}};
     </script>
 
-    <!-- Sorting and Pagination Controls at the top -->
+    <!-- Pagination Controls -->
     <section class="">
+        <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-3c-by-1r-special" role="navigation" aria-label="pagination">
+            <!-- Previous Page Link -->
+            <div class="make-it-center make-it-100percent-wide">
+                <a class="navbar-item make-it-rounded make-it-small" 
+                    href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
+                    {{#if (eq currentPage 1)}}disabled{{/if}}>Prev
+                </a>
+            </div>
 
-                <!-- Pagination Controls -->
-                <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-6c-by-1r" role="navigation" aria-label="pagination">
-                        <!-- Previous Page Link -->
-                        <a class="button is-small   " 
-                        href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
-                        {{#if (eq currentPage 1)}}disabled{{/if}}>Prev page</a>
+            <!-- Next Page Link -->
+            <a class="navbar-item make-it-rounded make-it-small" 
+                href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
+                {{#if (eq currentPage totalPages)}}disabled{{/if}}>Next
+            </a>
 
-                        <div class="make-it-center make-it-rounded make-it-semi-back  make-it-dark small-section make-it-small">
-                            Page {{currentPage}} of {{totalPages}}
-                        </div>
 
-                        <!-- Next Page Link -->
-                        <a class="button is-small   " 
-                        href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
-                        {{#if (eq currentPage totalPages)}}disabled{{/if}}>Next page</a>
+            <div class="make-it-dark small-section make-it-small">
+                Page {{currentPage}} of {{totalPages}}
+            </div>
 
-                        <!-- Page Numbers -->
-                        <ul class="pagination-list">
-                            {{#each pages}}
-                                <li>
-                                    <a class="pagination-link" 
-                                    href="?page={{this}}&limit={{../limit}}&sort={{../sort}}&sortOrder={{../sortOrder}}" 
-                                    {{#if (eq this @root.currentPage)}}aria-current="page"{{/if}}>{{this}}</a>
-                                </li>
-                            {{/each}}
-                        </ul>
-                </div>
+            
+
+        </div>
     </section>
 
     <!-- Product List -->
@@ -60,35 +55,38 @@
                             </div>
                             <div class="make-it-semi-back">
                                 <div class="small-section">
-                                    <div class="make-it-rounded">
+
+                                    <a href="/products/{{this.pid}}">
                                         <img src={{this.imageURL}} alt={{this.title}}>
-                                    </div>
-                                    <div class="card-category-badge-prebuilt make-it-left make-it-rounded">
-                                            {{this.category}}
+                                    </a>
+
+                                    <div class="card-category-badge-prebuilt make-it-left">
+                                        {{this.category}}
                                     </div>
                                     <br>
-                                    <div class="columns make-it-white-back make-it-rounded make-it-dark make-it-small small-section">
-                                        
+                                    <div class="columns make-it-white-back make-it-dark make-it-small small-section">
                                         <div class="column is-6 make-it-left">
-                                            <p><b>Price:</b>${{this.price}}</p>
+                                            <p><b>Price:</b> ${{this.price}}</p>
                                             <p><b>Stock:</b> {{this.stock}}</p>
                                             <p><b>Pieces:</b> {{this.pieces}}</p>
                                             <p><b>Code:</b> {{this.code}}</p>
                                         </div>
-                                        <div class="column is-6 make-it-center">
-                                            <p><b>Motor:</b> {{#if this.motorizable}} Yes {{else}} No {{/if}}</p>
-                                            <p><b>Lights:</b> {{#if this.lighting}} Yes {{else}} No {{/if}}</p>
+                                        <div class="column is-6 make-it-left">
+                                            <p><b>Motor:</b> {{#if this.motorizable}}Yes{{else}}No{{/if}}</p>
+                                            <p><b>Lights:</b> {{#if this.lighting}}Yes{{else}}No{{/if}}</p>
                                         </div>
                                     </div>
-                                    <div class="make-it-right section">
-                                        <button 
-                                            class="button is-small is-warning add-to-cart-btn" 
-                                            data-product='{{{stringify this}}}'>
-                                            Add to Cart
-                                        </button>
+                                    <div class="columns make-it-center small-section make-it-100percent-wide">
+                                        <div class="column is-12">
+                                            <button 
+                                                class="button make-it-100percent-wide is-small is-success make-it-normal add-to-cart-btn make-it-dark" 
+                                                data-product='{{{stringify this}}}'>
+                                                Add to cart
+                                            </button>
+                                        </div>
+
                                     </div>
                                 </div>
-                                <div class="make-it-dark make-it-small section make-it-center">PID: {{this.pid}}</div>
                             </div>
                         </div>
                     {{/each}}

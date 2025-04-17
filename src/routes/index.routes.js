@@ -9,10 +9,11 @@ import { cartDao } from "../persistence/mongo/dao/cart.dao.js";
 import { Cart } from "../persistence/mongo/models/cart.model.js";
 
 import { ticket } from "../persistence/mongo/models/ticket.model.js";
+import { ProductDTO } from "../dto/product.dto.js"; // 🔧 Added
+import { errorLog } from "../utils/errorLog.util.js";
 
 const router = Router();
 const jwtAuth = passport.authenticate("jwt", { session: false });
-
 
 router.get('/', async (req, res) => {
     try {
@@ -27,27 +28,34 @@ router.get("/login", (req, res) => {
     res.render("login"); 
 });
 
+// 🔥 NEW: Register page route
+router.get("/register", (req, res) => {
+    res.render("register");
+});
+
 router.get('/products', async (req, res) => {
-    let { page = 1, limit = 10, sort = 'title', sortOrder = 'asc', filterBy = '' } = req.query;
+    let { page = 1, limit = 12, sort = 'title', sortOrder = 'asc', filterBy = '' } = req.query;
 
     page = Math.max(1, Number(page));
     limit = Math.max(1, Number(limit));
     const sortDirection = sortOrder === 'desc' ? -1 : 1;
 
     try {
-        const query = filterBy ? { category: filterBy } : {}; // Filter products if a category is provided
+        const query = filterBy ? { category: filterBy } : {};
 
         const options = {
             page,
             limit,
             sort: { [sort]: sortDirection },
-            lean: true // Convert Mongoose docs to plain JS objects
+            lean: true
         };
 
         const result = await ProductModel.paginate(query, options);
 
+        const dtoProducts = result.docs.map(p => new ProductDTO(p));
+
         res.render('productsStatic', {
-            products: result.docs,
+            products: dtoProducts,
             currentPage: result.page,
             totalPages: result.totalPages,
             prevPage: result.prevPage,
@@ -65,7 +73,6 @@ router.get('/products', async (req, res) => {
     }
 });
 
-
 router.get('/carts', jwtAuth, requireAdminOrOwner(), async (req, res) => {
     try {
         let { limit = 10, page = 1, sort = 'createdAt', sortOrder = 'desc' } = req.query;
@@ -73,17 +80,15 @@ router.get('/carts', jwtAuth, requireAdminOrOwner(), async (req, res) => {
         page = Math.max(1, Number(page));
         const sortDirection = sortOrder === 'desc' ? -1 : 1;
 
-        // Fetch carts without population
         const options = {
             page,
             limit,
             sort: { [sort]: sortDirection },
-            lean: true // Convert Mongoose docs to plain JS objects
+            lean: true
         };
 
         const result = await Cart.paginate({}, options);
 
-        // Manually populate product details
         for (let cart of result.docs) {
             for (let item of cart.products) {
                 const product = await ProductModel.findOne({ pid: item.pid }).lean();
@@ -96,7 +101,7 @@ router.get('/carts', jwtAuth, requireAdminOrOwner(), async (req, res) => {
         console.log("Carts data being sent to Handlebars:", JSON.stringify(result.docs, null, 2));
 
         res.render('cartsStatic', {
-            carts: result.docs, 
+            carts: result.docs,
             currentPage: result.page,
             totalPages: result.totalPages,
             prevPage: result.prevPage,
@@ -114,7 +119,6 @@ router.get('/carts', jwtAuth, requireAdminOrOwner(), async (req, res) => {
     }
 });
 
-
 router.get('/carts/:cid', jwtAuth, requireAdminOrOwner(), async (req, res) => {
     const { cid } = req.params;
     try {
@@ -124,27 +128,24 @@ router.get('/carts/:cid', jwtAuth, requireAdminOrOwner(), async (req, res) => {
         }
         res.render("cart", { cart });
     } catch (err) {
-        res.status(500).render("cart", { error: "Failed to load cart" });
+        errorLog(err)
+        return res.status(500).render("cart", { error: "Failed to load cart" });
     }
 });
 
-// Show currently logged on user's information
 router.get("/current", jwtAuth, (req, res) => {
     res.render("current");
 });
 
-// Logout and clear cookie (browser)
 router.get("/logout", jwtAuth, (req, res) => {
     res.clearCookie("token");
     res.redirect("/login");
 });
 
-// Guest cart route (accessible without login)
 router.get("/guest-cart", (req, res) => {
     res.render("guestCart");
 });
 
-// Admin console
 router.get("/admin", jwtAuth, requireAdminOrOwner(), (req, res) => {
     res.render("admin");
 });
@@ -183,5 +184,22 @@ router.get('/tickets', jwtAuth, requireRole("admin"), async (req, res) => {
     }
 });
 
+router.get('/products/:pid', async (req, res) => {
+    try {
+        const { pid } = req.params;
+        const product = await ProductModel.findOne({ pid }).lean();
+
+        if (!product) {
+            return res.status(404).render("productDetail", { error: "Product not found" });
+        }
+
+        const dto = new ProductDTO(product);
+
+        res.render("productDetail", { product: dto });
+    } catch (err) {
+        console.error("Error rendering product detail:", err);
+        res.status(500).render("productDetail", { error: "Internal Server Error" });
+    }
+});
 
 export default router;

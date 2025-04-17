@@ -1,12 +1,11 @@
 //cart.controllers.js
 
 import { request, response } from "express";
-import { v4 as uuidv4 } from 'uuid';
 import { notifyCartChange } from "../server.js";
 import { ProductModel } from "../persistence/mongo/models/product.model.js";
 import { Cart } from "../persistence/mongo/models/cart.model.js";
 import { cartService } from "../services/cart.services.js";
-import { errorLog } from "../utils/errorLog.js";
+import { errorLog } from "../utils/errorLog.util.js";
 import { ticketService } from "../services/ticket.services.js";
 
 class CartControllers {
@@ -37,25 +36,18 @@ class CartControllers {
     }
 
     async createCart(req = request, res = response) {
+        console.log("📥 Received request to create cart");
         try {
-            const { products } = req.body || {};
-            const cid = uuidv4();
-            const newCart = new Cart({
-                cid,
-                products: products || []
-            });
-
-            await newCart.save();
+            const newCart = await cartService.createCart();
             notifyCartChange();
 
             res.status(201).json({
                 status: "success",
-                message: products?.length ? "Cart created successfully with products." : "Empty cart created.",
+                message: "Cart created successfully.",
                 payload: newCart
             });
-
         } catch (err) {
-            console.error("Error creating custom cart:", err);
+            console.error("Error creating cart:", err);
             res.status(400).json({ status: "error", message: err.message || "Invalid request body." });
         }
     }

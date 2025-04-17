@@ -4,6 +4,7 @@ import { productService } from "../services/product.services.js";
 import { notifyProductChange } from "../server.js";
 import { request, response } from "express";
 import { ProductModel } from "../persistence/mongo/models/product.model.js";
+import { ProductDTO } from "../dto/product.dto.js";
 
 class ProductsControllers {
     async deleteProduct(req, res) {
@@ -30,7 +31,8 @@ class ProductsControllers {
             const result = await productService.updateProduct(pid, productUpdate);
             if (result) {
                 notifyProductChange();
-                res.json({ status: "success", payload: result });
+                const dto = new ProductDTO(result);
+                res.json({ status: "success", payload: dto });
             } else {
                 res.status(400).json({ status: "error", message: "Invalid product ID or update failed" });
             }
@@ -47,7 +49,8 @@ class ProductsControllers {
             if (!selectedProduct) {
                 return res.status(404).json({ status: "error", message: `No product found with ID: ${pid}` });
             }
-            res.json({ status: "success", payload: selectedProduct });
+            const dto = new ProductDTO(selectedProduct);
+            res.json({ status: "success", payload: dto });
         } catch (err) {
             console.error("Error retrieving product by ID:", err);
             res.status(500).json({ status: "error", message: "Server error" });
@@ -74,9 +77,11 @@ class ProductsControllers {
 
             const result = await ProductModel.paginate(query, options);
 
+            const dtoPayload = result.payload.map(product => new ProductDTO(product));
+
             res.json({
                 status: "success",
-                payload: result.payload,
+                payload: dtoPayload,
                 totalPages: result.totalPages,
                 prevPage: result.hasPrevPage ? result.prevPage : null,
                 nextPage: result.hasNextPage ? result.nextPage : null,
@@ -137,7 +142,9 @@ class ProductsControllers {
                 return res.status(400).json({ status: "error", message: "Invalid product data" });
             }
 
-            res.status(201).json({ status: "success", payload: product });
+            const dto = new ProductDTO(product);
+
+            res.status(201).json({ status: "success", payload: dto });
         } catch (err) {
             console.error("Error creating product:", err);
             res.status(500).json({ status: "error", message: "Server error" });

@@ -2,23 +2,27 @@
 import { userDao } from "../persistence/mongo/dao/user.dao.js";
 import { cartService } from "./cart.services.js";
 import { v4 as uuidv4 } from 'uuid';
+import { UserDTO } from "../dto/user.dto.js";
 
 class UserService {
 
     async getUserByEmail(email) {
-        return await userDao.getUserByEmail(email);
+        const user = await userDao.getUserByEmail(email);
+        return user ? new UserDTO(user) : null;
     }
 
     async getUserById(id) {
-        return await userDao.getUserById(id);
+        const user = await userDao.getUserById(id);
+        return user ? new UserDTO(user) : null;
     }
 
     async getAllUsers() {
-        return await userDao.getAllUsers();
+        const users = await userDao.getAllUsers();
+        return users.map(user => new UserDTO(user));
     }
 
     async createUser(userData) {
-        // Before creating the user, let's generate a new cart for them.
+        // Generate a new cart before creating user
         const cid = uuidv4();
         const newCart = await cartService.createCart(cid);
 
@@ -27,7 +31,8 @@ class UserService {
             cartId: newCart.cid,
         };
 
-        return await userDao.createUser(newUser);
+        const created = await userDao.createUser(newUser);
+        return new UserDTO(created);
     }
 
     async deleteUserById(id) {

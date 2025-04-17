@@ -58,13 +58,55 @@ body {
   margin: 0
 }
 
+.make-it-7-wide {
+  min-width: 7rem !important;
+}
+
+.make-it-8-wide {
+  min-width: 8rem !important;
+  max-width: 8rem !important;
+}
+
+.make-it-9-wide {
+  min-width: 9rem !important;
+  max-width: 9rem !important;
+}
+
+.make-it-10-wide {
+  min-width: 10rem !important;
+  max-width: 10rem !important;
+}
+
+.make-it-11-wide {
+  min-width: 11rem !important;
+  max-width: 11rem !important;
+}
+
+.make-it-15-wide {
+  min-width: 15rem !important;
+  max-width: 15rem !important;
+}
+
+.make-it-20-wide {
+  min-width: 18rem !important;
+  max-width: 18rem !important;
+}
+
+.make-it-100percent-wide {
+  min-width: 100%;
+  max-width: 100%;
+}
+
 .navbar-item{
   display: inline-block;
-  min-width: 6.8rem !important;
+  min-width: 6rem !important;
   align-items: center;
   justify-content: center;
   padding: 0;
   margin: 0;
+  border: solid;
+  border-width: 0 1px 0 0;
+  border-color: #7e8073 !important;
 }
 
 .cart-count {
@@ -114,7 +156,8 @@ body {
   padding: .2rem .5rem;
   font-size: .9rem;
   position: relative;
-  width: 6.5rem
+  min-width: 8rem;
+  width: 8rem
 }
 
 .logo-back {
@@ -233,7 +276,6 @@ body {
   color: #000
 }
 
-.card-category-badge-detail,
 .card-category-badge-price {
   background-color: rgba(10, 230, 230, .999);
   color: #000;
@@ -244,13 +286,6 @@ body {
   justify-items: center;
   display: flex;
   min-width: 8rem
-}
-
-.card-category-badge-price {
-  background-color: rgba(10, 70, 70, .999);
-  color: #fff;
-  font-weight: 700;
-  font-size: 1.3rem
 }
 
 .page-title-main-container {
@@ -433,10 +468,6 @@ body {
 .thumb-image {
   width: 56px;
   margin-right: 2rem
-}
-
-.medium-image {
-  width: 96px
 }
 
 .medium-image {
@@ -803,7 +834,7 @@ textarea:focus {
     background-position: center;
     background-repeat: repeat-x;
     background-attachment: fixed;
-    padding: 8.5rem 1rem 4rem 1rem !important;
+    
   }
 
   .grid-container-3c-by-1r{

@@ -1,3 +1,5 @@
+// product.model.js
+
 import { Schema, model } from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
 

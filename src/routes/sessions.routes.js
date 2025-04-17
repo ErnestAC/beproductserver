@@ -7,7 +7,7 @@ import { registerUserSchema, loginUserSchema } from "../schemas/user.schema.js";
 import { userController } from "../controllers/user.controllers.js"
 
 const router = Router();
-const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_key";
+const JWT_SECRET = process.env.JWT_SECRET || "super_secret_jwt_string";
 
 // Register new user
 router.post("/register", validateRequest(registerUserSchema), userController.registerUser);

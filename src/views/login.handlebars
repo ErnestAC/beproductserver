@@ -7,70 +7,75 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
-    
 
-    <div class="make-it-white make-it-center section" id="message">
-    </div>
+    <div class="make-it-white make-it-center section" id="message"></div>
 
     <div class="grid-container-3c-by-1r">
         <div></div>
         <div class="box make-it-semi-back">
             <h2 class="make-it-left make-it-dark make-it-rounded-top make-it-normal">Log in</h2>
-            <div class="">
-                
+            <div>
                 <form class="make-it-center" id="loginForm">
-                    <div class="make-it-dark  section" for="email">
-                        <p class="make-it-dark">E-mail</p>
-                        <input class="input " name="email" type="email" required />
+                    <div class="make-it-dark section" for="email">
+                        <p class="make-it-dark small-section">E-mail</p>
+                <input class="input" name="email" type="email" required />
                     </div>
 
-                    <div class="make-it-dark  section " for="password">
-                        <p class="make-it-dark">Password</p>
-                        <input class="input " name="password" type="password" required />
+                    <div class="make-it-dark section" for="password">
+                        <p class="make-it-dark small-section">Password</p>
+                        <input class="input" name="password" type="password" required />
                     </div>
-
-                    <button class="section button " type="submit">Login</button>
+                    <br>
+                    <div class="grid-container-2c-by-1r section">
+                    
+                        <button class="button is-primary make-it-dark make-it-normal" type="submit">
+                            Login
+                        </button>
+                    
+                        <a href="/register" class="button is-link is-light make-it-dark make-it-normal">
+                            Register
+                        </a>
+                    
+                    </div>
                 </form>
             </div>
         </div>
     </div>
-
-    
 
     <script>
         const form = document.getElementById("loginForm");
         const message = document.getElementById("message");
 
         form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+            e.preventDefault();
 
-        const formData = new FormData(form);
-        const data = {
-            email: formData.get("email"),
-            password: formData.get("password"),
-        };
+            const formData = new FormData(form);
+            const data = {
+                email: formData.get("email"),
+                password: formData.get("password"),
+            };
 
-        try {
-            const res = await fetch("/api/sessions/jwt/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-            });
+            try {
+                const res = await fetch("/api/sessions/jwt/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data),
+                });
 
-            const result = await res.json();
+                const result = await res.json();
 
-            if (res.ok) {
-            message.innerText = "Logged in.";
-            localStorage.setItem("token", result.token);
-            setTimeout(() => {
-                window.location.href = "/products"; // the browser is redirected to products as a logged on user
-            }, 1000);
-            } else {
-            message.innerText = `${result.message || "Login failed"}`;
+                if (res.ok) {
+                    message.innerText = "Logged in.";
+                    localStorage.setItem("token", result.token);
+                    setTimeout(() => {
+                        window.location.href = "/products"; // Redirect after login
+                    }, 1000);
+                } else {
+                    message.innerText = `${result.message || "Login failed"}`;
+                }
+            } catch (err) {
+                message.innerText = `Failed to login: ${err.message}`;
             }
-        } catch (err) {
-            message.innerText = `Failed to login: ${err.message}`;
-        }
         });
     </script>
 </body>

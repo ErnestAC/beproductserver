@@ -53,6 +53,10 @@
             <div class="make-it-rounded-top small-section make-it-small make-it-semi make-it-right">
                     Cart ID: {{cart.cid}}
             </div>
+                <div class=" section">
+                    <button class="button is-warning is-small" onclick="emptyCart('{{cart.cid}}')">Empty Cart</button>
+                    <button class="button is-success is-small" onclick="purchaseCart('{{cart.cid}}')">Purchase</button>
+                </div>
             </div>
         {{else}}
             <p class="make-it-white make-it-center">Your cart is empty.</p>
@@ -120,9 +124,6 @@
             }
         }
     </script>
-    <div class=" section">
-        <button class="button is-warning is-small" onclick="emptyCart('{{cart.cid}}')">Empty Cart</button>
-        <button class="button is-success is-small" onclick="purchaseCart('{{cart.cid}}')">Purchase</button>
-    </div>
+
 </body>
 </html>
