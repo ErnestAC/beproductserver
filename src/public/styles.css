@@ -276,7 +276,6 @@ body {
   color: #000
 }
 
-.card-category-badge-detail,
 .card-category-badge-price {
   background-color: rgba(10, 230, 230, .999);
   color: #000;
@@ -287,13 +286,6 @@ body {
   justify-items: center;
   display: flex;
   min-width: 8rem
-}
-
-.card-category-badge-price {
-  background-color: rgba(10, 70, 70, .999);
-  color: #fff;
-  font-weight: 700;
-  font-size: 1.3rem
 }
 
 .page-title-main-container {
@@ -476,10 +468,6 @@ body {
 .thumb-image {
   width: 56px;
   margin-right: 2rem
-}
-
-.medium-image {
-  width: 96px
 }
 
 .medium-image {

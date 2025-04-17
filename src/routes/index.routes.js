@@ -10,6 +10,7 @@ import { Cart } from "../persistence/mongo/models/cart.model.js";
 
 import { ticket } from "../persistence/mongo/models/ticket.model.js";
 import { ProductDTO } from "../dto/product.dto.js"; // 🔧 Added
+import { errorLog } from "../utils/errorLog.util.js";
 
 const router = Router();
 const jwtAuth = passport.authenticate("jwt", { session: false });
@@ -127,7 +128,8 @@ router.get('/carts/:cid', jwtAuth, requireAdminOrOwner(), async (req, res) => {
         }
         res.render("cart", { cart });
     } catch (err) {
-        res.status(500).render("cart", { error: "Failed to load cart" });
+        errorLog(err)
+        return res.status(500).render("cart", { error: "Failed to load cart" });
     }
 });
 
