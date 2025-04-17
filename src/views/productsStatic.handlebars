@@ -16,7 +16,7 @@
 
     <!-- Pagination Controls -->
     <section class="">
-        <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-6c-by-1r" role="navigation" aria-label="pagination">
+        <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-3c-by-1r-special" role="navigation" aria-label="pagination">
             <!-- Previous Page Link -->
             <div class="make-it-center make-it-100percent-wide">
                 <a class="navbar-item make-it-rounded make-it-small" 
@@ -25,25 +25,19 @@
                 </a>
             </div>
 
-            <div class="make-it-rounded make-it-light-back make-it-dark small-section make-it-small">
-                Page {{currentPage}} of {{totalPages}}
-            </div>
-
             <!-- Next Page Link -->
             <a class="navbar-item make-it-rounded make-it-small" 
                 href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
-                {{#if (eq currentPage totalPages)}}disabled{{/if}}>Next</a>
+                {{#if (eq currentPage totalPages)}}disabled{{/if}}>Next
+            </a>
 
-            <!-- Page Numbers -->
-            <ul class="pagination-list">
-                {{#each pages}}
-                    <li>
-                        <a class="pagination-link" 
-                            href="?page={{this}}&limit={{../limit}}&sort={{../sort}}&sortOrder={{../sortOrder}}" 
-                            {{#if (eq this @root.currentPage)}}aria-current="page"{{/if}}>{{this}}</a>
-                    </li>
-                {{/each}}
-            </ul>
+
+            <div class="make-it-dark small-section make-it-small">
+                Page {{currentPage}} of {{totalPages}}
+            </div>
+
+            
+
         </div>
     </section>
 
@@ -77,7 +71,7 @@
                                             <p><b>Pieces:</b> {{this.pieces}}</p>
                                             <p><b>Code:</b> {{this.code}}</p>
                                         </div>
-                                        <div class="column is-6 make-it-center">
+                                        <div class="column is-6 make-it-left">
                                             <p><b>Motor:</b> {{#if this.motorizable}}Yes{{else}}No{{/if}}</p>
                                             <p><b>Lights:</b> {{#if this.lighting}}Yes{{else}}No{{/if}}</p>
                                         </div>
