@@ -1,4 +1,4 @@
-//cart.controllers.js
+// src/controllers/cart.controllers.js
 
 import { request, response } from "express";
 import { notifyCartChange } from "../server.js";
@@ -7,6 +7,7 @@ import { Cart } from "../persistence/mongo/models/cart.model.js";
 import { cartService } from "../services/cart.services.js";
 import { errorLog } from "../utils/errorLog.util.js";
 import { ticketService } from "../services/ticket.services.js";
+import { CartDTO } from "../dto/cart.dto.js";
 
 class CartControllers {
     async getCartById(req, res) {
@@ -14,9 +15,10 @@ class CartControllers {
         try {
             const cart = await cartService.getCartById(cid);
             if (cart) {
+                const dto = new CartDTO(cart);
                 res.json({
                     status: "success",
-                    payload: cart,
+                    payload: dto,
                     totalPages: 1,
                     prevPage: null,
                     nextPage: null,
@@ -36,15 +38,13 @@ class CartControllers {
     }
 
     async createCart(req = request, res = response) {
-        console.log("📥 Received request to create cart");
         try {
             const newCart = await cartService.createCart();
             notifyCartChange();
-
             res.status(201).json({
                 status: "success",
                 message: "Cart created successfully.",
-                payload: newCart
+                payload: new CartDTO(newCart)
             });
         } catch (err) {
             console.error("Error creating cart:", err);
@@ -79,8 +79,7 @@ class CartControllers {
         try {
             const cart = await cartService.updateProductQuantity(cid, pid, quantity);
             notifyCartChange();
-
-            res.json({ status: "success", message: "Product quantity updated", payload: cart });
+            res.json({ status: "success", message: "Product quantity updated", payload: new CartDTO(cart) });
         } catch (err) {
             console.error("Error updating product quantity:", err);
             res.status(500).json({ status: "error", message: err.message || "Server error" });
@@ -92,7 +91,7 @@ class CartControllers {
         try {
             const cart = await cartService.removeProductFromCart(cid, pid);
             notifyCartChange();
-            res.json({ status: "success", message: "Product removed from cart", payload: cart });
+            res.json({ status: "success", message: "Product removed from cart", payload: new CartDTO(cart) });
         } catch (err) {
             errorLog(err);
             res.status(500).json({ status: "error", message: err.message || "Server error" });
@@ -104,7 +103,7 @@ class CartControllers {
         try {
             const updatedCart = await cartService.addProductToCart(cid, pid);
             notifyCartChange();
-            res.json({ status: "success", payload: updatedCart });
+            res.json({ status: "success", payload: new CartDTO(updatedCart) });
         } catch (err) {
             errorLog(err);
             res.status(err.message.includes("Cart with ID") ? 404 : 500).json({
@@ -135,7 +134,24 @@ class CartControllers {
                     customLabels: { docs: "payload" }
                 });
 
-            res.json({ status: "success", carts });
+            const dtoCarts = carts.payload.map(cart => new CartDTO(cart));
+
+            res.json({
+                status: "success",
+                payload: dtoCarts,
+                totalPages: carts.totalPages,
+                prevPage: carts.hasPrevPage ? carts.prevPage : null,
+                nextPage: carts.hasNextPage ? carts.nextPage : null,
+                page: carts.page,
+                hasPrevPage: carts.hasPrevPage,
+                hasNextPage: carts.hasNextPage,
+                prevLink: carts.hasPrevPage
+                    ? `${req.baseUrl}?page=${carts.prevPage}&limit=${limit}&sort=${sort}&sortOrder=${sortOrder === -1 ? "desc" : "asc"}`
+                    : null,
+                nextLink: carts.hasNextPage
+                    ? `${req.baseUrl}?page=${carts.nextPage}&limit=${limit}&sort=${sort}&sortOrder=${sortOrder === -1 ? "desc" : "asc"}`
+                    : null
+            });
         } catch (err) {
             errorLog(err);
             res.status(500).json({ status: "error", message: "Server error" });

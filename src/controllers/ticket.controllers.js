@@ -14,7 +14,7 @@ class TicketController {
 
             const tickets = await ticketService.getAllTickets({ page, limit, sort, sortOrder });
 
-            res.json({ status: "success", tickets });
+            res.json({ status: "success", payload: tickets });
         } catch (err) {
             errorLog(err, req);
             res.status(500).json({ status: "error", message: "Failed to retrieve tickets" });
@@ -29,7 +29,7 @@ class TicketController {
                 return res.status(404).json({ status: "error", message: `Ticket ${tid} not found` });
             }
 
-            res.json({ status: "success", ticket });
+            res.json({ status: "success", payload: ticket });
         } catch (err) {
             errorLog(err, req);
             res.status(500).json({ status: "error", message: "Failed to retrieve ticket" });
