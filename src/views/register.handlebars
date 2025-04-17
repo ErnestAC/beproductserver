@@ -1,0 +1,90 @@
+{{!-- views/register.handlebars (with password confirmation) --}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+</head>
+<body>
+    <section class="section">
+        <h2 class="section make-it-left make-it-white-back make-it-dark make-it-normal make-it-rounded-top make-it-normal">Create a Shopnhour Account</h2>
+        <div class="container">
+
+            <br>
+            <form id="registerForm" action="/api/sessions/register" method="POST" class="box">
+                <div class="field">
+                    <label class="label">Username (login name)</label>
+                    <div class="control">
+                        <input class="input" type="text" name="username" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Email (contact email)</label>
+                    <div class="control">
+                        <input class="input" type="email" name="email" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">First Name</label>
+                    <div class="control">
+                        <input class="input" type="text" name="first_name" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Last Name</label>
+                    <div class="control">
+                        <input class="input" type="text" name="last_name" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Password</label>
+                    <div class="control">
+                        <input id="password" class="input" type="password" name="password" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Confirm Password</label>
+                    <div class="control">
+                        <input id="confirmPassword" class="input" type="password" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Age</label>
+                    <div class="control">
+                        <input class="input" type="number" name="age" required min="0">
+                    </div>
+                </div>
+
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-link" type="submit">Register</button>
+                    </div>
+                    <div class="control">
+                        <a class="button is-light" href="/login">Back to Login</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", function (event) {
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+
+            if (password !== confirmPassword) {
+                event.preventDefault();
+                alert("Passwords do not match. Please try again.");
+            }
+        });
+    </script>
+</body>
+</html>

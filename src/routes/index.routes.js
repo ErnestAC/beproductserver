@@ -27,6 +27,11 @@ router.get("/login", (req, res) => {
     res.render("login"); 
 });
 
+// 🔥 NEW: Register page route
+router.get("/register", (req, res) => {
+    res.render("register");
+});
+
 router.get('/products', async (req, res) => {
     let { page = 1, limit = 12, sort = 'title', sortOrder = 'asc', filterBy = '' } = req.query;
 
@@ -35,7 +40,7 @@ router.get('/products', async (req, res) => {
     const sortDirection = sortOrder === 'desc' ? -1 : 1;
 
     try {
-        const query = filterBy ? { category: filterBy } : {}; // Filter products if a category is provided
+        const query = filterBy ? { category: filterBy } : {};
 
         const options = {
             page,
@@ -46,10 +51,10 @@ router.get('/products', async (req, res) => {
 
         const result = await ProductModel.paginate(query, options);
 
-        const dtoProducts = result.docs.map(p => new ProductDTO(p)); // 🔧 Convert to DTO
+        const dtoProducts = result.docs.map(p => new ProductDTO(p));
 
         res.render('productsStatic', {
-            products: dtoProducts, // 🔧 Use DTOs
+            products: dtoProducts,
             currentPage: result.page,
             totalPages: result.totalPages,
             prevPage: result.prevPage,
@@ -66,7 +71,6 @@ router.get('/products', async (req, res) => {
         res.status(500).send("Error rendering products");
     }
 });
-
 
 router.get('/carts', jwtAuth, requireAdminOrOwner(), async (req, res) => {
     try {
@@ -96,7 +100,7 @@ router.get('/carts', jwtAuth, requireAdminOrOwner(), async (req, res) => {
         console.log("Carts data being sent to Handlebars:", JSON.stringify(result.docs, null, 2));
 
         res.render('cartsStatic', {
-            carts: result.docs, 
+            carts: result.docs,
             currentPage: result.page,
             totalPages: result.totalPages,
             prevPage: result.prevPage,
@@ -113,7 +117,6 @@ router.get('/carts', jwtAuth, requireAdminOrOwner(), async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
-
 
 router.get('/carts/:cid', jwtAuth, requireAdminOrOwner(), async (req, res) => {
     const { cid } = req.params;
@@ -196,6 +199,5 @@ router.get('/products/:pid', async (req, res) => {
         res.status(500).render("productDetail", { error: "Internal Server Error" });
     }
 });
-
 
 export default router;

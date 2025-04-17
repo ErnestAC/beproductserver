@@ -3,7 +3,9 @@ import { userService } from "../services/user.services.js";
 
 class UserControllers {
     async registerUser(req, res) {
-        const { username, email, password, first_name, last_name, age, role } = req.body;
+        const { username, email, password, first_name, last_name, age } = req.body;
+
+        const role = "user" // forces everything that is created to be a user no matter what has been sent in the body
 
         try {
             const existingUser = await userService.getUserByEmail(email);
