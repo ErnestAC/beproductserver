@@ -21,28 +21,28 @@
         <div class="grid-container-3c-by-1r-special make-it-rounded small-section make-it-small">
             <div></div>
             <div class="grid-container-3c-by-1r-special">
-                <a class="navbar-item make-it-rounded make-it-dark" href="/products">
+                <a class="navbar-item make-it-rounded make-it-dark make-it-7-wide" href="/products">
                     <span><i class="fas fa-box-open small-section"></i>Products</span>
                 </a>
                 {{#if user}}
                     <div class="">
-                        <a class="navbar-item make-it-rounded make-it-dark" href="/current/">
+                        <a class="navbar-item make-it-rounded make-it-dark make-it-7-wide" href="/current/">
                             <span><i class="fas fa-user small-section"></i>{{user.username}}</span>
                         </a>
                     </div>
                 {{else}}
                 <div class="">
-                    <a class="navbar-item make-it-rounded make-it-dark" href="/login/">
+                    <a class="navbar-item make-it-rounded make-it-dark make-it-7-wide" href="/login/">
                         <span><i class="fas fa-key small-section"></i>Log in</span>
                     </a>
                 </div>
                 {{/if}}
                 {{#if user}}
-                    <a class="navbar-item make-it-rounded make-it-dark" href="/carts/{{user.cartId}}">
+                    <a class="navbar-item make-it-rounded make-it-dark make-it-7-wide" href="/carts/{{user.cartId}}">
                         <span><i class="fas fa-shopping-cart small-section"></i>Cart</span>
                     </a>
                 {{else}}
-                    <a class="navbar-item make-it-rounded make-it-dark" href="/guest-cart">
+                    <a class="navbar-item make-it-rounded make-it-dark make-it-7-wide" href="/guest-cart">
                         <span><i class="fas fa-shopping-cart small-section"></i>Cart</span>
                     </a>
                 {{/if}}

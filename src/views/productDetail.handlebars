@@ -1,0 +1,55 @@
+{{!-- views/productDetail.handlebars --}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{product.title}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+</head>
+<body>
+    {{#if error}}
+        <h2>{{error}}</h2>
+    {{else}}
+        <section class="section">
+            <div class="columns is-centered">
+                <div class="column is-12-mobile is-12-desktop">
+                    <div class="card-title-container make-it-dark-back make-it-left make-it-white">
+                        <div>
+                            {{product.title}}
+                        </div>
+                    </div>
+                    <div class="make-it-semi-back">
+                        <div class="small-section">
+                            <div class="make-it-rounded">
+                                <img src="{{product.imageURL}}" alt="{{product.title}}">
+                            </div>
+                            <div class="card-category-badge-prebuilt make-it-left">
+                                {{product.category}}
+                            </div>
+                            <br>
+                            <div class="columns make-it-white-back make-it-rounded make-it-dark make-it-small small-section">
+                                <div class="column is-6 make-it-left">
+                                    <p><b>Price:</b> ${{product.price}}</p>
+                                    <p><b>Stock:</b> {{product.stock}}</p>
+                                    <p><b>Pieces:</b> {{product.pieces}}</p>
+                                    <p><b>Code:</b> {{product.code}}</p>
+                                </div>
+                                <div class="column is-6 make-it-left">
+                                    <p><b>Motor:</b> {{#if product.motorizable}}Yes{{else}}No{{/if}}</p>
+                                    <p><b>Lights:</b> {{#if product.lighting}}Yes{{else}}No{{/if}}</p>
+                                </div>
+                            </div>
+                            <div class="make-it-right section">
+                                <a href="/products" class="button is-small is-link make-it-small" style="margin-top: 0.5rem;">
+                                    Back
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {{/if}}
+</body>
+</html>

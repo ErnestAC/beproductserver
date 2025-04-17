@@ -179,4 +179,23 @@ router.get('/tickets', jwtAuth, requireRole("admin"), async (req, res) => {
     }
 });
 
+router.get('/products/:pid', async (req, res) => {
+    try {
+        const { pid } = req.params;
+        const product = await ProductModel.findOne({ pid }).lean();
+
+        if (!product) {
+            return res.status(404).render("productDetail", { error: "Product not found" });
+        }
+
+        const dto = new ProductDTO(product);
+
+        res.render("productDetail", { product: dto });
+    } catch (err) {
+        console.error("Error rendering product detail:", err);
+        res.status(500).render("productDetail", { error: "Internal Server Error" });
+    }
+});
+
+
 export default router;

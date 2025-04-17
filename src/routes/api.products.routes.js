@@ -1,3 +1,5 @@
+//api.products.routes.js
+
 import { Router } from "express";
 import { uploader } from "../utils.js";
 import passport from "../config/passport/passport.config.js";
