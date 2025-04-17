@@ -41,6 +41,7 @@ app.use(methodOverride("_method")); // for UI delete requests
 // Static files
 app.use("/static", express.static(path.join(__dirname, "../public")));
 app.use("/img", express.static(path.join(__dirname, "../public/img")));
+app.use("/js", express.static(path.join(__dirname, "../public/js")));
 
 // View engine setup
 app.set("views", path.join(__dirname, "../views"));

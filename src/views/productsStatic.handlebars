@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Product List</title>
     <meta name="color-scheme" content="dark">
 </head>
 <body>
-    <h2 class=" section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Products</h2>
+    <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Products</h2>
 
     <script>
         const isLoggedIn = {{#if user}}true{{else}}false{{/if}};
         const userCartId = {{#if user}}"{{user.cartId}}"{{else}}null{{/if}};
     </script>
 
-    <!-- Pagination Controls -->
     <section class="">
         <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-3c-by-1r-special" role="navigation" aria-label="pagination">
-            <!-- Previous Page Link -->
             <div class="make-it-center make-it-100percent-wide">
                 <a class="navbar-item make-it-rounded make-it-small" 
                     href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
@@ -25,23 +23,17 @@
                 </a>
             </div>
 
-            <!-- Next Page Link -->
             <a class="navbar-item make-it-rounded make-it-small" 
                 href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
                 {{#if (eq currentPage totalPages)}}disabled{{/if}}>Next
             </a>
 
-
             <div class="make-it-dark small-section make-it-small">
                 Page {{currentPage}} of {{totalPages}}
             </div>
-
-            
-
         </div>
     </section>
 
-    <!-- Product List -->
     <section class="section">
         <div class="">
             <div class="columns is-multiline is-centered">
@@ -49,20 +41,14 @@
                     {{#each products}}
                         <div class="column is-12-mobile is-3-desktop">
                             <div class="card-title-container make-it-dark-back make-it-left make-it-white">
-                                <div>
-                                    {{this.title}}
-                                </div>
+                                <div>{{this.title}}</div>
                             </div>
                             <div class="make-it-semi-back">
                                 <div class="small-section">
-
                                     <a href="/products/{{this.pid}}">
-                                        <img src={{this.imageURL}} alt={{this.title}}>
+                                        <img src="{{this.imageURL}}" alt="{{this.title}}">
                                     </a>
-
-                                    <div class="card-category-badge-prebuilt make-it-left">
-                                        {{this.category}}
-                                    </div>
+                                    <div class="card-category-badge-prebuilt make-it-left">{{this.category}}</div>
                                     <br>
                                     <div class="columns make-it-white-back make-it-dark make-it-small small-section">
                                         <div class="column is-6 make-it-left">
@@ -84,7 +70,6 @@
                                                 Add to cart
                                             </button>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -96,6 +81,10 @@
             </div>
         </div>
     </section>
+
+    <!-- Toastify (dependency for showToast.js) -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="/js/showToast.js"></script>
 
     <script>
         function applyLimit() {
@@ -123,13 +112,13 @@
                         });
 
                         if (response.ok) {
-                            console.log("added product to cart")
+                            showToast(`${product.title} added to cart`);
                         } else {
                             const err = await response.json();
-                            alert(`Failed to add to cart: ${err.message}`);
+                            showToast(`Failed to add to cart: ${err.message}`, false);
                         }
                     } catch (err) {
-                        alert("Error adding product to cart.");
+                        showToast("Error adding product to cart", false);
                         console.error(err);
                     }
                 } else {
@@ -148,7 +137,7 @@
                     }
 
                     localStorage.setItem("guestCart", JSON.stringify(cart));
-                    console.log("added product to cart")
+                    showToast(`${product.title} added to guest cart`);
                 }
             });
         });

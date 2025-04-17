@@ -162,7 +162,8 @@ class CartControllers {
         try {
             const { cid } = req.params;
 
-            const cart = await cartService.getCartById(cid);
+            const cart = await cartService.getCartById(cid); // Notice: must use getCartByIdMongoose to ensure full population
+
             if (!cart) {
                 return res.status(404).json({ status: "error", message: `Cart ${cid} was not found.` });
             }
@@ -178,7 +179,8 @@ class CartControllers {
 
             res.status(200).json({ status: "success", ticket });
         } catch (error) {
-            errorLog(error, req);
+            errorLog(error);
+            
             res.status(500).json({ status: "error", message: "Internal server error" });
         }
     }

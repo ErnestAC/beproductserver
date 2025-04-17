@@ -1,10 +1,22 @@
 // src/services/cart.services.js
+
 import { cartDao } from "../persistence/mongo/dao/cart.dao.js";
 import { ProductModel } from "../persistence/mongo/models/product.model.js";
+import { Cart } from "../persistence/mongo/models/cart.model.js";
 
 class CartService {
     async getCartById(cid) {
         return await cartDao.getCartById(cid);
+    }
+
+    async getCartByIdMongoose(cid) {
+        return await Cart.findOne({ cid })
+            .populate({
+                path: "products.pid",
+                model: ProductModel,
+                select: "title handle imageURL description price category stock pieces"
+            })
+            .lean();
     }
 
     async createCart() {
@@ -56,7 +68,11 @@ class CartService {
             const product = await ProductModel.findOne({ pid: item.pid });
 
             if (!product || product.stock <= 0) {
-                notPurchased.push(item);
+                notPurchased.push({
+                    ...item.toObject(),
+                    title: product ? product.title : "Unknown",
+                    price: product ? product.price : 0
+                });
                 continue;
             }
 
@@ -64,13 +80,17 @@ class CartService {
                 product.stock -= item.quantity;
                 await product.save();
 
-                purchased.push({ ...item.toObject(), price: product.price });
+                purchased.push({
+                    ...item.toObject(),
+                    title: product.title,
+                    price: product.price
+                });
                 total += product.price * item.quantity;
             } else {
-                // Partially fulfill the order
                 purchased.push({
                     ...item.toObject(),
                     quantity: product.stock,
+                    title: product.title,
                     price: product.price
                 });
 
@@ -78,7 +98,9 @@ class CartService {
 
                 notPurchased.push({
                     ...item.toObject(),
-                    quantity: item.quantity - product.stock
+                    quantity: item.quantity - product.stock,
+                    title: product.title,
+                    price: product.price
                 });
 
                 product.stock = 0;
@@ -86,8 +108,10 @@ class CartService {
             }
         }
 
-        // Update the cart with only the unfulfilled items
-        cart.products = notPurchased;
+        cart.products = notPurchased.map(item => ({
+            pid: item.pid,
+            quantity: item.quantity
+        }));
         await cart.save();
 
         return { purchased, notPurchased, total };

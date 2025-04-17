@@ -32,7 +32,7 @@ router.delete("/:cid/products/:pid", jwtAuth, requireAdminOrOwner("cid"), cartCo
 // Admin user: Create a new cart
 router.post("/", jwtAuth, requireRole("admin"), validateRequest(cartSchema), cartController.createCart);
 
-// Use POST method for purchase! - admin is not allowed to purchase!
+// Use POST method for purchase - admin is not allowed to purchase!
 router.post("/:cid/purchase", jwtAuth, requireOwner("cid"), requireRole("user"), cartController.purchaseCart);
 
 export default router;
