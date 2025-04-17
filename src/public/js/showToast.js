@@ -10,7 +10,7 @@ function showToast(message, goodness = true) {
         text: message,
         duration: 3000,
         gravity: "bottom",
-        position: "right",
+        position: "center",
         backgroundColor: backgroundColorS,
         stopOnFocus: true
     }).showToast();
