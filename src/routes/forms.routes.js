@@ -2,7 +2,7 @@
 
 import { Router } from "express";
 import passport from "../config/passport/passport.config.js";
-import { uploader } from "../utils.js";
+import { uploader } from "../utils/fileHandler.utils.js";
 import { productDao } from "../persistence/mongo/dao/product.dao.js";
 import { notifyProductChange } from "../server.js";
 import { requireRole } from "../middlewares/role.middleware.js";

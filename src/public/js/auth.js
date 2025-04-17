@@ -1,4 +1,4 @@
-// 🔐 Auth helper for attaching token to requests
+// Auth helper for attaching token to requests
 export const authFetch = async (url, options = {}) => {
     const token = localStorage.getItem("token");
     

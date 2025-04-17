@@ -9,7 +9,7 @@ import session from "express-session";
 import passport from "./config/passport/passport.config.js";
 import cookieParser from "cookie-parser";
 import { jwtViewAuth } from "./middlewares/auth.middleware.js";
-import { __dirname } from "./utils.js";
+import { __dirname } from "./utils/fileHandler.utils.js";
 
 import ProductsRoute from "./routes/api.products.routes.js";
 import CartsRoute from "./routes/api.carts.routes.js";
@@ -39,11 +39,11 @@ app.use(jwtViewAuth);
 app.use(methodOverride("_method")); // for UI delete requests
 
 // Static files
-app.use("/static", express.static(path.join(__dirname, "public")));
-app.use("/img", express.static(path.join(__dirname, "public/img")));
+app.use("/static", express.static(path.join(__dirname, "../public")));
+app.use("/img", express.static(path.join(__dirname, "../public/img")));
 
 // View engine setup
-app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(__dirname, "../views"));
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 

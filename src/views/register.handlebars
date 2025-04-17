@@ -1,4 +1,4 @@
-{{!-- views/register.handlebars (with password confirmation) --}}
+{{!-- views/register.handlebars --}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,55 +9,58 @@
 </head>
 <body>
     <section class="section">
-        <h2 class="section make-it-left make-it-white-back make-it-dark make-it-normal make-it-rounded-top make-it-normal">Create a Shopnhour Account</h2>
+        <h2 class="section make-it-left make-it-white-back make-it-dark make-it-normal make-it-rounded-top make-it-normal">
+            Create a Shopnhour Account
+        </h2>
         <div class="container">
-
             <br>
-            <form id="registerForm" action="/api/sessions/register" method="POST" class="box">
+            <form id="registerForm" action="/api/sessions/register" method="POST" class="box make-it-small">
                 <div class="field">
-                    <label class="label">Username (login name)</label>
+                    <label class="make-it-normal">Display name (Username)</label>
                     <div class="control">
                         <input class="input" type="text" name="username" required>
                     </div>
                 </div>
 
                 <div class="field">
-                    <label class="label">Email (contact email)</label>
+                    <label class="make-it-normal">Email (Used to log in)</label>
                     <div class="control">
                         <input class="input" type="email" name="email" required>
                     </div>
                 </div>
 
                 <div class="field">
-                    <label class="label">First Name</label>
+                    <label class="make-it-normal">First Name</label>
                     <div class="control">
                         <input class="input" type="text" name="first_name" required>
                     </div>
                 </div>
 
                 <div class="field">
-                    <label class="label">Last Name</label>
+                    <label class="make-it-normal">Last Name</label>
                     <div class="control">
                         <input class="input" type="text" name="last_name" required>
                     </div>
                 </div>
 
                 <div class="field">
-                    <label class="label">Password</label>
+                    <label class="make-it-normal">Password</label>
                     <div class="control">
                         <input id="password" class="input" type="password" name="password" required>
                     </div>
+                    <p id="passwordHelp" class="help make-it-normal"></p>
                 </div>
 
                 <div class="field">
-                    <label class="label">Confirm Password</label>
+                    <label class="make-it-normal">Confirm Password</label>
                     <div class="control">
                         <input id="confirmPassword" class="input" type="password" required>
                     </div>
+                    <p id="confirmPasswordHelp" class="help make-it-normal"></p>
                 </div>
 
                 <div class="field">
-                    <label class="label">Age</label>
+                    <label class="make-it-normal">Age</label>
                     <div class="control">
                         <input class="input" type="number" name="age" required min="0">
                     </div>
@@ -65,10 +68,10 @@
 
                 <div class="field is-grouped">
                     <div class="control">
-                        <button class="button is-link" type="submit">Register</button>
+                        <button id="submitBtn" class="button is-success make-it-normal" type="submit">Register</button>
                     </div>
                     <div class="control">
-                        <a class="button is-light" href="/login">Back to Login</a>
+                        <a class="button is-warning make-it-normal" href="/login">Back to Login</a>
                     </div>
                 </div>
             </form>
@@ -76,9 +79,84 @@
     </section>
 
     <script>
-        document.getElementById("registerForm").addEventListener("submit", function (event) {
-            const password = document.getElementById("password").value;
-            const confirmPassword = document.getElementById("confirmPassword").value;
+        const form = document.getElementById("registerForm");
+        const passwordInput = document.getElementById("password");
+        const confirmPasswordInput = document.getElementById("confirmPassword");
+        const submitBtn = document.getElementById("submitBtn");
+        const passwordHelp = document.getElementById("passwordHelp");
+        const confirmPasswordHelp = document.getElementById("confirmPasswordHelp");
+
+        function validatePasswordDetailed(password, options = {}) {
+            const {
+                minLength = 8,
+                minUppercase = 1,
+                minNumbers = 1,
+                minSpecialChars = 1
+            } = options;
+
+            const errors = [];
+
+            if (typeof password !== "string") {
+                errors.push("Password must be a string.");
+                return errors;
+            }
+
+            if (password.length < minLength) {
+                errors.push(`Password must be at least ${minLength} characters long.`);
+            }
+
+            const uppercaseCount = (password.match(/[A-Z]/g) || []).length;
+            if (uppercaseCount < minUppercase) {
+                errors.push(`Password must contain at least ${minUppercase} uppercase letter(s).`);
+            }
+
+            const numberCount = (password.match(/[0-9]/g) || []).length;
+            if (numberCount < minNumbers) {
+                errors.push(`Password must contain at least ${minNumbers} number(s).`);
+            }
+
+            const specialCharCount = (password.match(/[!@#$%^&*(),.?":{}|<>]/g) || []).length;
+            if (specialCharCount < minSpecialChars) {
+                errors.push(`Password must contain at least ${minSpecialChars} special character(s).`);
+            }
+
+            return errors;
+        }
+
+        function validateForm() {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            const passwordErrors = validatePasswordDetailed(password);
+
+            if (passwordErrors.length === 0) {
+                passwordHelp.textContent = "Password is strong.";
+                passwordHelp.className = "help is-success make-it-normal";
+            } else {
+                passwordHelp.textContent = passwordErrors.join(" ");
+                passwordHelp.className = "help is-danger make-it-normal";
+            }
+
+            if (confirmPassword === password && password.length > 0) {
+                confirmPasswordHelp.textContent = "Passwords match.";
+                confirmPasswordHelp.className = "help is-success make-it-normal";
+            } else {
+                confirmPasswordHelp.textContent = "Passwords do not match.";
+                confirmPasswordHelp.className = "help is-danger make-it-normal";
+            }
+
+            if (passwordErrors.length === 0 && confirmPassword === password) {
+                submitBtn.disabled = false;
+            } else {
+                submitBtn.disabled = true;
+            }
+        }
+
+        passwordInput.addEventListener("input", validateForm);
+        confirmPasswordInput.addEventListener("input", validateForm);
+
+        form.addEventListener("submit", function (event) {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
 
             if (password !== confirmPassword) {
                 event.preventDefault();
