@@ -17,7 +17,7 @@ body {
   background-repeat: repeat-x;
   background-attachment: fixed;
   background-color: #384D48;
-  padding: 5.5rem 1rem 4rem 1rem !important;
+  padding: 5.5rem 1rem 4.5rem 1rem !important;
 }
 
 .App,
@@ -834,7 +834,7 @@ textarea:focus {
     background-position: center;
     background-repeat: repeat-x;
     background-attachment: fixed;
-    
+    padding-top: 6.4rem !important
   }
 
   .grid-container-3c-by-1r{
