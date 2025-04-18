@@ -12,8 +12,8 @@
         <h2>{{error}}</h2>
     {{else}}
         <section class="section">
-            <div class="columns is-centered">
-                <div class="column is-12-mobile is-12-desktop">
+            <div class="columns make-it-center">
+                <div class="column make-it-100percent-wide">
                     <div class="card-title-container make-it-dark-back make-it-left make-it-white">
                         <div>
                             {{product.title}}
@@ -22,7 +22,7 @@
                     <div class="make-it-semi-back">
                         <div class="small-section">
                             <div class="make-it-rounded">
-                                <img src="{{product.imageURL}}" alt="{{product.title}}">
+                                <img class="make-it-single-image" src="{{product.imageURL}}" alt="{{product.title}}">
                             </div>
                             <div class="card-category-badge-prebuilt make-it-left">
                                 {{product.category}}

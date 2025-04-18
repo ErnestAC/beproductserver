@@ -51,9 +51,10 @@
                     Cart ID: {{cart.cid}}
                 </div>
 
-                <div class="section">
-                    <button class="button is-warning is-small" onclick="emptyCart('{{cart.cid}}')">Empty Cart</button>
-                    <button id="purchaseButton" class="button is-success is-small" onclick="purchaseCart('{{cart.cid}}')">Purchase</button>
+                <div class="section rt-general-page-footer grid-container-3c-by-1r-special">
+                    <div></div>
+                    <button class="button  is-small make-it-normal" onclick="emptyCart('{{cart.cid}}')">Empty Cart</button>
+                    <button id="purchaseButton" class="button is-success is-small is-dark make-it-normal" onclick="purchaseCart('{{cart.cid}}')">Complete Purchase</button>
                 </div>
             </div>
         {{else}}
