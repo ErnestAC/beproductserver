@@ -43,11 +43,11 @@
                 <div class="navbar-item make-it-rounded make-it-dark make-it-7-wide cart-container" id="cart-link-container">
                     {{#if user}}
                         <a href="/carts/{{user.cartId}}" id="cart-link">
-                            <span><i class="fas fa-shopping-cart small-section"></i> Cart<span id="cart-count" class="cart-count make-it-light-back">0</span></span>
+                            <span><span id="cart-count" class="cart-count make-it-dark-back make-it-small make-it-white">0</span> Cart</span>
                         </a>
                     {{else}}
                         <a href="/guest-cart" id="cart-link">
-                            <span><i class="fas fa-shopping-cart small-section"></i> Cart<span id="cart-count" class="cart-count make-it-light-back">0</span></span>
+                            <span><span id="cart-count" class="cart-count make-it-light-back">0</span> Cart</span>
                         </a>
                     {{/if}}
                 </div>

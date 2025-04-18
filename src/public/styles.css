@@ -111,12 +111,10 @@ body {
 
 .cart-count {
   color: #000000;
-  border-radius: 20%;
-  padding: .1rem .5rem;
-  font-size: .8rem;
-  position: absolute;
-  top: 0.4rem;
-  left: 0.0rem
+  border-radius: 10%;
+  padding: .2rem .5rem;
+  position: relative;
+  margin-right: 0.8rem;
 }
 
 .item-counter,
@@ -845,4 +843,8 @@ textarea:focus {
     position: relative;
     width: 5rem
   }
+}
+
+.cart-count {
+  left: 0.6rem
 }
