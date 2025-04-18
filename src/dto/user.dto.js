@@ -5,7 +5,8 @@ export class UserDTO {
         this.username = username;
         this.email = email;
         this.firstName = first_name;
-        this.lastName = last_name;
+        this.lastName = last_name; 
+        this.completeName = first_name + " " + last_name;
         this.dateOfBirth = dateOfBirth;
         this.gid = gid;
         this.role = role;

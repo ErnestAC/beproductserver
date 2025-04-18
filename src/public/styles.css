@@ -393,6 +393,12 @@ body {
   color: #fff !important
 }
 
+.title-bar-container{
+  border-color: #7e8073 !important;
+  border-width: 0 0 1px 0px;
+  border-style: solid;
+}
+
 .subtitle-bar-container {
   font-size: 1.2rem !important;
   background-color: #6E7271 !important
@@ -523,6 +529,9 @@ body {
 
 .rt-general-page-footer {
   bottom: 0rem !important;
+  border-color: #7e8073 !important;
+  border-width: 1px 0 0px 0px;
+  border-style: solid;
 }
 
 .general-page-footer-moving,
