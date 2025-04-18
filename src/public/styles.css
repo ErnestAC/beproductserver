@@ -124,16 +124,15 @@ body {
 }
 
 .make-it-square-image {
-  width: 30rem; 
+  width: 90vw; 
   height: 100%; 
   object-fit: cover;
   object-position: 25% 25%; 
   }
 
 .make-it-single-image {
-  width: 90%; 
-  height: 90%; 
-  object-fit: cover;
+  width: 90vw; 
+  object-fit:contain;
   object-position: 25% 25%; 
   }
 
