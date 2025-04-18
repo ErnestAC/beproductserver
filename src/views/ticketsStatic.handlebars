@@ -33,12 +33,12 @@
 
     <!-- Ticket List -->
     <section class="section">
-        <div class="make-it-small">
+        <div class="make-it-small make-it-100percent-wide">
             <div class="columns is-multiline is-centered">
                 {{#if tickets.length}}
                     {{#each tickets}}
-                        <div class="column is-12-mobile is-12-desktop">
-                            <div class="small-section make-it-light-back">
+                        <div class="column make-it-100percent-wide">
+                            <div class="small-section make-it-light-back make-it-100percent-wide">
                                 <div class="section">
                                     <div class="make-it-dark-back section make-it-rounded-top make-it-white">
                                         <b>Ticket ID:</b> {{this.tid}} | <b>Purchaser:</b> {{this.purchaser}} | <b>Total:</b> ${{this.amount}}
@@ -48,7 +48,7 @@
 
                                     <!-- Purchased Products -->
                                     <div class="section make-it-small">
-                                        <h3 class="make-it-small">Purchased Products</h3>
+                                        <h3 class="make-it-small"><strong>Purchased Products</strong></h3>
                                         <table width="100%">
                                             <thead>
                                                 <tr class="table make-it-semi-back">
@@ -71,7 +71,7 @@
 
                                     <!-- Not Purchased Products -->
                                     <div class="section">
-                                        <h3 class="make-it-small">Not Purchased Products</h3>
+                                        <h3 class="make-it-small"><strong>Not Purchased Products</strong></h3>
                                         <table width="100%">
                                             <thead>
                                                 <tr class="table make-it-semi-back make-it-white make-it-rounded make-it-small">

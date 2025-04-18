@@ -8,34 +8,33 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
-    <h2 class="section make-it-left make-it-white-back make-it-dark make-it-small  make-it-rounded-top make-it-normal">Cart List - Static View</h2>
+    <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Cart List - Static View</h2>
 
     <!-- Sorting and Pagination Controls -->
-    <section class="section">
-        <div class="container make-it-dark">
+    
+        
             <div class="columns is-multiline is-centered">
  
                 <!-- Pagination Controls -->
-                <div class="column is-10">
-                    <div class="make-it-dark-back is-centered grid-container-3c-by-1r" role="navigation" aria-label="pagination">
-                        <a class="button section " 
+                
+                    <div class="rt-general-page-footer make-it-dark-back is-centered grid-container-3c-by-1r-special make-it-100percent-wide" role="navigation" aria-label="pagination">
+                        <a class="button section make-it-small" 
                             href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}">Prev page</a>
 
-                        <div class="section make-it-center make-it-rounded make-it-semi-back  make-it-white">
+                        <div class="section make-it-center make-it-rounded make-it-semi-back  make-it-dark make-it-small">
                             Page {{currentPage}} of {{totalPages}}
                         </div>
 
-                        <a class="button section " 
+                        <a class="button section make-it-small" 
                             href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}">Next page</a>
                     </div>
-                </div>
+                
             </div>
-        </div>
-    </section>
-
+        
+    
     <!-- Cart List -->
     <section class="">
-        <div class="">
+        <div class="make-it-small section">
             <div class="columns is-multiline is-centered">
                 {{#if carts.length}}
                     {{#each carts}}

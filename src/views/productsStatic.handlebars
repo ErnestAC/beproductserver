@@ -14,28 +14,28 @@
         const userCartId = {{#if user}}"{{user.cartId}}"{{else}}null{{/if}};
     </script>
 
-    <section class="make-it-wide">
-        <div class="rt-general-page-footer is-centered grid-container-3c-by-1r-special" role="navigation" aria-label="pagination">
-            
-            <a class="button section make-it-small" 
-                href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
-                {{#if (eq currentPage 1)}}disabled{{/if}}>Prev
-            </a>
-
-            <div class="section make-it-center make-it-rounded make-it-semi-back make-it-dark make-it-small">
-                Page {{currentPage}} of {{totalPages}}
+    <section class="">
+        <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-3c-by-1r-special" role="navigation" aria-label="pagination">
+            <div class="make-it-center make-it-100percent-wide">
+                <a class="navbar-item make-it-rounded make-it-small" 
+                    href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
+                    {{#if (eq currentPage 1)}}disabled{{/if}}>Prev
+                </a>
             </div>
 
-            <a class="button section make-it-small" 
+            <a class="navbar-item make-it-rounded make-it-small" 
                 href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
                 {{#if (eq currentPage totalPages)}}disabled{{/if}}>Next
             </a>
 
+            <div class="make-it-dark small-section make-it-small">
+                Page {{currentPage}} of {{totalPages}}
+            </div>
         </div>
     </section>
 
     <section class="section">
-        <div class="">
+        <div>
             <div class="columns is-multiline is-centered">
                 {{#if products.length}}
                     {{#each products}}
@@ -82,11 +82,18 @@
         </div>
     </section>
 
-    <!-- Toastify (dependency for showToast.js) -->
+    <!-- Toastify JS -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="/js/showToast.js"></script>
 
     <script>
+        function incrementCartCount(amount = 1) {
+            const cartCountElement = document.getElementById("cart-count");
+            if (!cartCountElement) return;
+            const current = parseInt(cartCountElement.textContent) || 0;
+            cartCountElement.textContent = current + amount;
+        }
+
         function applyLimit() {
             const selectedLimit = document.getElementById('limit-select').value;
             const urlParams = new URLSearchParams(window.location.search);
@@ -113,6 +120,7 @@
 
                         if (response.ok) {
                             showToast(`${product.title} added to cart`);
+                            incrementCartCount(1);
                         } else {
                             const err = await response.json();
                             showToast(`Failed to add to cart: ${err.message}`, false);
@@ -138,6 +146,7 @@
 
                     localStorage.setItem("guestCart", JSON.stringify(cart));
                     showToast(`${product.title} added to guest cart`);
+                    incrementCartCount(1);
                 }
             });
         });

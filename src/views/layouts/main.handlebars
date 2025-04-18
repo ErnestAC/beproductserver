@@ -25,32 +25,34 @@
                 <a class="navbar-item make-it-rounded make-it-dark make-it-8-wide" href="/products">
                     <span><i class="fas fa-box-open small-section"></i>Products</span>
                 </a>
+
                 {{#if user}}
-                    <div class="">
+                    <div>
                         <a class="navbar-item make-it-rounded make-it-dark make-it-8-wide" href="/current/">
                             <span><i class="fas fa-user small-section"></i>{{user.username}}</span>
                         </a>
                     </div>
                 {{else}}
-                <div class="">
-                    <a class="navbar-item make-it-rounded make-it-dark make-it-7-wide" href="/login/">
-                        <span><i class="fas fa-key small-section"></i>Log in</span>
-                    </a>
+                    <div>
+                        <a class="navbar-item make-it-rounded make-it-dark make-it-7-wide" href="/login/">
+                            <span><i class="fas fa-key small-section"></i>Log in</span>
+                        </a>
+                    </div>
+                {{/if}}
+
+                <div class="navbar-item make-it-rounded make-it-dark make-it-7-wide cart-container" id="cart-link-container">
+                    {{#if user}}
+                        <a href="/carts/{{user.cartId}}" id="cart-link">
+                            <span><i class="fas fa-shopping-cart small-section"></i> Cart<span id="cart-count" class="cart-count make-it-light-back">0</span></span>
+                        </a>
+                    {{else}}
+                        <a href="/guest-cart" id="cart-link">
+                            <span><i class="fas fa-shopping-cart small-section"></i> Cart<span id="cart-count" class="cart-count make-it-light-back">0</span></span>
+                        </a>
+                    {{/if}}
                 </div>
-                {{/if}}
-                {{#if user}}
-                    <a class="navbar-item make-it-rounded make-it-dark make-it-7-wide" href="/carts/{{user.cartId}}">
-                        <span><i class="fas fa-shopping-cart small-section"></i>Cart</span>
-                    </a>
-                {{else}}
-                    <a class="navbar-item make-it-rounded make-it-dark make-it-7-wide" href="/guest-cart">
-                        <span><i class="fas fa-shopping-cart small-section"></i>Cart</span>
-                    </a>
-                {{/if}}
 
             </div>
-
-
         </div>
     </header>
 
@@ -61,6 +63,40 @@
     <footer class="content section make-it-semi make-it-small">
         <p>&copy; 2025 Shopnhour</p>
     </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const cartCountElement = document.getElementById("cart-count");
+            const isLoggedIn = {{#if user}}true{{else}}false{{/if}};
+            const userCartId = {{#if user}}"{{user.cartId}}"{{else}}null{{/if}};
+
+            if (isLoggedIn && userCartId) {
+                try {
+                    const token = localStorage.getItem("token");
+                    const res = await fetch(`/api/carts/${userCartId}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                    if (res.ok) {
+                        const result = await res.json();
+                        const cart = result.payload;
+                        let totalQuantity = 0;
+                        if (cart && cart.products && Array.isArray(cart.products)) {
+                            totalQuantity = cart.products.reduce((sum, item) => sum + item.quantity, 0);
+                        }
+                        cartCountElement.textContent = totalQuantity;
+                    }
+                } catch (err) {
+                    console.error("Error fetching cart count", err);
+                }
+            } else {
+                let guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+                let totalQuantity = guestCart.reduce((sum, item) => sum + item.quantity, 0);
+                cartCountElement.textContent = totalQuantity;
+            }
+        });
+    </script>
 
 </body>
 </html>
