@@ -13,14 +13,14 @@
     </h2>
 
     <!-- Pagination Controls -->
-    <section class="section make-it-small">
+    <section class="section make-it-small rt-general-page-footer">
         <div class="container make-it-dark">
             <div class="columns is-multiline is-centered">
                 <div class="column is-10">
                     <div class="rt-general-page-footer make-it-dark-back is-centered grid-container-3c-by-1r-special" role="navigation" aria-label="pagination">
                         <a class="button section make-it-small" href="?page={{prevPage}}&limit={{limit}}">Prev page</a>
 
-                        <div class="">
+                        <div class="make-it-center make-it-white">
                             Page {{currentPage}} of {{totalPages}}
                         </div>
 
@@ -33,12 +33,12 @@
 
     <!-- Ticket List -->
     <section class="section">
-        <div class="">
+        <div class="make-it-small">
             <div class="columns is-multiline is-centered">
                 {{#if tickets.length}}
                     {{#each tickets}}
                         <div class="column is-12-mobile is-12-desktop">
-                            <div class="card">
+                            <div class="small-section make-it-light-back">
                                 <div class="section">
                                     <div class="make-it-dark-back section make-it-rounded-top make-it-white">
                                         <b>Ticket ID:</b> {{this.tid}} | <b>Purchaser:</b> {{this.purchaser}} | <b>Total:</b> ${{this.amount}}
@@ -48,19 +48,21 @@
 
                                     <!-- Purchased Products -->
                                     <div class="section make-it-small">
-                                        <h3 class="make-it-normal"><strong>Purchased Products</strong></h3>
+                                        <h3 class="make-it-small">Purchased Products</h3>
                                         <table width="100%">
                                             <thead>
-                                                <tr class="table make-it-semi-back make-it-white make-it-rounded">
+                                                <tr class="table make-it-semi-back">
                                                     <th>Product ID</th>
-                                                    <th>Quantity</th>
+                                                    <th class="make-it-left">Quantity</th>
+                                                    <th class="make-it-right">Price</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {{#each this.purchased}}
                                                     <tr>
                                                         <td>{{this.pid}}</td>
-                                                        <td>{{this.quantity}}</td>
+                                                        <td class="make-it-left">{{this.quantity}}</td>
+                                                        <td class="make-it-right">${{this.price}}</td>
                                                     </tr>
                                                 {{/each}}
                                             </tbody>
@@ -69,19 +71,21 @@
 
                                     <!-- Not Purchased Products -->
                                     <div class="section">
-                                        <h3 class="make-it-normal"><strong>Not Purchased Products</strong></h3>
+                                        <h3 class="make-it-small">Not Purchased Products</h3>
                                         <table width="100%">
                                             <thead>
                                                 <tr class="table make-it-semi-back make-it-white make-it-rounded make-it-small">
                                                     <th>Product ID</th>
-                                                    <th>Quantity</th>
+                                                    <th class="make-it-left">Quantity</th>
+                                                    <th class="make-it-right">Price</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {{#each this.notPurchased}}
                                                     <tr class="make-it-small">
                                                         <td>{{this.pid}}</td>
-                                                        <td>{{this.quantity}}</td>
+                                                        <td class="make-it-left">{{this.quantity}}</td>
+                                                        <td class="make-it-right">${{this.price}}</td>
                                                     </tr>
                                                 {{/each}}
                                             </tbody>

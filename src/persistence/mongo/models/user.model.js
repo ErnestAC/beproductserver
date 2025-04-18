@@ -8,21 +8,20 @@ const UserSchema = new mongoose.Schema(
         password: { type: String, required: true },
         first_name: { type: String, required: true },
         last_name: { type: String, required: true },
-        age: { type: Number, required: true },
+        dateOfBirth: { type: Date, required: true },
+        gid: { type: String, required: true, unique: true },
         cartId: { type: String, required: true },
         role: { type: String, enum: ["user", "admin"], default: "user" },
     },
     { timestamps: true }
 );
 
-// Hash password before saving
 UserSchema.pre("save", function (next) {
     if (!this.isModified("password")) return next();
     this.password = hashPassword(this.password);
     next();
 });
 
-// Compare passwords
 UserSchema.methods.matchPassword = function (enteredPassword) {
     return comparePassword(this.password, enteredPassword);
 };

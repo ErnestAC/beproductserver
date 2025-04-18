@@ -1,11 +1,11 @@
-// user.controllers.js
+// src/controllers/user.controllers.js
 import { userService } from "../services/user.services.js";
 
 class UserControllers {
     async registerUser(req, res) {
-        const { username, email, password, first_name, last_name, age } = req.body;
+        const { username, email, password, first_name, last_name, dateOfBirth, gid } = req.body;
 
-        const role = "user" // forces everything that is created to be a user no matter what has been sent in the body
+        const role = "user";
 
         try {
             const existingUser = await userService.getUserByEmail(email);
@@ -19,16 +19,19 @@ class UserControllers {
                 password,
                 first_name,
                 last_name,
-                age,
+                dateOfBirth,
+                gid,
                 role
             };
 
             const newUser = await userService.createUser(userData);
 
-            // newUser is already a UserDTO
-            res.status(201).json({
-                message: "User registered successfully",
-                user: newUser // Clean and safe for client
+            res.status(201).render("registerSuccess", {
+                user: {
+                    username: newUser.username,
+                    firstName: newUser.firstName,
+                    lastName: newUser.lastName
+                }
             });
         } catch (err) {
             console.error("Error registering user:", err);

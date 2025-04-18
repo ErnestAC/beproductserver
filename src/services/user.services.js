@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { UserDTO } from "../dto/user.dto.js";
 
 class UserService {
-
     async getUserByEmail(email) {
         const user = await userDao.getUserByEmail(email);
         return user ? new UserDTO(user) : null;
@@ -22,13 +21,19 @@ class UserService {
     }
 
     async createUser(userData) {
-        // Generate a new cart before creating user
         const cid = uuidv4();
         const newCart = await cartService.createCart(cid);
 
         const newUser = {
-            ...userData,
-            cartId: newCart.cid,
+            username: userData.username,
+            email: userData.email,
+            password: userData.password,
+            first_name: userData.first_name,
+            last_name: userData.last_name,
+            dateOfBirth: userData.dateOfBirth,
+            gid: userData.gid,
+            role: userData.role,
+            cartId: newCart.cid
         };
 
         const created = await userDao.createUser(newUser);

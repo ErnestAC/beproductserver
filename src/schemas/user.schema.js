@@ -8,17 +8,15 @@ export const registerUserSchema = z.object({
     first_name: z.string().min(1, "First name is required"),
     last_name: z.string().min(1, "Last name is required"),
     
-    age: z
-        .union([
-        z.string().transform((val) => parseInt(val, 10)),
-        z.number(),
-        ])
-        .transform((val) => Number(val)) // Ensure it's a number regardless
-        .refine((val) => !isNaN(val) && val > 0, {
-        message: "Age must be a positive number",
+    dateOfBirth: z
+        .string()
+        .refine(val => !isNaN(Date.parse(val)), {
+            message: "Invalid date format for Date of Birth",
         }),
-
-
+    
+    gid: z
+        .string()
+        .min(5, "Government ID must be at least 5 characters long"),
 
     role: z.string().optional().default("user"),
 });
