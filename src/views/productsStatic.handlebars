@@ -5,19 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Product List</title>
     <meta name="color-scheme" content="dark">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
     <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Products</h2>
 
-    <script>
-        const isLoggedIn = {{#if user}}true{{else}}false{{/if}};
-        const userCartId = {{#if user}}"{{user.cartId}}"{{else}}null{{/if}};
-    </script>
-
     <section class="">
         <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-3c-by-1r-special" role="navigation" aria-label="pagination">
-            <div class="make-it-center make-it-100percent-wide">
-                <a class="navbar-item make-it-rounded make-it-small" 
+            <div class="button section make-it-small">
+                <a class="" 
                     href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
                     {{#if (eq currentPage 1)}}disabled{{/if}}>Prev
                 </a>
@@ -25,8 +21,8 @@
             <div class="make-it-dark small-section make-it-small make-it-center">
                 Page {{currentPage}} of {{totalPages}}
             </div>
-            <div class="make-it-center make-it-100percent-wide">
-                <a class="navbar-item make-it-rounded make-it-small" 
+            <div class="button section make-it-small">
+                <a class="" 
                     href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
                     {{#if (eq currentPage totalPages)}}disabled{{/if}}>Next
                 </a>
@@ -45,9 +41,7 @@
                             </div>
                             <div class="make-it-semi-back make-it-center">
                                 <div class="small-section">
-                                    <div class="card-category-badge-prebuilt make-it-left">
-                                        {{this.category}}
-                                    </div>
+                                    <div class="card-category-badge-prebuilt make-it-left">{{this.category}}</div>
                                     <br>
                                     <a href="/products/{{this.pid}}" class="make-it-center">
                                         <img class="small-section make-it-square-image" src="{{this.imageURL}}" alt="{{this.title}}">
@@ -65,6 +59,7 @@
                                             <p><b>Lights:</b> {{#if this.lighting}}Yes{{else}}No{{/if}}</p>
                                         </div>
                                     </div>
+
                                     <div class="columns make-it-center small-section make-it-100percent-wide">
                                         <div class="column is-12">
                                             <button 
@@ -74,6 +69,7 @@
                                             </button>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -85,7 +81,7 @@
         </div>
     </section>
 
-    <!-- Toastify JS -->
+    <!-- Toastify -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="/js/showToast.js"></script>
 
@@ -105,56 +101,62 @@
             window.location.search = urlParams.toString();
         }
 
-        document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
-            button.addEventListener("click", async () => {
-                const product = JSON.parse(button.getAttribute("data-product"));
+        document.addEventListener("DOMContentLoaded", () => {
+            const isLoggedIn = !!localStorage.getItem("token");
+            const user = JSON.parse(localStorage.getItem("user") || "{}");
+            const userCartId = user.cartId || null;
 
-                if (isLoggedIn && userCartId) {
-                    try {
-                        const token = localStorage.getItem("token");
-                        const response = await fetch(`/api/carts/${userCartId}/product/${product.pid}`, {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                                Authorization: `Bearer ${token}`
-                            },
-                            body: JSON.stringify({ quantity: 1 })
-                        });
+            document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
+                button.addEventListener("click", async () => {
+                    const product = JSON.parse(button.getAttribute("data-product"));
 
-                        const result = await response.json();
+                    if (isLoggedIn && userCartId) {
+                        try {
+                            const token = localStorage.getItem("token");
+                            const response = await fetch(`/api/carts/${userCartId}/product/${product.pid}`, {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    Authorization: `Bearer ${token}`
+                                },
+                                body: JSON.stringify({ quantity: 1 })
+                            });
 
-                        if (response.ok) {
-                            if (result.token) {
-                                localStorage.setItem("token", result.token); // 🔥 Save new refreshed token
+                            const result = await response.json();
+
+                            if (response.ok) {
+                                if (result.token) {
+                                    localStorage.setItem("token", result.token); // Rolling token
+                                }
+                                showToast(`${product.title} added to cart`);
+                                incrementCartCount(1);
+                            } else {
+                                showToast(`Failed to add to cart: ${result.message}`, false);
                             }
-                            showToast(`${product.title} added to cart`);
-                            incrementCartCount(1);
-                        } else {
-                            showToast(`Failed to add to cart: ${result.message}`, false);
+                        } catch (err) {
+                            console.error(err);
+                            showToast("Error adding product to cart", false);
                         }
-                    } catch (err) {
-                        showToast("Error adding product to cart", false);
-                        console.error(err);
-                    }
-                } else {
-                    let cart = JSON.parse(localStorage.getItem("guestCart") || "[]");
-                    const existing = cart.find(item => item.pid === product.pid);
-
-                    if (existing) {
-                        existing.quantity += 1;
                     } else {
-                        cart.push({
-                            pid: product.pid,
-                            title: product.title,
-                            price: product.price,
-                            quantity: 1
-                        });
-                    }
+                        let guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+                        const existing = guestCart.find(item => item.pid === product.pid);
 
-                    localStorage.setItem("guestCart", JSON.stringify(cart));
-                    showToast(`${product.title} added to guest cart`);
-                    incrementCartCount(1);
-                }
+                        if (existing) {
+                            existing.quantity += 1;
+                        } else {
+                            guestCart.push({
+                                pid: product.pid,
+                                title: product.title,
+                                price: product.price,
+                                quantity: 1
+                            });
+                        }
+
+                        localStorage.setItem("guestCart", JSON.stringify(guestCart));
+                        showToast(`${product.title} added to guest cart`);
+                        incrementCartCount(1);
+                    }
+                });
             });
         });
     </script>

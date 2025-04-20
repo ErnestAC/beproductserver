@@ -6,6 +6,7 @@
     <title>Register</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="dark">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
     <section class="section">
@@ -14,7 +15,7 @@
         </h2>
         <div class="container">
             <br>
-            <form id="registerForm" action="/api/sessions/register" method="POST" class="box make-it-small">
+            <form id="registerForm" class="box make-it-small">
                 <div class="field">
                     <label class="make-it-normal">Display name (Username)</label>
                     <div class="control">
@@ -72,13 +73,19 @@
                     </div>
                     <p id="confirmPasswordHelp" class="help make-it-normal"></p>
                 </div>
+
                 <br>
+
                 <div class="field is-grouped">
                     <div class="control">
-                        <button id="submitBtn" class="button is-success make-it-normal" type="submit">Register</button>
+                        <button id="submitBtn" class="button is-success make-it-normal" type="submit">
+                            Register
+                        </button>
                     </div>
                     <div class="control">
-                        <a class="button is-warning make-it-normal" href="/login">Back to Login</a>
+                        <a class="button is-warning make-it-normal" href="/login">
+                            Back to Login
+                        </a>
                     </div>
                 </div>
             </form>
@@ -94,13 +101,7 @@
         const confirmPasswordHelp = document.getElementById("confirmPasswordHelp");
 
         function validatePasswordDetailed(password, options = {}) {
-            const {
-                minLength = 8,
-                minUppercase = 1,
-                minNumbers = 1,
-                minSpecialChars = 1
-            } = options;
-
+            const { minLength = 8, minUppercase = 1, minNumbers = 1, minSpecialChars = 1 } = options;
             const errors = [];
 
             if (typeof password !== "string") {
@@ -112,18 +113,15 @@
                 errors.push(`Password must be at least ${minLength} characters long.`);
             }
 
-            const uppercaseCount = (password.match(/[A-Z]/g) || []).length;
-            if (uppercaseCount < minUppercase) {
+            if ((password.match(/[A-Z]/g) || []).length < minUppercase) {
                 errors.push(`Password must contain at least ${minUppercase} uppercase letter(s).`);
             }
 
-            const numberCount = (password.match(/[0-9]/g) || []).length;
-            if (numberCount < minNumbers) {
+            if ((password.match(/[0-9]/g) || []).length < minNumbers) {
                 errors.push(`Password must contain at least ${minNumbers} number(s).`);
             }
 
-            const specialCharCount = (password.match(/[!@#$%^&*(),.?":{}|<>]/g) || []).length;
-            if (specialCharCount < minSpecialChars) {
+            if ((password.match(/[!@#$%^&*(),.?":{}|<>]/g) || []).length < minSpecialChars) {
                 errors.push(`Password must contain at least ${minSpecialChars} special character(s).`);
             }
 
@@ -157,13 +155,42 @@
         passwordInput.addEventListener("input", validateForm);
         confirmPasswordInput.addEventListener("input", validateForm);
 
-        form.addEventListener("submit", function (event) {
-            const password = passwordInput.value;
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const body = Object.fromEntries(formData.entries());
+
+            const password = body.password;
             const confirmPassword = confirmPasswordInput.value;
 
             if (password !== confirmPassword) {
-                event.preventDefault();
                 alert("Passwords do not match. Please try again.");
+                return;
+            }
+
+            try {
+                const res = await fetch("/api/sessions/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(body)
+                });
+
+                const result = await res.json();
+
+                if (res.ok) {
+                    if (result.token) {
+                        localStorage.setItem("token", result.token);
+                        window.location.href = "/products"; // Auto-login after register
+                    } else {
+                        window.location.href = "/login"; // Regular registration flow
+                    }
+                } else {
+                    alert(result.message || "Registration failed");
+                }
+            } catch (err) {
+                alert("An error occurred during registration.");
+                console.error(err);
             }
         });
     </script>

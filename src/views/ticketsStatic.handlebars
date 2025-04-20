@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ticket List</title>
     <meta name="color-scheme" content="dark">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
-    <h2 class="section make-it-left make-it-white-back make-it-dark make-it-normal make-it-rounded-top make-it-normal">
+    <h2 class="section make-it-left make-it-white-back make-it-dark make-it-normal make-it-rounded-top">
         Ticket List - Static View
     </h2>
 
@@ -17,7 +17,7 @@
         <div class="container make-it-dark">
             <div class="columns is-multiline is-centered">
                 <div class="column is-10">
-                    <div class="rt-general-page-footer make-it-dark-back is-centered grid-container-3c-by-1r-special" role="navigation" aria-label="pagination">
+                    <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-3c-by-1r-special" role="navigation" aria-label="pagination">
                         <a class="button section make-it-small" href="?page={{prevPage}}&limit={{limit}}">Prev page</a>
 
                         <div class="make-it-center make-it-white">
@@ -37,12 +37,14 @@
             <div class="columns is-multiline is-centered">
                 {{#if tickets.length}}
                     {{#each tickets}}
-                        <div class="column make-it-100percent-wide">
+                        <div class="column is-12">
                             <div class="small-section make-it-light-back make-it-100percent-wide">
                                 <div class="section">
                                     <div class="make-it-dark-back section make-it-rounded-top make-it-white">
-                                        <b>Ticket ID:</b> {{this.tid}} | <b>Purchaser:</b> {{this.purchaser}} | <b>Total:</b> ${{this.amount}}
-                                        <br />
+                                        <b>Ticket ID:</b> {{this.tid}} | 
+                                        <b>Purchaser:</b> {{this.purchaser}} | 
+                                        <b>Total:</b> ${{this.amount}}
+                                        <br>
                                         <small><b>Date:</b> {{this.purchase_datetime}}</small>
                                     </div>
 
@@ -91,12 +93,15 @@
                                             </tbody>
                                         </table>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
                     {{/each}}
                 {{else}}
-                    <div class="has-text-centered make-it-white section">No tickets found in database.</div>
+                    <div class="has-text-centered make-it-white section">
+                        No tickets found in database.
+                    </div>
                 {{/if}}
             </div>
         </div>

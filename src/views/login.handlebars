@@ -4,7 +4,9 @@
     <meta charset="UTF-8" />
     <title>Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 <body>
 
@@ -13,35 +15,34 @@
     <div class="grid-container-3c-by-1r">
         <div></div>
         <div class="box make-it-semi-back">
-            <div>
-                <form class="make-it-center" id="loginForm">
-                    <div class="make-it-dark section" for="email">
-                        <p class="make-it-dark small-section">E-mail</p>
-                <input class="input" name="email" type="email" required />
-                    </div>
+            <form class="make-it-center" id="loginForm">
+                <div class="make-it-dark section" for="email">
+                    <p class="make-it-dark small-section">E-mail</p>
+                    <input class="input" name="email" type="email" required />
+                </div>
 
-                    <div class="make-it-dark section" for="password">
-                        <p class="make-it-dark small-section">Password</p>
-                        <input class="input" name="password" type="password" required />
+                <div class="make-it-dark section" for="password">
+                    <p class="make-it-dark small-section">Password</p>
+                    <input class="input" name="password" type="password" required />
+                </div>
+
+                <div class="section">
+                    <button class="button is-primary make-it-dark make-it-normal" type="submit">
+                        Login
+                    </button>
+                    <div class="small-section">
+                        or 
+                        <a href="/register" class="is-link is-underlined make-it-dark make-it-normal">
+                            Register
+                        </a>
                     </div>
-                    <div class="section">
-                    
-                        <button class="button is-primary make-it-dark make-it-normal" type="submit">
-                            Login
-                        </button>
-                        <div class="small-section">
-                            or 
-                            <a href="/register" class="is-link is-underlined make-it-dark make-it-normal">
-                                Register
-                            </a>
-                        </div>
-                        
-                    
-                    </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="/js/showToast.js"></script>
 
     <script>
         const form = document.getElementById("loginForm");
@@ -66,18 +67,26 @@
                 const result = await res.json();
 
                 if (res.ok) {
-                    message.innerText = "Logged in.";
+                    showToast("Logged in successfully!", true);
+
+                    // Save token and user
                     localStorage.setItem("token", result.token);
+                    localStorage.setItem("user", JSON.stringify(result.user)); 
+
                     setTimeout(() => {
-                        window.location.href = "/products"; // Redirect after login
+                        window.location.href = "/products"; // Redirect to products
                     }, 1000);
                 } else {
+                    showToast(result.message || "Login failed", false);
                     message.innerText = `${result.message || "Login failed"}`;
                 }
             } catch (err) {
+                console.error("Login error:", err);
+                showToast(`Failed to login: ${err.message}`, false);
                 message.innerText = `Failed to login: ${err.message}`;
             }
         });
     </script>
+
 </body>
 </html>

@@ -23,15 +23,15 @@
                 <p><strong>Role:</strong> {{user.role}}</p>
             </div>
 
-            <div class="rt-general-page-footer grid-container-3c-by-1r-special">
-                <div class="">
+            <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-3c-by-1r-special">
+                <div class="button section make-it-small">
                     {{#if (eq user.role "admin")}}
-                        <a href="/admin" class="navbar-item make-it-normal button">Admin Panel</a>
+                        <a href="/admin" class="">Admin Panel</a>
                     {{/if}}
                 </div>
                 <div></div>
-                <div class="">
-                    <a href="/logout" class="navbar-item is-danger make-it-normal button" id="logout-btn">Logout</a>
+                <div class="button section make-it-small is-warning">
+                    <a href="/logout" class="" id="logout-btn">Logout</a>
                 </div>
             </div>
         </div>
