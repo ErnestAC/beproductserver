@@ -24,15 +24,22 @@
             </div>
 
             <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-3c-by-1r-special">
-                <div class="button section make-it-small">
+                
                     {{#if (eq user.role "admin")}}
-                        <a href="/admin" class="">Admin Panel</a>
+                        <div class="button section make-it-small">
+                            <a href="/admin" class="">Admin Panel</a>
+                        </div>        
                     {{/if}}
-                </div>
+                
                 <div></div>
-                <div class="button section make-it-small is-warning">
-                    <a href="/logout" class="" id="logout-btn">Logout</a>
-                </div>
+                
+                <a href="/logout" 
+                    class="button section make-it-small is-warning" 
+                    id="logout-btn">
+
+                    Logout
+                </a>
+                
             </div>
         </div>
     </section>

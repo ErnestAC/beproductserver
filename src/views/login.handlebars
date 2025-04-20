@@ -67,7 +67,7 @@
                 const result = await res.json();
 
                 if (res.ok) {
-                    showToast("Logged in successfully!", true);
+                    showToast(`Welcome back, ${String(result.user.username)}`, true);
 
                     // Save token and user
                     localStorage.setItem("token", result.token);
