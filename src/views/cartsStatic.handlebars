@@ -11,26 +11,19 @@
     <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Cart List - Static View</h2>
 
     <!-- Sorting and Pagination Controls -->
-    
-        
-            <div class="columns is-multiline is-centered">
- 
-                <!-- Pagination Controls -->
-                
-                    <div class="rt-general-page-footer make-it-dark-back is-centered grid-container-3c-by-1r-special make-it-100percent-wide" role="navigation" aria-label="pagination">
-                        <a class="button section make-it-small" 
-                            href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}">Prev page</a>
+    <div class="columns is-multiline is-centered">
+        <div class="rt-general-page-footer make-it-dark-back is-centered grid-container-3c-by-1r-special make-it-100percent-wide" role="navigation" aria-label="pagination">
+            <a class="button section make-it-small" 
+                href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}">Prev page</a>
 
-                        <div class="section make-it-center make-it-rounded make-it-semi-back  make-it-dark make-it-small">
-                            Page {{currentPage}} of {{totalPages}}
-                        </div>
-
-                        <a class="button section make-it-small" 
-                            href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}">Next page</a>
-                    </div>
-                
+            <div class="section make-it-center make-it-rounded make-it-semi-back make-it-dark make-it-small">
+                Page {{currentPage}} of {{totalPages}}
             </div>
-        
+
+            <a class="button section make-it-small" 
+                href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}">Next page</a>
+        </div>
+    </div>
     
     <!-- Cart List -->
     <section class="">
@@ -81,7 +74,8 @@
                                             {{/each}}
                                         </table>
                                     </div>
-                                    <div class="make-it-semi-back make-it-dark make-it-small  make-it-rounded-bottom section">
+
+                                    <div class="make-it-semi-back make-it-dark make-it-small make-it-rounded-bottom section">
                                         <strong>Products in Cart:</strong> {{this.products.length}}
                                     </div>
                                 </div>
@@ -96,8 +90,16 @@
     </section>
 
     <script>
+        // Save the token if the server starts returning refreshed tokens (future-proof)
+        function saveTokenIfProvided(response) {
+            if (response.token) {
+                localStorage.setItem("token", response.token);
+            }
+        }
+
         function applyLimit() {
-            const selectedLimit = document.getElementById('limit-select').value;
+            const selectedLimit = document.getElementById('limit-select')?.value;
+            if (!selectedLimit) return;
             const urlParams = new URLSearchParams(window.location.search);
             urlParams.set('limit', selectedLimit);
             urlParams.set('page', 1);

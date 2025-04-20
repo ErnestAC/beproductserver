@@ -53,7 +53,7 @@
 
                 <div class="section rt-general-page-footer grid-container-3c-by-1r-special">
                     <div></div>
-                    <button class="button  is-small make-it-normal" onclick="emptyCart('{{cart.cid}}')">Empty Cart</button>
+                    <button class="button is-small make-it-normal" onclick="emptyCart('{{cart.cid}}')">Empty Cart</button>
                     <button id="purchaseButton" class="button is-success is-small is-dark make-it-normal" onclick="purchaseCart('{{cart.cid}}')">Complete Purchase</button>
                 </div>
             </div>
@@ -69,14 +69,21 @@
     <script src="/js/showToast.js"></script>
 
     <script>
+        const token = localStorage.getItem("token");
+
         async function removeItem(cid, pid) {
             if (!confirm("Are you sure you want to remove this item?")) return;
             try {
                 const res = await fetch(`/api/carts/${cid}/products/${pid}`, {
                     method: "DELETE",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    }
                 });
                 if (res.ok) {
+                    const result = await res.json();
+                    if (result.token) localStorage.setItem("token", result.token);
                     location.reload();
                 } else {
                     showToast("Failed to remove item from cart.", false);
@@ -92,9 +99,14 @@
             try {
                 const res = await fetch(`/api/carts/${cid}`, {
                     method: "DELETE",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    }
                 });
                 if (res.ok) {
+                    const result = await res.json();
+                    if (result.token) localStorage.setItem("token", result.token);
                     location.reload();
                 } else {
                     showToast("Failed to empty cart.", false);
@@ -114,10 +126,14 @@
             try {
                 const res = await fetch(`/api/carts/${cid}/purchase`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    }
                 });
                 if (res.ok) {
                     const result = await res.json();
+                    if (result.token) localStorage.setItem("token", result.token);
                     showToast(result.message || "Purchase completed!");
                     setTimeout(() => {
                         location.reload();

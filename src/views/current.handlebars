@@ -31,11 +31,29 @@
                 </div>
                 <div></div>
                 <div class="">
-                    <a href="/logout" class="navbar-item is-danger make-it-normal button">Logout</a>
+                    <a href="/logout" class="navbar-item is-danger make-it-normal button" id="logout-btn">Logout</a>
                 </div>
-
             </div>
         </div>
     </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const logoutBtn = document.getElementById("logout-btn");
+
+            if (logoutBtn) {
+                logoutBtn.addEventListener("click", () => {
+                    // Clear the token from localStorage when logging out
+                    localStorage.removeItem("token");
+                });
+            }
+        });
+
+        function saveTokenIfProvided(response) {
+            if (response.token) {
+                localStorage.setItem("token", response.token);
+            }
+        }
+    </script>
 </body>
 </html>

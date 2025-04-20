@@ -5,63 +5,129 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Product</title>
     <meta name="color-scheme" content="dark">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/static/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
+
 <body>
-    
-    <form class="" action="/forms/add-product" method="POST" enctype="multipart/form-data">
-        <h2 class="section make-it-white">Add a New Product</h2>
-        <div class="section box make-it-semi-back ">
-            <label class="make-it-dark make-it-small  " for="title">Title:</label>
-            <input placeholder="Title" class="input is-dark " type="text" id="title" name="title" required value="{{title}}"><br><br>
+    <section class="section">
+        <form action="/forms/add-product" method="POST" enctype="multipart/form-data" class="box make-it-semi-back">
+            <h2 class="section title is-4 has-text-white">Add a New Product</h2>
 
-            <label class="make-it-dark make-it-small  " for="description">Description:</label>
-            <textarea placeholder="Description" class="textarea " id="description" name="description" required>{{description}}</textarea><br><br>
+            <div class="field">
+                <label class="label make-it-dark" for="title">Title:</label>
+                <div class="control">
+                    <input placeholder="Title" class="input is-dark" type="text" id="title" name="title" required value="{{title}}">
+                </div>
+            </div>
 
-            <label class="make-it-dark make-it-small  " for="code">Code:</label>
-            <input placeholder="ABC-DEC" class="input " type="text" id="code" name="code" required value="{{code}}"><br><br>
+            <div class="field">
+                <label class="label make-it-dark" for="description">Description:</label>
+                <div class="control">
+                    <textarea placeholder="Description" class="textarea is-dark" id="description" name="description" required>{{description}}</textarea>
+                </div>
+            </div>
 
-            <label class="make-it-dark make-it-small  " for="price">Price:</label>
-            <input placeholder="Price" class="input  is-dark" type="number" id="price" name="price" min="0" required value="{{price}}"><br><br>
+            <div class="field">
+                <label class="label make-it-dark" for="code">Code:</label>
+                <div class="control">
+                    <input placeholder="ABC-DEC" class="input is-dark" type="text" id="code" name="code" required value="{{code}}">
+                </div>
+            </div>
 
-            <label class="make-it-dark make-it-small  " for="stock">Current Stock:</label>
-            <input placeholder="Stock" class="input " type="number" id="stock" name="stock" min="0" required value="{{stock}}"><br><br>
+            <div class="field">
+                <label class="label make-it-dark" for="price">Price:</label>
+                <div class="control">
+                    <input placeholder="Price" class="input is-dark" type="number" id="price" name="price" min="0" required value="{{price}}">
+                </div>
+            </div>
 
-            <label class="make-it-dark make-it-small  " for="category">Category:</label>
-            <input placeholder="Category" class="input " type="text" id="category" name="category" required value="{{category}}"><br><br>
+            <div class="field">
+                <label class="label make-it-dark" for="stock">Current Stock:</label>
+                <div class="control">
+                    <input placeholder="Stock" class="input is-dark" type="number" id="stock" name="stock" min="0" required value="{{stock}}">
+                </div>
+            </div>
 
-            <label class="make-it-dark make-it-small  " for="pieces">Pieces:</label>
-            <input placeholder="Number of Pieces" class="input " type="number" id="pieces" name="pieces" min="1" required value="{{pieces}}"><br><br>
+            <div class="field">
+                <label class="label make-it-dark" for="category">Category:</label>
+                <div class="control">
+                    <input placeholder="Category" class="input is-dark" type="text" id="category" name="category" required value="{{category}}">
+                </div>
+            </div>
 
-            <label class="make-it-dark make-it-small  " for="handle">Handle:</label>
-            <input placeholder="Handle" class="input " type="text" id="handle" name="handle" required value="{{handle}}"><br><br>
+            <div class="field">
+                <label class="label make-it-dark" for="pieces">Pieces:</label>
+                <div class="control">
+                    <input placeholder="Number of Pieces" class="input is-dark" type="number" id="pieces" name="pieces" min="1" required value="{{pieces}}">
+                </div>
+            </div>
 
-            <label class="make-it-dark make-it-small  " for="wheelArrangement">Wheel Arrangement:</label>
-            <input placeholder="Wheel Arrangement" class="input " type="text" id="wheelArrangement" name="wheelArrangement" required value="{{wheelArrangement}}"><br><br>
+            <div class="field">
+                <label class="label make-it-dark" for="handle">Handle:</label>
+                <div class="control">
+                    <input placeholder="Handle" class="input is-dark" type="text" id="handle" name="handle" required value="{{handle}}">
+                </div>
+            </div>
 
-            <label class="make-it-dark make-it-small  " for="lighting">Lighting:</label>
-            <select class="input " id="lighting" name="lighting" required>
-                <option value="true" {{#if lighting}}selected{{/if}}>Yes</option>
-                <option value="false" {{#unless lighting}}selected{{/unless}}>No</option>
-            </select><br><br>
+            <div class="field">
+                <label class="label make-it-dark" for="wheelArrangement">Wheel Arrangement:</label>
+                <div class="control">
+                    <input placeholder="Wheel Arrangement" class="input is-dark" type="text" id="wheelArrangement" name="wheelArrangement" required value="{{wheelArrangement}}">
+                </div>
+            </div>
 
-            <label class="make-it-dark make-it-small  " for="motorizable">Motorizable:</label>
-            <select class="input " id="motorizable" name="motorizable" required>
-                <option value="true" {{#if motorizable}}selected{{/if}}>Yes</option>
-                <option value="false" {{#unless motorizable}}selected{{/unless}}>No</option>
-            </select><br><br>
+            <div class="field">
+                <label class="label make-it-dark" for="lighting">Lighting:</label>
+                <div class="control">
+                    <div class="select is-dark">
+                        <select id="lighting" name="lighting" required>
+                            <option value="true" {{#if lighting}}selected{{/if}}>Yes</option>
+                            <option value="false" {{#unless lighting}}selected{{/unless}}>No</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
-            <label class="make-it-dark make-it-small  " for="status">Status:</label>
-            <select class="input " id="status" name="status" required>
-                <option value="true" {{#if status}}selected{{/if}}>Active</option>
-                <option value="false" {{#unless status}}selected{{/unless}}>Inactive</option>
-            </select><br><br>
+            <div class="field">
+                <label class="label make-it-dark" for="motorizable">Motorizable:</label>
+                <div class="control">
+                    <div class="select is-dark">
+                        <select id="motorizable" name="motorizable" required>
+                            <option value="true" {{#if motorizable}}selected{{/if}}>Yes</option>
+                            <option value="false" {{#unless motorizable}}selected{{/unless}}>No</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
-            <label class="make-it-dark make-it-small  " for="file">Upload Image:</label>
-            <input class="input " type="file" id="file" name="file" accept="image/*" required><br><br>
+            <div class="field">
+                <label class="label make-it-dark" for="status">Status:</label>
+                <div class="control">
+                    <div class="select is-dark">
+                        <select id="status" name="status" required>
+                            <option value="true" {{#if status}}selected{{/if}}>Active</option>
+                            <option value="false" {{#unless status}}selected{{/unless}}>Inactive</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
-            <button class="button is-small is-success " type="submit">Add Product</button>
-        </div>
-    </form>
+            <div class="field">
+                <label class="label make-it-dark" for="file">Upload Image:</label>
+                <div class="control">
+                    <input class="input is-dark" type="file" id="file" name="file" accept="image/*" required>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <button class="button is-success is-fullwidth" type="submit">Add Product</button>
+                </div>
+            </div>
+        </form>
+    </section>
 </body>
 </html>

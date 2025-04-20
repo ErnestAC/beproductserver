@@ -31,8 +31,6 @@
                     {{#if (eq currentPage totalPages)}}disabled{{/if}}>Next
                 </a>
             </div>
-
-
         </div>
     </section>
 
@@ -54,7 +52,6 @@
                                     <a href="/products/{{this.pid}}" class="make-it-center">
                                         <img class="small-section make-it-square-image" src="{{this.imageURL}}" alt="{{this.title}}">
                                     </a>
-                                    
 
                                     <div class="columns make-it-white-back make-it-dark make-it-small small-section">
                                         <div class="column is-6 make-it-left">
@@ -124,12 +121,16 @@
                             body: JSON.stringify({ quantity: 1 })
                         });
 
+                        const result = await response.json();
+
                         if (response.ok) {
+                            if (result.token) {
+                                localStorage.setItem("token", result.token); // 🔥 Save new refreshed token
+                            }
                             showToast(`${product.title} added to cart`);
                             incrementCartCount(1);
                         } else {
-                            const err = await response.json();
-                            showToast(`Failed to add to cart: ${err.message}`, false);
+                            showToast(`Failed to add to cart: ${result.message}`, false);
                         }
                     } catch (err) {
                         showToast("Error adding product to cart", false);

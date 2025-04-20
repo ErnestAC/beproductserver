@@ -5,38 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShopnhourBE</title>
     <meta name="color-scheme" content="dark">
+
+    <!-- Styles -->
     <link rel="stylesheet" href="/static/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
+
 <body class="splash-page-home make-it-normal">
 
-    <header class="title-bar-container other-bar is-frozen make-it-semi-back make-it-normal grid-container-3c-by-1r-special ">
+    <!-- HEADER -->
+    <header class="title-bar-container other-bar is-frozen make-it-semi-back make-it-normal grid-container-3c-by-1r-special">
         <div class="navbar-brand">
             <a class="section" href="/">
                 <img class="logo-image" src="/static/shopnhour_blue.png" alt="Shopnhour Store Logo">
             </a>
         </div>
+
         <div></div>
+
         <div class="grid-container-3c-by-1r-special make-it-rounded small-section make-it-small">
             <div></div>
             <div class="grid-container-3c-by-1r-special">
-                <a class="navbar-item  make-it-dark grid-container-2c-by-1r" href="/products">
+
+                <a class="navbar-item make-it-dark grid-container-2c-by-1r" href="/products">
                     <i class="fas fa-box-open small-section"></i>
                     <span>Products</span>
                 </a>
 
                 {{#if user}}
                     <div>
-                        <a class="navbar-item  make-it-dark make-it-8-wide grid-container-2c-by-1r" href="/current/">
+                        <a class="navbar-item make-it-dark make-it-8-wide grid-container-2c-by-1r" href="/current/">
                             <i class="fas fa-user small-section"></i>
                             <span>{{user.username}}</span>
                         </a>
                     </div>
                 {{else}}
                     <div>
-                        <a class="navbar-item  make-it-dark make-it-7-wide grid-container-2c-by-1r" href="/login/">
+                        <a class="navbar-item make-it-dark make-it-7-wide grid-container-2c-by-1r" href="/login/">
                             <i class="fas fa-key small-section"></i>
                             <span>Log in</span>
                         </a>
@@ -45,7 +52,7 @@
 
                 <div>
                     {{#if user}}
-                        <a href="/carts/{{user.cartId}}" class="navbar-item  make-it-dark make-it-7-wide grid-container-2c-by-1r" id="cart-link">
+                        <a href="/carts/{{user.cartId}}" class="navbar-item make-it-dark make-it-7-wide grid-container-2c-by-1r" id="cart-link">
                             <span id="cart-count" class="cart-count make-it-dark-back make-it-small make-it-white">0</span>
                             <span> Cart</span>
                         </a>
@@ -56,23 +63,30 @@
                         </a>
                     {{/if}}
                 </div>
+
             </div>
         </div>
     </header>
 
+    <!-- MAIN BODY -->
     <main>
         {{{body}}}
     </main>
 
+    <!-- FOOTER -->
     <footer class="content section make-it-semi make-it-small make-it-right">
         <p>&copy; 2025 Shopnhour</p>
     </footer>
 
+    <!-- GLOBAL SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
     <script>
+        const isLoggedIn = {{#if user}}true{{else}}false{{/if}};
+        const userCartId = {{#if user}}"{{user.cartId}}"{{else}}null{{/if}};
+
         document.addEventListener("DOMContentLoaded", async () => {
             const cartCountElement = document.getElementById("cart-count");
-            const isLoggedIn = {{#if user}}true{{else}}false{{/if}};
-            const userCartId = {{#if user}}"{{user.cartId}}"{{else}}null{{/if}};
 
             if (isLoggedIn && userCartId) {
                 try {
@@ -82,8 +96,15 @@
                             Authorization: `Bearer ${token}`
                         }
                     });
+
                     if (res.ok) {
                         const result = await res.json();
+
+                        // Refresh token if provided
+                        if (result.token) {
+                            localStorage.setItem("token", result.token);
+                        }
+
                         const cart = result.payload;
                         let totalQuantity = 0;
                         if (cart && cart.products && Array.isArray(cart.products)) {
@@ -95,8 +116,9 @@
                     console.error("Error fetching cart count", err);
                 }
             } else {
-                let guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
-                let totalQuantity = guestCart.reduce((sum, item) => sum + item.quantity, 0);
+                // Guest cart
+                const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+                const totalQuantity = guestCart.reduce((sum, item) => sum + item.quantity, 0);
                 cartCountElement.textContent = totalQuantity;
             }
         });
