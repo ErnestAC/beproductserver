@@ -6,7 +6,7 @@ export class UserDTO {
         this.email = email;
         this.firstName = first_name;
         this.lastName = last_name;
-        this.completeName = `${first_name} ${last_name}`;
+        this.completeName = this.giveCompleName(first_name, last_name)
         this.role = role;
         this.cartId = cartId;
         this.age = dateOfBirth ? this.calculateAge(dateOfBirth) : null;
@@ -22,5 +22,9 @@ export class UserDTO {
             age--; // hasn't had birthday yet this year
         }
         return age;
+    }
+
+    giveCompleName(first_name, last_name){
+        return first_name + " " + last_name
     }
 }
