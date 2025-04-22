@@ -22,6 +22,10 @@ class UserDao {
     async deleteUserById(id) {
         return await User.findByIdAndDelete(id);
     }
+
+    async updateUser(id, updatedFields) {
+        return await User.findByIdAndUpdate(id, updatedFields, { new: true });
+    }
 }
 
 export const userDao = new UserDao();

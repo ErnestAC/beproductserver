@@ -10,12 +10,14 @@ import passport from "./config/passport/passport.config.js";
 import cookieParser from "cookie-parser";
 import { jwtViewAuth } from "./middlewares/auth.middleware.js";
 import { __dirname } from "./utils/fileHandler.utils.js";
+import os from "os";
 
 import ProductsRoute from "./routes/api.products.routes.js";
 import CartsRoute from "./routes/api.carts.routes.js";
 import TicketsRoute from "./routes/api.tickets.routes.js";
 import homeRoute from "./routes/index.routes.js";
 import FormsRoute from "./routes/forms.routes.js";
+import UsersRoute from "./routes/api.users.routes.js";
 import RealtimeViews from "./routes/realtimeDisplay.routes.js";
 import authRoutes from "./routes/sessions.routes.js";
 import methodOverride from "method-override";
@@ -149,12 +151,30 @@ app.use("/forms", FormsRoute);
 app.use("/api/products", ProductsRoute);
 app.use("/api/carts", CartsRoute);
 app.use("/api/tickets", TicketsRoute);
+app.use("/api/users", UsersRoute);
 app.use("/api/sessions", authRoutes);
 app.use("/realtime/", RealtimeViews);
 
 // Start server
 const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
+    const networkInterfaces = os.networkInterfaces();
+    let localIP = "localhost";
+
+    for (const interfaceKey in networkInterfaces) {
+        const networkInterface = networkInterfaces[interfaceKey];
+        if (!networkInterface) continue;
+
+        for (const net of networkInterface) {
+            if (net.family === "IPv4" && !net.internal) {
+                localIP = net.address;
+                break;
+            }
+        }
+        if (localIP !== "localhost") break;
+    }
+
     console.log(`\nServer started on port ${PORT}.`);
-    console.log(`http://localhost:${PORT}\n`);
+    console.log(`Local:   http://localhost:${PORT}`);
+    console.log(`Network: http://${localIP}:${PORT}\n`);
 });

@@ -1,4 +1,5 @@
 // src/services/user.services.js
+
 import { userDao } from "../persistence/mongo/dao/user.dao.js";
 import { cartService } from "./cart.services.js";
 import { v4 as uuidv4 } from 'uuid';
@@ -12,7 +13,7 @@ class UserService {
 
     async getUserById(id) {
         const user = await userDao.getUserById(id);
-        return user ? new UserDTO(user) : null;
+        return user;  // <-- return raw
     }
 
     async getAllUsers() {
@@ -42,6 +43,11 @@ class UserService {
 
     async deleteUserById(id) {
         return await userDao.deleteUserById(id);
+    }
+
+    async updateUser(id, updatedFields) {
+        const updatedUser = await userDao.updateUser(id, updatedFields);
+        return updatedUser ? new UserDTO(updatedUser) : null;
     }
 }
 

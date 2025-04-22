@@ -12,21 +12,19 @@
 
     <section class="">
         <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-3c-by-1r-special" role="navigation" aria-label="pagination">
-            <div class="button section make-it-small">
-                <a class="" 
-                    href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
-                    {{#if (eq currentPage 1)}}disabled{{/if}}>Prev
-                </a>
-            </div>
+
+            <a class="button section make-it-small" 
+                href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
+                {{#if (eq currentPage 1)}}disabled{{/if}}>Prev
+            </a>
+
             <div class="make-it-dark small-section make-it-small make-it-center">
                 Page {{currentPage}} of {{totalPages}}
             </div>
-            <div class="button section make-it-small">
-                <a class="" 
-                    href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
-                    {{#if (eq currentPage totalPages)}}disabled{{/if}}>Next
-                </a>
-            </div>
+            <a class="button section make-it-small" 
+                href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
+                {{#if (eq currentPage totalPages)}}disabled{{/if}}>Next
+            </a>
         </div>
     </section>
 

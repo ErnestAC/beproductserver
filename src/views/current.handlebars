@@ -17,19 +17,15 @@
                 <p><strong>Email:</strong> {{user.email}}</p>
                 <p><strong>First Name:</strong> {{user.firstName}}</p>
                 <p><strong>Last Name:</strong> {{user.lastName}}</p>
-                <p><strong>Date of Birth:</strong> {{user.dateOfBirth}}</p>
-                <p><strong>Government ID (GID):</strong> {{user.gid}}</p>
                 <p><strong>Cart ID:</strong> {{user.cartId}}</p>
                 <p><strong>Role:</strong> {{user.role}}</p>
             </div>
 
             <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-3c-by-1r-special">
                 
-                    {{#if (eq user.role "admin")}}
-                        <div class="button section make-it-small">
-                            <a href="/admin" class="">Admin Panel</a>
-                        </div>        
-                    {{/if}}
+                {{#if (eq user.role "admin")}}
+                        <a class="button section make-it-small" href="/admin" class="">Admin Panel</a>
+                {{/if}}
                 
                 <div></div>
                 
