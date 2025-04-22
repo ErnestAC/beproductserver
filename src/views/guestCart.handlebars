@@ -1,89 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Guest Cart</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="color-scheme" content="dark" />
-
+    <meta charset="UTF-8" />
+    <title>Guest Cart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
 </head>
 <body>
-<h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">
-    Guest Cart
-</h2>
+    <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">
+        Your Guest Cart
+    </h2>
 
-<section class="section">
-    <div id="guestCartContainer" class="box cart-products is-hidden">
-    <div class="make-it-semi-back make-it-rounded-top section make-it-normal make-it-dark">
-        Cart Details - Guest
-    </div>
+    <section class="section">
+        <div id="guestCartContainer" class="box cart-products" style="display: none;">
+            <table class="table is-fullwidth is-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Title / PID</th>
+                        <th>Code</th>
+                        <th>Description</th>
+                        <th>Pieces</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="cartItems"></tbody>
+            </table>
 
-    <table class="table is-fullwidth is-striped">
-        <thead>
-        <tr>
-            <th class="make-it-center"></th>
-            <th>Title</th>
-            <th>Description</th>
-            <th class="make-it-center">Price/u</th>
-            <th class="make-it-center">Quantity</th>
-            <th class="make-it-center">Actions</th>
-        </tr>
-        </thead>
-        <tbody id="guestCartTableBody">
-        <!-- Filled by JS -->
-        </tbody>
-    </table>
-    </div>
+            <div class="make-it-rounded-top small-section make-it-small make-it-semi make-it-right">
+                Guest Cart
+            </div>
 
-    <div id="emptyGuestMessage" class="make-it-white make-it-center">
-    Your cart is empty.<br />
-    Go to <a class="make-it-white" href="/products"><b>/products</b></a> to start adding.
-    </div>
-</section>
+            <div class="section rt-general-page-footer grid-container-3c-by-1r-special">
+                <div></div>
+                <button class="button is-small" onclick="emptyGuestCart()">Empty Cart</button>
+                <a href="/login" class="button is-success is-small is-dark make-it-normal">Login or Register</a>
+            </div>
+        </div>
 
-<script>
-    const cartContainer = document.getElementById("guestCartContainer");
-    const tableBody = document.getElementById("guestCartTableBody");
-    const emptyMessage = document.getElementById("emptyGuestMessage");
+        <div id="emptyCartMessage" class="make-it-white make-it-center" style="display: none;">
+            <p>Your guest cart is empty.</p>
+            <p>
+                Go to <a class="button is-small" href="/products"><b>/products</b></a> to start adding products.
+            </p>
+        </div>
+    </section>
 
-    function renderCart() {
-    const cart = JSON.parse(localStorage.getItem("guestCart") || "[]");
-    tableBody.innerHTML = "";
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="/js/showToast.js"></script>
 
-    if (cart.length === 0) {
-        emptyMessage.classList.remove("is-hidden");
-        cartContainer.classList.add("is-hidden");
-        return;
-    }
+    <script>
+        function renderGuestCart() {
+            const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+            const container = document.getElementById("guestCartContainer");
+            const tableBody = document.getElementById("cartItems");
+            const emptyMessage = document.getElementById("emptyCartMessage");
 
-    emptyMessage.classList.add("is-hidden");
-    cartContainer.classList.remove("is-hidden");
+            if (guestCart.length === 0) {
+                container.style.display = "none";
+                emptyMessage.style.display = "block";
+                return;
+            }
 
-    cart.forEach((item, index) => {
-        const row = document.createElement("tr");
+            container.style.display = "block";
+            emptyMessage.style.display = "none";
 
-        row.innerHTML = `
-        <td><img src="${item.imageURL || '/static/placeholder.png'}" alt="${item.title}" width="50"></td>
-        <td class="make-it-dark make-it-small">${item.title}</td>
-        <td>${item.description || '—'}</td>
-        <td class="make-it-center">$${item.price}</td>
-        <td class="make-it-center">x${item.quantity}</td>
-        <td class="make-it-center">
-            <button class="button is-danger is-small" onclick="removeItem(${index})">Remove</button>
-        </td>
-        `;
-        tableBody.appendChild(row);
-    });
-    }
+            tableBody.innerHTML = "";
 
-    function removeItem(index) {
-    const cart = JSON.parse(localStorage.getItem("guestCart") || "[]");
-    cart.splice(index, 1);
-    localStorage.setItem("guestCart", JSON.stringify(cart));
-    renderCart();
-    }
+            guestCart.forEach(product => {
+                const row = document.createElement("tr");
 
-    renderCart();
-</script>
+                row.innerHTML = `
+                    <td width="64px"><img src="${product.imageURL || '/static/default-product.png'}" alt="${product.title}" /></td>
+                    <td>${product.title}<br /><span class="make-it-small">(${product.pid})</span></td>
+                    <td>${product.code || "N/A"}</td>
+                    <td>${product.description || "N/A"}</td>
+                    <td class="make-it-center">${product.pieces || "-"}</td>
+                    <td class="make-it-center">$${product.price}</td>
+                    <td class="make-it-center">x${product.quantity}</td>
+                    <td class="make-it-center">
+                        <button class="button is-danger is-small" onclick="removeGuestItem('${product.pid}')">
+                            Remove
+                        </button>
+                    </td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        function removeGuestItem(pid) {
+            let cart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+            cart = cart.filter(item => item.pid !== pid);
+            localStorage.setItem("guestCart", JSON.stringify(cart));
+            renderGuestCart();
+            showToast("Item removed from guest cart.");
+        }
+
+        function emptyGuestCart() {
+            if (!confirm("Are you sure you want to empty your guest cart?")) return;
+            localStorage.removeItem("guestCart");
+            renderGuestCart();
+            showToast("Guest cart emptied.");
+        }
+
+        document.addEventListener("DOMContentLoaded", renderGuestCart);
+    </script>
 </body>
 </html>

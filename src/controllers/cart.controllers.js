@@ -1,4 +1,4 @@
-//cart.controllers.js
+// src/controllers/cart.controllers.js
 
 import { request, response } from "express";
 import { notifyCartChange } from "../server.js";
@@ -7,48 +7,33 @@ import { Cart } from "../persistence/mongo/models/cart.model.js";
 import { cartService } from "../services/cart.services.js";
 import { errorLog } from "../utils/errorLog.util.js";
 import { ticketService } from "../services/ticket.services.js";
+import { CartDTO } from "../dto/cart.dto.js";
+import { sendSuccessResponse, sendErrorResponse } from "../utils/response.util.js"; // <-- USE HERE
 
 class CartControllers {
     async getCartById(req, res) {
         const { cid } = req.params;
         try {
             const cart = await cartService.getCartById(cid);
-            if (cart) {
-                res.json({
-                    status: "success",
-                    payload: cart,
-                    totalPages: 1,
-                    prevPage: null,
-                    nextPage: null,
-                    page: 1,
-                    hasPrevPage: false,
-                    hasNextPage: false,
-                    prevLink: null,
-                    nextLink: null
-                });
-            } else {
-                res.status(404).json({ status: "error", message: "Cart not found" });
+            if (!cart) {
+                return sendErrorResponse(res, "Cart not found", 404);
             }
+            const dto = new CartDTO(cart);
+            sendSuccessResponse(res, { payload: dto }, req.user);
         } catch (err) {
             errorLog(err);
-            res.status(500).json({ status: "error", message: "Server error" });
+            sendErrorResponse(res);
         }
     }
 
     async createCart(req = request, res = response) {
-        console.log("📥 Received request to create cart");
         try {
             const newCart = await cartService.createCart();
             notifyCartChange();
-
-            res.status(201).json({
-                status: "success",
-                message: "Cart created successfully.",
-                payload: newCart
-            });
+            sendSuccessResponse(res, { message: "Cart created successfully", payload: new CartDTO(newCart) }, req.user);
         } catch (err) {
-            console.error("Error creating cart:", err);
-            res.status(400).json({ status: "error", message: err.message || "Invalid request body." });
+            errorLog(err);
+            sendErrorResponse(res, "Invalid request body", 400);
         }
     }
 
@@ -56,15 +41,14 @@ class CartControllers {
         const { cid } = req.params;
         try {
             const deleted = await cartService.clearCart(cid);
-            if (deleted) {
-                notifyCartChange();
-                res.json({ status: "success", message: "Cart contents deleted" });
-            } else {
-                res.status(404).json({ status: "error", message: "Cart not found" });
+            if (!deleted) {
+                return sendErrorResponse(res, "Cart not found", 404);
             }
+            notifyCartChange();
+            sendSuccessResponse(res, { message: "Cart contents deleted" }, req.user);
         } catch (err) {
             errorLog(err);
-            res.status(500).json({ status: "error", message: "Server error" });
+            sendErrorResponse(res);
         }
     }
 
@@ -73,17 +57,16 @@ class CartControllers {
         const { quantity } = req.body;
 
         if (!quantity || isNaN(quantity) || quantity <= 0) {
-            return res.status(400).json({ status: "error", message: "Quantity must be a valid positive number" });
+            return sendErrorResponse(res, "Quantity must be a valid positive number", 400);
         }
 
         try {
             const cart = await cartService.updateProductQuantity(cid, pid, quantity);
             notifyCartChange();
-
-            res.json({ status: "success", message: "Product quantity updated", payload: cart });
+            sendSuccessResponse(res, { message: "Product quantity updated", payload: new CartDTO(cart) }, req.user);
         } catch (err) {
-            console.error("Error updating product quantity:", err);
-            res.status(500).json({ status: "error", message: err.message || "Server error" });
+            errorLog(err);
+            sendErrorResponse(res);
         }
     }
 
@@ -92,10 +75,10 @@ class CartControllers {
         try {
             const cart = await cartService.removeProductFromCart(cid, pid);
             notifyCartChange();
-            res.json({ status: "success", message: "Product removed from cart", payload: cart });
+            sendSuccessResponse(res, { message: "Product removed from cart", payload: new CartDTO(cart) }, req.user);
         } catch (err) {
             errorLog(err);
-            res.status(500).json({ status: "error", message: err.message || "Server error" });
+            sendErrorResponse(res);
         }
     }
 
@@ -104,13 +87,11 @@ class CartControllers {
         try {
             const updatedCart = await cartService.addProductToCart(cid, pid);
             notifyCartChange();
-            res.json({ status: "success", payload: updatedCart });
+            sendSuccessResponse(res, { payload: new CartDTO(updatedCart) }, req.user);
         } catch (err) {
             errorLog(err);
-            res.status(err.message.includes("Cart with ID") ? 404 : 500).json({
-                status: "error",
-                message: err.message || "Server error"
-            });
+            const statusCode = err.message.includes("Cart with ID") ? 404 : 500;
+            sendErrorResponse(res, err.message || "Server error", statusCode);
         }
     }
 
@@ -135,10 +116,26 @@ class CartControllers {
                     customLabels: { docs: "payload" }
                 });
 
-            res.json({ status: "success", carts });
+            const dtoCarts = carts.payload.map(cart => new CartDTO(cart));
+
+            sendSuccessResponse(res, {
+                payload: dtoCarts,
+                totalPages: carts.totalPages,
+                prevPage: carts.hasPrevPage ? carts.prevPage : null,
+                nextPage: carts.hasNextPage ? carts.nextPage : null,
+                page: carts.page,
+                hasPrevPage: carts.hasPrevPage,
+                hasNextPage: carts.hasNextPage,
+                prevLink: carts.hasPrevPage
+                    ? `${req.baseUrl}?page=${carts.prevPage}&limit=${limit}&sort=${sort}&sortOrder=${sortOrder === -1 ? "desc" : "asc"}`
+                    : null,
+                nextLink: carts.hasNextPage
+                    ? `${req.baseUrl}?page=${carts.nextPage}&limit=${limit}&sort=${sort}&sortOrder=${sortOrder === -1 ? "desc" : "asc"}`
+                    : null
+            }, req.user);
         } catch (err) {
             errorLog(err);
-            res.status(500).json({ status: "error", message: "Server error" });
+            sendErrorResponse(res);
         }
     }
 
@@ -147,8 +144,9 @@ class CartControllers {
             const { cid } = req.params;
 
             const cart = await cartService.getCartById(cid);
+
             if (!cart) {
-                return res.status(404).json({ status: "error", message: `Cart ${cid} was not found.` });
+                return sendErrorResponse(res, `Cart ${cid} not found`, 404);
             }
 
             const { purchased, notPurchased, total } = await cartService.purchaseCart(cid);
@@ -160,10 +158,10 @@ class CartControllers {
                 notPurchased
             });
 
-            res.status(200).json({ status: "success", ticket });
+            sendSuccessResponse(res, { ticket }, req.user);
         } catch (error) {
-            errorLog(error, req);
-            res.status(500).json({ status: "error", message: "Internal server error" });
+            errorLog(error);
+            sendErrorResponse(res);
         }
     }
 }

@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="dark">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Real-Time Products</title>
+    <meta name="color-scheme" content="dark" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
         let currentPage = 1;
         let totalItems = 0;
-        let itemsPerPage = 10; // initial value
+        let itemsPerPage = 10;
         let totalPages = 1;
 
         socket.on('updateProducts', (products) => {
@@ -20,15 +20,14 @@
 
             const productList = document.getElementById('productList');
             const productCount = document.getElementById('productCount');
-            const paginationInfo = document.getElementById('paginationInfo');
+            
 
-            // Pagination logic
             const start = (currentPage - 1) * itemsPerPage;
             const end = start + itemsPerPage;
             const paginatedProducts = products.slice(start, end);
 
             productList.innerHTML = `
-                <table class="table is-striped is-hoverable is-fullwidth make-it-rounded-top make-it-semi-back make-it-normal">
+                <table class="table is-striped is-hoverable is-fullwidth make-it-rounded-top make-it-semi-back make-it-small">
                     <thead>
                         <tr>
                             <th></th>
@@ -42,8 +41,10 @@
                     </thead>
                     <tbody>
                         ${paginatedProducts.map(product => `
-                            <tr class="">
-                                <td class="make-it-center"><img src="${product.imageURL}" width="28px"></td>
+                            <tr>
+                                <td class="make-it-center">
+                                    <img src="${product.imageURL || '/static/default.png'}" width="28px" alt="${product.title}" />
+                                </td>
                                 <td>${product.pid}</td>
                                 <td>${product.title}</td>
                                 <td>$${product.price}</td>
@@ -57,7 +58,7 @@
             `;
 
             productCount.textContent = `Displaying ${paginatedProducts.length} product(s) | Page ${currentPage}`;
-            paginationInfo.textContent = `Total Items: ${totalItems}, Total Pages: ${totalPages}`;
+            
         });
 
         function changePage(step) {
@@ -67,24 +68,26 @@
             socket.emit('requestProducts');
         }
 
-        // Apply new itemsPerPage value from the dropdown
         function updateItemsPerPage() {
             const selectedValue = document.getElementById('itemsPerPageDropdown').value;
-            itemsPerPage = parseInt(selectedValue);
-            currentPage = 1;  // Reset to page 1 after changing itemsPerPage
+            itemsPerPage = parseInt(selectedValue, 10);
+            currentPage = 1;
             socket.emit('requestProducts');
         }
+
+        socket.emit('requestProducts');
     </script>
 </head>
 <body>
-    <h2 class=" section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Product List - Realtime display</h2>
-    <div class="section">
-        
-        <div id="productList"></div>
-        
-        <br>
+    <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">
+        Product List - Real-time Display
+    </h2>
 
-        <!-- Dropdown for items per page -->
+    <div class="section">
+        <div id="productList"></div>
+
+        <br />
+
         <div class="field is-inline-block">
             <div class="control">
                 <div class="select is-small">
@@ -95,18 +98,19 @@
                     </select>
                 </div>
             </div>
+            <div class="control">
+                <button class="button is-small" onclick="updateItemsPerPage()">Apply</button>
+            </div>
         </div>
-        <button class="button is-small  " onclick="updateItemsPerPage()">Apply</button>
 
-        <br><br>
-        
-        <div class="grid-container-3c-by-1r make-it-rounded make-it-white-back make-it-dark">
-            <button class="button is-small  " onclick="changePage(-1)">Prev</button>
-            <div class="content make-it-dark make-it-small  make-it-semi-back  make-it-rounded make-it-center section" id="productCount"></div>
-            <button class="button is-small  " onclick="changePage(1)">Next</button>
+        <br /><br />
+
+        <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-3c-by-1r-special">
+            <button class="button section make-it-small" onclick="changePage(-1)">Prev</button>
+            <div id="productCount" class="make-it-dark small-section make-it-small make-it-center"></div>
+            <button class="button section make-it-small" onclick="changePage(1)">Next</button>
         </div>
-        
-        <div class="content make-it-dark make-it-small  make-it-rounded-top make-it-semi-back  rt-general-page-footer" id="paginationInfo"></div>
+
     </div>
 </body>
 </html>

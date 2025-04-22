@@ -1,6 +1,6 @@
 // index.routes.js
 import passport from "../config/passport/passport.config.js";
-import { requireAdminOrOwner, requireRole } from "../middlewares/role.middleware.js";
+import { requireAdminOrOwner, requireLoggedOutOrRole, requireRole } from "../middlewares/role.middleware.js";
 
 import { ProductModel } from "../persistence/mongo/models/product.model.js";
 import { Router } from "express";
@@ -9,8 +9,11 @@ import { cartDao } from "../persistence/mongo/dao/cart.dao.js";
 import { Cart } from "../persistence/mongo/models/cart.model.js";
 
 import { ticket } from "../persistence/mongo/models/ticket.model.js";
-import { ProductDTO } from "../dto/product.dto.js"; // 🔧 Added
+import { ProductDTO } from "../dto/product.dto.js";
+import { UserDTO } from "../dto/user.dto.js";
 import { errorLog } from "../utils/errorLog.util.js";
+
+
 
 const router = Router();
 const jwtAuth = passport.authenticate("jwt", { session: false });
@@ -24,12 +27,12 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get("/login", (req, res) => {
+router.get("/login", requireLoggedOutOrRole(), (req, res) => {
     res.render("login"); 
 });
 
-// 🔥 NEW: Register page route
-router.get("/register", (req, res) => {
+// Register page route
+router.get("/register", requireLoggedOutOrRole(), (req, res) => {
     res.render("register");
 });
 
@@ -134,7 +137,8 @@ router.get('/carts/:cid', jwtAuth, requireAdminOrOwner(), async (req, res) => {
 });
 
 router.get("/current", jwtAuth, (req, res) => {
-    res.render("current");
+    const userDto = new UserDTO(req.user);
+    res.render("current", { user: userDto });
 });
 
 router.get("/logout", jwtAuth, (req, res) => {

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Users</title>
+    <meta name="color-scheme" content="dark">
+
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+
+<body>
+    <h2 class="section make-it-left make-it-white-back make-it-dark make-it-normal make-it-rounded-top">
+        User Editor
+    </h2>
+    <section class="">
+        <form id="editUserForm" class="box make-it-semi-back">
+            <div class="field small-section make-it-small">
+                <label class="label make-it-dark make-it-small" for="userSelect">Select User:</label>
+                <div class="control">
+                    <div class="select is-dark is-fullwidth make-it-small">
+                        <select id="userSelect" required>
+                            <option disabled selected value="">-- Choose a user --</option>
+                            {{#each users}}
+                                <option value="{{this.id}}">{{this.username}} ({{this.email}})</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div id="editFields" style="display:none;">
+                <div class="field">
+                    <label class="label make-it-dark make-it-small" for="firstName">First Name:</label>
+                    <div class="control">
+                        <input class="input is-dark make-it-small" type="text" id="firstName" name="firstName" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label make-it-dark make-it-small" for="lastName">Last Name:</label>
+                    <div class="control">
+                        <input class="input is-dark make-it-small" type="text" id="lastName" name="lastName" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label make-it-dark make-it-small" for="role">Role:</label>
+                    <div class="control make-it-small">
+                        <div class="select is-dark make-it-small">
+                            <select id="role" name="role" required>
+                                <option value="user">User</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field rt-general-page-footer">
+                    <div class="control make-it-center make-it-100percent-wide">
+                        <button class="button is-success make-it-small make-it-dark " type="submit">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <!-- Toastify + showToast util -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="/js/showToast.js"></script>
+
+    <script>
+        const userSelect = document.getElementById("userSelect");
+        const editFields = document.getElementById("editFields");
+        const firstNameInput = document.getElementById("firstName");
+        const lastNameInput = document.getElementById("lastName");
+        const roleSelect = document.getElementById("role");
+        const editUserForm = document.getElementById("editUserForm");
+
+        userSelect.addEventListener("change", async () => {
+            const userId = userSelect.value;
+            if (!userId) {
+                editFields.style.display = "none";
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem("token");
+                const res = await fetch(`/api/users/${userId}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                if (res.ok) {
+                    const { payload: user } = await res.json();
+                    firstNameInput.value = user.firstName || "";
+                    lastNameInput.value = user.lastName || "";
+                    roleSelect.value = user.role || "user";
+                    editFields.style.display = "block";
+                } else {
+                    showToast("Failed to fetch user details.", false);
+                    editFields.style.display = "none";
+                }
+            } catch (err) {
+                console.error(err);
+                showToast("Error loading user.", false);
+                editFields.style.display = "none";
+            }
+        });
+
+        editUserForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const userId = userSelect.value;
+            if (!userId) return;
+
+            const updatedUser = {
+                firstName: firstNameInput.value,
+                lastName: lastNameInput.value,
+                role: roleSelect.value
+            };
+
+            try {
+                const token = localStorage.getItem("token");
+                const res = await fetch(`/api/users/${userId}`, {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify(updatedUser)
+                });
+
+                const result = await res.json();
+
+                if (res.ok) {
+                    if (result.token) {
+                        localStorage.setItem("token", result.token);
+                    }
+                    showToast("User updated successfully.");
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    showToast(`Failed to update user: ${result.message}`, false);
+                }
+            } catch (err) {
+                console.error(err);
+                showToast("Something went wrong.", false);
+            }
+        });
+    </script>
+</body>
+</html>

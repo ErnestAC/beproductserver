@@ -1,3 +1,4 @@
+{{!-- views/current.handlebars --}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,65 +13,50 @@
     <section class="">
         <div class="section make-it-light-back make-it-small">
             <div id="userInfo" class="box make-it-dark">
-                Loading...
+                <p><strong>Username:</strong> {{user.username}}</p>
+                <p><strong>Email:</strong> {{user.email}}</p>
+                <p><strong>First Name:</strong> {{user.firstName}}</p>
+                <p><strong>Last Name:</strong> {{user.lastName}}</p>
+                <p><strong>Cart ID:</strong> {{user.cartId}}</p>
+                <p><strong>Role:</strong> {{user.role}}</p>
             </div>
-            <div class="grid-container-3c-by-1r">
+
+            <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-3c-by-1r-special">
+                
+                {{#if (eq user.role "admin")}}
+                        <a class="button section make-it-small" href="/admin" class="">Admin Panel</a>
+                {{/if}}
+                
                 <div></div>
-                <div class="">
-                    <a href="/logout" class="navbar-item is-warning make-it-normal button">Logout</a>
-                </div>
-                <div id="adminButtonContainer" class="">
-                    
-                </div>
+                
+                <a href="/logout" 
+                    class="button section make-it-small is-warning" 
+                    id="logout-btn">
+
+                    Logout
+                </a>
+                
             </div>
         </div>
     </section>
 
     <script>
-        const userInfo = document.getElementById("userInfo");
-        const adminButtonContainer = document.getElementById("adminButtonContainer");
-        const token = localStorage.getItem("token");
+        document.addEventListener("DOMContentLoaded", async () => {
+            const logoutBtn = document.getElementById("logout-btn");
 
-        async function loadUser() {
-            try {
-                const res = await fetch("/api/sessions/current", {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
+            if (logoutBtn) {
+                logoutBtn.addEventListener("click", () => {
+                    // Clear the token from localStorage when logging out
+                    localStorage.removeItem("token");
                 });
+            }
+        });
 
-                if (!res.ok) {
-                    throw new Error("Not authenticated");
-                }
-
-                const { user } = await res.json();
-
-                userInfo.innerHTML = `
-                    <p><strong>Username:</strong> ${user.username}</p>
-                    <p><strong>Email:</strong> ${user.email}</p>
-                    <p><strong>First Name:</strong> ${user.first_name}</p>
-                    <p><strong>Last Name:</strong> ${user.last_name}</p>
-                    <p><strong>Age:</strong> ${user.age}</p>
-                    <p><strong>Cart ID:</strong> ${user.cartId}</p>
-                    <p><strong>Role:</strong> ${user.role}</p>
-                `;
-
-                if (user.role === "admin") {
-                    adminButtonContainer.innerHTML = `
-                        <a href="/admin" class="navbar-item make-it-normal button">
-                            Admin Panel
-                        </a>
-                    `;
-                }
-            } catch (err) {
-                userInfo.innerHTML = `
-                    <p class="has-text-danger">⚠️ You are not logged in.</p>
-                    <a href="/login" class="button is-warning mt-3">Go to Login</a>
-                `;
+        function saveTokenIfProvided(response) {
+            if (response.token) {
+                localStorage.setItem("token", response.token);
             }
         }
-
-        loadUser();
     </script>
 </body>
 </html>

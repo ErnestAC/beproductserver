@@ -12,6 +12,17 @@ export const requireRole = (role) => {
     };
 };
 
+export const requireLoggedOutOrRole = () => {
+    return (req, res, next) => {
+        if (!req.user || req.user.role == "admin") {
+            next();
+        } else {
+            return res.status(403).json({ message: "Unauthorized while logged on as user" });
+        }
+    };
+};
+
+
 export const requireAdminOrOwner = (paramKey = "cid") => {
     return (req, res, next) => {
     if (!req.user) {

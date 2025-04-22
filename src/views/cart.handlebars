@@ -13,11 +13,8 @@
 
     <section class="section">
         {{#if cart.products.length}}
-
             <div class="box cart-products">
-
-
-                <table class="table is-fullwidth is-striped">
+                <table class="table is-fullwidth is-striped make-it-small">
                     <thead>
                         <tr>
                             <th></th>
@@ -41,7 +38,7 @@
                             <td class="make-it-center">${{this.price}}</td>
                             <td class="make-it-center">x{{this.quantity}}</td>
                             <td class="make-it-center">
-                                <button class="button is-danger is-small" onclick="removeItem('{{../cart.cid}}', '{{this.pid}}')">
+                                <button class="button section make-it-small is-danger" onclick="removeItem('{{../cart.cid}}', '{{this.pid}}')">
                                     Remove
                                 </button>
                             </td>
@@ -50,12 +47,14 @@
                     </tbody>
                 </table>
 
-            <div class="make-it-rounded-top small-section make-it-small make-it-semi make-it-right">
+                <div class="make-it-rounded-top small-section make-it-small make-it-semi make-it-right">
                     Cart ID: {{cart.cid}}
-            </div>
-                <div class=" section">
-                    <button class="button is-warning is-small" onclick="emptyCart('{{cart.cid}}')">Empty Cart</button>
-                    <button class="button is-success is-small" onclick="purchaseCart('{{cart.cid}}')">Purchase</button>
+                </div>
+
+                <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-3c-by-1r-special">
+                    <div></div>
+                    <button class="button section make-it-small" onclick="emptyCart('{{cart.cid}}')">Empty Cart</button>
+                    <button id="purchaseButton" class="button section make-it-small is-success" onclick="purchaseCart('{{cart.cid}}')">Complete Purchase</button>
                 </div>
             </div>
         {{else}}
@@ -66,22 +65,32 @@
         {{/if}}
     </section>
 
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="/js/showToast.js"></script>
+
     <script>
+        const token = localStorage.getItem("token");
+
         async function removeItem(cid, pid) {
             if (!confirm("Are you sure you want to remove this item?")) return;
             try {
                 const res = await fetch(`/api/carts/${cid}/products/${pid}`, {
                     method: "DELETE",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    }
                 });
                 if (res.ok) {
+                    const result = await res.json();
+                    if (result.token) localStorage.setItem("token", result.token);
                     location.reload();
                 } else {
-                    alert("Failed to remove item from cart.");
+                    showToast("Failed to remove item from cart.", false);
                 }
             } catch (err) {
                 console.error("Remove error:", err);
-                alert("Something went wrong.");
+                showToast("Something went wrong.", false);
             }
         }
 
@@ -90,40 +99,56 @@
             try {
                 const res = await fetch(`/api/carts/${cid}`, {
                     method: "DELETE",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    }
                 });
                 if (res.ok) {
+                    const result = await res.json();
+                    if (result.token) localStorage.setItem("token", result.token);
                     location.reload();
                 } else {
-                    alert("Failed to empty cart.");
+                    showToast("Failed to empty cart.", false);
                 }
             } catch (err) {
                 console.error("Empty error:", err);
-                alert("Something went wrong.");
+                showToast("Something went wrong.", false);
             }
         }
 
         async function purchaseCart(cid) {
+            const purchaseButton = document.getElementById("purchaseButton");
             if (!confirm("Proceed to purchase?")) return;
+
+            purchaseButton.disabled = true;
+
             try {
                 const res = await fetch(`/api/carts/${cid}/purchase`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    }
                 });
                 if (res.ok) {
                     const result = await res.json();
-                    alert(result.message || "Purchase completed!");
-                    location.reload(); // Optionally redirect to an order confirmation page
+                    if (result.token) localStorage.setItem("token", result.token);
+                    showToast(result.message || "Purchase completed!");
+                    setTimeout(() => {
+                        location.reload();
+                    }, 3000);
                 } else {
                     const error = await res.json();
-                    alert(error.message || "Failed to complete purchase.");
+                    showToast(error.message || "Failed to complete purchase.", false);
+                    purchaseButton.disabled = false;
                 }
             } catch (err) {
                 console.error("Purchase error:", err);
-                alert("Something went wrong during purchase.");
+                showToast("Something went wrong during purchase.", false);
+                purchaseButton.disabled = false;
             }
         }
     </script>
-
 </body>
 </html>

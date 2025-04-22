@@ -1,3 +1,5 @@
+// validateRequest.middleware.js
+
 export const validateRequest = (schema) => (req, res, next) => {
     try {
         req.body = schema.parse(req.body); // throws if invalid

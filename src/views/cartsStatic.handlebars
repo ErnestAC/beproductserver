@@ -8,34 +8,26 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
-    <h2 class="section make-it-left make-it-white-back make-it-dark make-it-small  make-it-rounded-top make-it-normal">Cart List - Static View</h2>
+    <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Cart List - Static View</h2>
 
     <!-- Sorting and Pagination Controls -->
-    <section class="section">
-        <div class="container make-it-dark">
-            <div class="columns is-multiline is-centered">
- 
-                <!-- Pagination Controls -->
-                <div class="column is-10">
-                    <div class="make-it-dark-back is-centered grid-container-3c-by-1r" role="navigation" aria-label="pagination">
-                        <a class="button section " 
-                            href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}">Prev page</a>
+    <div class="columns is-multiline is-centered">
+        <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-3c-by-1r-special" role="navigation" aria-label="pagination">
+            <a class="button section make-it-small" 
+                href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}">Prev page</a>
 
-                        <div class="section make-it-center make-it-rounded make-it-semi-back  make-it-white">
-                            Page {{currentPage}} of {{totalPages}}
-                        </div>
-
-                        <a class="button section " 
-                            href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}">Next page</a>
-                    </div>
-                </div>
+            <div class="make-it-dark small-section make-it-small make-it-center">
+                Page {{currentPage}} of {{totalPages}}
             </div>
-        </div>
-    </section>
 
+            <a class="button section make-it-small" 
+                href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}">Next page</a>
+        </div>
+    </div>
+    
     <!-- Cart List -->
     <section class="">
-        <div class="">
+        <div class="make-it-small section">
             <div class="columns is-multiline is-centered">
                 {{#if carts.length}}
                     {{#each carts}}
@@ -82,7 +74,8 @@
                                             {{/each}}
                                         </table>
                                     </div>
-                                    <div class="make-it-semi-back make-it-dark make-it-small  make-it-rounded-bottom section">
+
+                                    <div class="make-it-semi-back make-it-dark make-it-small make-it-rounded-bottom section">
                                         <strong>Products in Cart:</strong> {{this.products.length}}
                                     </div>
                                 </div>
@@ -97,8 +90,16 @@
     </section>
 
     <script>
+        // Save the token if the server starts returning refreshed tokens (future-proof)
+        function saveTokenIfProvided(response) {
+            if (response.token) {
+                localStorage.setItem("token", response.token);
+            }
+        }
+
         function applyLimit() {
-            const selectedLimit = document.getElementById('limit-select').value;
+            const selectedLimit = document.getElementById('limit-select')?.value;
+            if (!selectedLimit) return;
             const urlParams = new URLSearchParams(window.location.search);
             urlParams.set('limit', selectedLimit);
             urlParams.set('page', 1);

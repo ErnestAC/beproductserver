@@ -2,11 +2,12 @@
 
 import { Router } from "express";
 import passport from "../config/passport/passport.config.js";
-import { uploader } from "../utils.js";
+import { uploader } from "../utils/fileHandler.utils.js";
 import { productDao } from "../persistence/mongo/dao/product.dao.js";
+import { userDao } from "../persistence/mongo/dao/user.dao.js"; // 📌 NEW: Import userDao
 import { notifyProductChange } from "../server.js";
 import { requireRole } from "../middlewares/role.middleware.js";
-
+import { UserDTO } from "../dto/user.dto.js"; // 📌 NEW: Import UserDTO
 
 const router = Router();
 const jwtAuth = passport.authenticate("jwt", { session: false });
@@ -89,6 +90,19 @@ router.post('/delete-product/:pid', jwtAuth, requireRole("admin"), async (req, r
         }
     } catch (error) {
         res.status(500).json({ message: `Server error ${error}` });
+    }
+});
+
+// Render form to edit users (Admin only)
+router.get('/users', jwtAuth, requireRole("admin"), async (req, res) => {
+    try {
+        const users = await userDao.getAllUsers();
+        const dtoUsers = users.map(user => new UserDTO(user));
+
+        res.render('editUsers', { users: dtoUsers });
+    } catch (error) {
+        console.error("Error loading users:", error);
+        res.status(500).send("Server error loading users");
     }
 });
 

@@ -8,7 +8,7 @@
     <meta name="color-scheme" content="dark">
 </head>
 <body>
-    <h2 class=" section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Delete Products</h2>
+    <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Delete Products</h2>
 
     <p id="resultMessage" class="has-text-centered make-it-white section"></p>
 
@@ -27,14 +27,27 @@
         <button class="pagination-next" id="nextPage">Next</button>
     </nav>
 
-
     <script>
         let currentPage = 1;
         const limit = 10;
 
+        function saveTokenIfProvided(response) {
+            if (response.token) {
+                localStorage.setItem("token", response.token);
+            }
+        }
+
         async function fetchProducts(page = 1) {
-            const res = await fetch(`/api/products?page=${page}&limit=${limit}`);
+            const token = localStorage.getItem("token");
+
+            const res = await fetch(`/api/products?page=${page}&limit=${limit}`, {
+                headers: {
+                    Authorization: token ? `Bearer ${token}` : undefined
+                }
+            });
+
             const data = await res.json();
+            saveTokenIfProvided(data);
 
             const productList = document.getElementById("productList");
             productList.innerHTML = "";
@@ -82,15 +95,22 @@
                 return;
             }
 
+            const token = localStorage.getItem("token");
             let successCount = 0;
 
             for (const pid of selected) {
                 try {
                     const res = await fetch(`/api/products/${pid}`, {
                         method: "DELETE",
-                        headers: { "Content-Type": "application/json" },
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: token ? `Bearer ${token}` : undefined
+                        },
                         body: JSON.stringify({ killFlag: true })
                     });
+
+                    const result = await res.json();
+                    saveTokenIfProvided(result);
 
                     if (res.ok) successCount++;
                 } catch (err) {

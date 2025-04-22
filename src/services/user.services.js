@@ -1,11 +1,11 @@
 // src/services/user.services.js
+
 import { userDao } from "../persistence/mongo/dao/user.dao.js";
 import { cartService } from "./cart.services.js";
 import { v4 as uuidv4 } from 'uuid';
 import { UserDTO } from "../dto/user.dto.js";
 
 class UserService {
-
     async getUserByEmail(email) {
         const user = await userDao.getUserByEmail(email);
         return user ? new UserDTO(user) : null;
@@ -13,7 +13,7 @@ class UserService {
 
     async getUserById(id) {
         const user = await userDao.getUserById(id);
-        return user ? new UserDTO(user) : null;
+        return user;  // <-- return raw
     }
 
     async getAllUsers() {
@@ -22,13 +22,19 @@ class UserService {
     }
 
     async createUser(userData) {
-        // Generate a new cart before creating user
         const cid = uuidv4();
         const newCart = await cartService.createCart(cid);
 
         const newUser = {
-            ...userData,
-            cartId: newCart.cid,
+            username: userData.username,
+            email: userData.email,
+            password: userData.password,
+            first_name: userData.first_name,
+            last_name: userData.last_name,
+            dateOfBirth: userData.dateOfBirth,
+            gid: userData.gid,
+            role: userData.role,
+            cartId: newCart.cid
         };
 
         const created = await userDao.createUser(newUser);
@@ -37,6 +43,11 @@ class UserService {
 
     async deleteUserById(id) {
         return await userDao.deleteUserById(id);
+    }
+
+    async updateUser(id, updatedFields) {
+        const updatedUser = await userDao.updateUser(id, updatedFields);
+        return updatedUser ? new UserDTO(updatedUser) : null;
     }
 }
 

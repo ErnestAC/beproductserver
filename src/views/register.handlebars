@@ -1,4 +1,4 @@
-{{!-- views/register.handlebars (with password confirmation) --}}
+{{!-- views/register.handlebars --}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,69 +6,86 @@
     <title>Register</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="dark">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
     <section class="section">
-        <h2 class="section make-it-left make-it-white-back make-it-dark make-it-normal make-it-rounded-top make-it-normal">Create a Shopnhour Account</h2>
+        <h2 class="section make-it-left make-it-white-back make-it-dark make-it-normal make-it-rounded-top make-it-normal">
+            Create a Shopnhour Account
+        </h2>
         <div class="container">
-
             <br>
-            <form id="registerForm" action="/api/sessions/register" method="POST" class="box">
+            <form id="registerForm" class="box make-it-small">
                 <div class="field">
-                    <label class="label">Username (login name)</label>
+                    <label class="make-it-normal">Display name (Username)</label>
                     <div class="control">
                         <input class="input" type="text" name="username" required>
                     </div>
                 </div>
 
                 <div class="field">
-                    <label class="label">Email (contact email)</label>
+                    <label class="make-it-normal">Email (Used to log in)</label>
                     <div class="control">
                         <input class="input" type="email" name="email" required>
                     </div>
                 </div>
 
                 <div class="field">
-                    <label class="label">First Name</label>
+                    <label class="make-it-normal">First Name</label>
                     <div class="control">
                         <input class="input" type="text" name="first_name" required>
                     </div>
                 </div>
 
                 <div class="field">
-                    <label class="label">Last Name</label>
+                    <label class="make-it-normal">Last Name</label>
                     <div class="control">
                         <input class="input" type="text" name="last_name" required>
                     </div>
                 </div>
 
                 <div class="field">
-                    <label class="label">Password</label>
+                    <label class="make-it-normal">Date of Birth</label>
+                    <div class="control">
+                        <input class="input" type="date" name="dateOfBirth" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="make-it-normal">Government ID (GID)</label>
+                    <div class="control">
+                        <input class="input" type="text" name="gid" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="make-it-normal">Password</label>
                     <div class="control">
                         <input id="password" class="input" type="password" name="password" required>
                     </div>
+                    <p id="passwordHelp" class="help make-it-normal"></p>
                 </div>
 
                 <div class="field">
-                    <label class="label">Confirm Password</label>
+                    <label class="make-it-normal">Confirm Password</label>
                     <div class="control">
                         <input id="confirmPassword" class="input" type="password" required>
                     </div>
+                    <p id="confirmPasswordHelp" class="help make-it-normal"></p>
                 </div>
 
-                <div class="field">
-                    <label class="label">Age</label>
-                    <div class="control">
-                        <input class="input" type="number" name="age" required min="0">
-                    </div>
-                </div>
+                <br>
 
                 <div class="field is-grouped">
                     <div class="control">
-                        <button class="button is-link" type="submit">Register</button>
+                        <button id="submitBtn" class="button is-success make-it-normal" type="submit">
+                            Register
+                        </button>
                     </div>
                     <div class="control">
-                        <a class="button is-light" href="/login">Back to Login</a>
+                        <a class="button is-warning make-it-normal" href="/login">
+                            Back to Login
+                        </a>
                     </div>
                 </div>
             </form>
@@ -76,13 +93,104 @@
     </section>
 
     <script>
-        document.getElementById("registerForm").addEventListener("submit", function (event) {
-            const password = document.getElementById("password").value;
-            const confirmPassword = document.getElementById("confirmPassword").value;
+        const form = document.getElementById("registerForm");
+        const passwordInput = document.getElementById("password");
+        const confirmPasswordInput = document.getElementById("confirmPassword");
+        const submitBtn = document.getElementById("submitBtn");
+        const passwordHelp = document.getElementById("passwordHelp");
+        const confirmPasswordHelp = document.getElementById("confirmPasswordHelp");
+
+        function validatePasswordDetailed(password, options = {}) {
+            const { minLength = 8, minUppercase = 1, minNumbers = 1, minSpecialChars = 1 } = options;
+            const errors = [];
+
+            if (typeof password !== "string") {
+                errors.push("Password must be a string.");
+                return errors;
+            }
+
+            if (password.length < minLength) {
+                errors.push(`Password must be at least ${minLength} characters long.`);
+            }
+
+            if ((password.match(/[A-Z]/g) || []).length < minUppercase) {
+                errors.push(`Password must contain at least ${minUppercase} uppercase letter(s).`);
+            }
+
+            if ((password.match(/[0-9]/g) || []).length < minNumbers) {
+                errors.push(`Password must contain at least ${minNumbers} number(s).`);
+            }
+
+            if ((password.match(/[!@#$%^&*(),.?":{}|<>]/g) || []).length < minSpecialChars) {
+                errors.push(`Password must contain at least ${minSpecialChars} special character(s).`);
+            }
+
+            return errors;
+        }
+
+        function validateForm() {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            const passwordErrors = validatePasswordDetailed(password);
+
+            if (passwordErrors.length === 0) {
+                passwordHelp.textContent = "Password is strong.";
+                passwordHelp.className = "help is-success make-it-normal";
+            } else {
+                passwordHelp.textContent = passwordErrors.join(" ");
+                passwordHelp.className = "help is-danger make-it-normal";
+            }
+
+            if (confirmPassword === password && password.length > 0) {
+                confirmPasswordHelp.textContent = "Passwords match.";
+                confirmPasswordHelp.className = "help is-success make-it-normal";
+            } else {
+                confirmPasswordHelp.textContent = "Passwords do not match.";
+                confirmPasswordHelp.className = "help is-danger make-it-normal";
+            }
+
+            submitBtn.disabled = !(passwordErrors.length === 0 && confirmPassword === password);
+        }
+
+        passwordInput.addEventListener("input", validateForm);
+        confirmPasswordInput.addEventListener("input", validateForm);
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const body = Object.fromEntries(formData.entries());
+
+            const password = body.password;
+            const confirmPassword = confirmPasswordInput.value;
 
             if (password !== confirmPassword) {
-                event.preventDefault();
                 alert("Passwords do not match. Please try again.");
+                return;
+            }
+
+            try {
+                const res = await fetch("/api/sessions/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(body)
+                });
+
+                const result = await res.json();
+
+                if (res.ok) {
+                    if (result.token) {
+                        localStorage.setItem("token", result.token);
+                        window.location.href = "/products"; // Auto-login after register
+                    } else {
+                        window.location.href = "/login"; // Regular registration flow
+                    }
+                } else {
+                    alert(result.message || "Registration failed");
+                }
+            } catch (err) {
+                alert("An error occurred during registration.");
+                console.error(err);
             }
         });
     </script>

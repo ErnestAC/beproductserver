@@ -9,7 +9,7 @@ export const __dirname = dirname(__filename);
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, "/public/img")); // Ensure this folder exists
+        cb(null, path.join(__dirname, "../public/img")); // Ensure this folder exists
     },
     filename: (req, file, cb) => {
         const fileExt = path.extname(file.originalname); // Get file extension

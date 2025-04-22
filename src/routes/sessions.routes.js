@@ -5,14 +5,15 @@ import { User } from "../persistence/mongo/models/user.model.js";
 import { validateRequest } from "../middlewares/validateRequest.middleware.js";
 import { registerUserSchema, loginUserSchema } from "../schemas/user.schema.js";
 import { userController } from "../controllers/user.controllers.js"
+import { requireLoggedOutOrRole } from "../middlewares/role.middleware.js";
+import { errorLog } from "../utils/errorLog.util.js";
+import { UserDTO } from "../dto/user.dto.js";
 
 const router = Router();
 const JWT_SECRET = process.env.JWT_SECRET || "super_secret_jwt_string";
 
-// Register new user
-router.post("/register", validateRequest(registerUserSchema), userController.registerUser);
+router.post("/register", requireLoggedOutOrRole(), validateRequest(registerUserSchema), userController.registerUser);
 
-// Login with session-based Passport
 router.post("/login", validateRequest(loginUserSchema), (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
         if (err) return next(err);
@@ -22,31 +23,24 @@ router.post("/login", validateRequest(loginUserSchema), (req, res, next) => {
             if (err) return next(err);
             return res.json({
                 message: "Logged in successfully",
-                user: { id: user._id, username: user.username, email: user.email },
+                user: new UserDTO(user),
             });
         });
     })(req, res, next);
 });
 
-// Logout and clear cookie
 router.post("/logout", (req, res) => {
-    res.clearCookie("token"); // Clear JWT cookie
+    res.clearCookie("token");
     req.logout((err) => {
         if (err) return res.status(500).json({ message: "Logout failed" });
         res.json({ message: "Logged out successfully" });
     });
 });
 
-// Get current user using JWT from cookie
-router.get(
-    "/current",
-    passport.authenticate("jwt", { session: false }),
-    (req, res) => {
-        return res.json({ user: req.user });
-    }
-);
+router.get("/current", passport.authenticate("jwt", { session: false }), (req, res) => {
+    return res.json({ user: new UserDTO(req.user) });
+});
 
-// JWT login and send token via cookie
 router.post("/jwt/login", validateRequest(loginUserSchema), async (req, res) => {
     const { email, password } = req.body;
 
@@ -60,21 +54,21 @@ router.post("/jwt/login", validateRequest(loginUserSchema), async (req, res) => 
             expiresIn: "30m",
         });
 
-        // Send token in cookie (HttpOnly)
         res
             .cookie("token", token, {
                 httpOnly: true,
-                secure: false, // Set to true if using HTTPS
+                secure: false,
                 sameSite: "strict",
-                maxAge: 30 * 60 * 1000, // 30 minutes
+                maxAge: 30 * 60 * 1000,
             })
             .json({
                 message: "JWT issued and stored in cookie",
-                user: { id: user._id, username: user.username, email: user.email },
+                user: new UserDTO(user),
             });
 
     } catch (err) {
-        res.status(500).json({ message: "Server error" });
+        errorLog(err);
+        return res.status(500).json({ message: "Server error" });
     }
 });
 

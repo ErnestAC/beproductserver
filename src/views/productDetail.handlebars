@@ -6,28 +6,29 @@
     <title>{{product.title}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="dark">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 <body>
     {{#if error}}
-        <h2>{{error}}</h2>
+        <h2 class="make-it-center section make-it-white">{{error}}</h2>
     {{else}}
         <section class="section">
-            <div class="columns is-centered">
-                <div class="column is-12-mobile is-12-desktop">
+            <div class="columns make-it-center">
+                <div class="column make-it-100percent-wide">
                     <div class="card-title-container make-it-dark-back make-it-left make-it-white">
-                        <div>
-                            {{product.title}}
-                        </div>
+                        <div>{{product.title}}</div>
                     </div>
+
                     <div class="make-it-semi-back">
                         <div class="small-section">
                             <div class="make-it-rounded">
-                                <img src="{{product.imageURL}}" alt="{{product.title}}">
+                                <img class="make-it-single-image" src="{{product.imageURL}}" alt="{{product.title}}">
                             </div>
-                            <div class="card-category-badge-prebuilt make-it-left">
-                                {{product.category}}
-                            </div>
+
+                            <div class="card-category-badge-prebuilt make-it-left">{{product.category}}</div>
                             <br>
+
                             <div class="columns make-it-white-back make-it-rounded make-it-dark make-it-small small-section">
                                 <div class="column is-6 make-it-left">
                                     <p><b>Price:</b> ${{product.price}}</p>
@@ -40,7 +41,11 @@
                                     <p><b>Lights:</b> {{#if product.lighting}}Yes{{else}}No{{/if}}</p>
                                 </div>
                             </div>
+
                             <div class="make-it-right section">
+                                <button id="addToCartButton" class="button is-success is-small make-it-small" style="margin-top: 0.5rem;">
+                                    Add to Cart
+                                </button>
                                 <a href="/products" class="button is-small make-it-small" style="margin-top: 0.5rem;">
                                     Back
                                 </a>
@@ -51,5 +56,67 @@
             </div>
         </section>
     {{/if}}
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="/js/showToast.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const addToCartButton = document.getElementById("addToCartButton");
+            const userCartId = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).cartId : null;
+            const isLoggedIn = localStorage.getItem("token") !== null;
+
+            addToCartButton.addEventListener("click", async () => {
+                if (!isLoggedIn) {
+                    // Guest cart logic
+                    let guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+                    const existing = guestCart.find(item => item.pid === "{{product.pid}}");
+
+                    if (existing) {
+                        existing.quantity += 1;
+                    } else {
+                        guestCart.push({
+                            pid: "{{product.pid}}",
+                            title: "{{product.title}}",
+                            price: {{product.price}},
+                            quantity: 1
+                        });
+                    }
+
+                    localStorage.setItem("guestCart", JSON.stringify(guestCart));
+                    showToast("Added to guest cart");
+                    return;
+                }
+
+                try {
+                    const token = localStorage.getItem("token");
+                    const res = await fetch(`/api/carts/${userCartId}/product/{{product.pid}}`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ quantity: 1 })
+                    });
+
+                    const result = await res.json();
+
+                    if (res.ok) {
+                        showToast("Added to your cart!");
+
+                        // Refresh token if server sent a new one
+                        if (result.token) {
+                            localStorage.setItem("token", result.token);
+                        }
+                    } else {
+                        showToast(result.message || "Failed to add to cart", false);
+                    }
+                } catch (err) {
+                    console.error("Error adding to cart:", err);
+                    showToast("Error adding to cart", false);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
