@@ -7,43 +7,6 @@
 	},
 	"item": [
 		{
-			"name": "Deprecated - Refresh JWT session token",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"token\": \"ANOTHERBEARERTOKEN\"\r\n}\r\n",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/auth/refresh",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"auth",
-						"refresh"
-					],
-					"query": [
-						{
-							"key": "{ \"token\": \"YOUR_REFRESH_TOKEN_HERE\" }",
-							"value": null,
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Create a product",
 			"request": {
 				"auth": {
@@ -187,7 +150,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/products/e2e0f1ae-9172-423d-b6ec-d37d9ad80b87",
+					"raw": "localhost:8080/api/products/:pid",
 					"host": [
 						"localhost"
 					],
@@ -195,7 +158,13 @@
 					"path": [
 						"api",
 						"products",
-						"e2e0f1ae-9172-423d-b6ec-d37d9ad80b87"
+						":pid"
+					],
+					"variable": [
+						{
+							"key": "pid",
+							"value": "7bf6dd9a-47eb-4f4e-b3ab-b0583f3a15e5"
+						}
 					]
 				}
 			},
@@ -373,7 +342,7 @@
 			"response": []
 		},
 		{
-			"name": "Get carts by ID",
+			"name": "Get cart by ID",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -390,6 +359,36 @@
 						"api",
 						"carts",
 						"5ab6e82f-b289-4dff-8ff5-25dc0f749ee2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Purchase cart by ID",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/carts/:cid/purchase",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"carts",
+						":cid",
+						"purchase"
+					],
+					"variable": [
+						{
+							"key": "cid",
+							"value": "2376a7cd-194d-4091-a3ab-8bf123ed58a4"
+						}
 					]
 				}
 			},
@@ -589,13 +588,70 @@
 			"response": []
 		},
 		{
+			"name": "Get all tickets",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTRmNzhiNDY2NTFhMjBmODhhNmY5YiIsImVtYWlsIjoibm9lbWFpbDdAZW1haWwuY29tIiwiaWF0IjoxNzQzMTI3MDU2LCJleHAiOjE3NDMxMzA2NTZ9.bdwMVw79rQEWHE-zIwMObDX0Kpw8R_hkUBl0KWkFgJE",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/tickets",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"tickets"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "price",
+							"disabled": true
+						},
+						{
+							"key": "sortOrder",
+							"value": "desc",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "Authorization",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Register - Create user",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\":\"dogadmin2\",\r\n    \"email\":\"noemai20@email.com\",\r\n    \"password\":\"somepw\",\r\n    \"first_name\":\"john\",\r\n    \"last_name\":\"tester\",\r\n    \"age\":100\r\n    \r\n}",
+					"raw": "{\r\n    \"username\":\"dogadmin2\",\r\n    \"email\":\"noemai20@email.com\",\r\n    \"password\":\"sss121\",\r\n    \"first_name\":\"john\",\r\n    \"last_name\":\"tester\",\r\n    \"age\":100\r\n    \r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -641,7 +697,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"youremail7@email.com\",\r\n    \"password\": \"somepw\"\r\n}",
+					"raw": "{\r\n    \"email\": \"noemail7@email.com\",\r\n    \"password\": \"sss121\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -670,7 +726,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"youremail7@email.com\",\r\n    \"password\": \"somepw\"\r\n}",
+					"raw": "{\r\n    \"email\": \"noemail7@email.com\",\r\n    \"password\": \"sss121\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -731,6 +787,69 @@
 						"api",
 						"sessions",
 						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/users/68008565bb9a8f78682245f7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"68008565bb9a8f78682245f7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user by ID Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/users/68008565bb9a8f78682245f7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"68008565bb9a8f78682245f7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/users/68008565bb9a8f78682245f7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users",
+						"68008565bb9a8f78682245f7"
 					]
 				}
 			},
