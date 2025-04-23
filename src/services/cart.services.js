@@ -3,20 +3,41 @@
 import { cartDao } from "../persistence/mongo/dao/cart.dao.js";
 import { ProductModel } from "../persistence/mongo/models/product.model.js";
 import { Cart } from "../persistence/mongo/models/cart.model.js";
+import { CartDTO } from "../dto/cart.dto.js";
 
 class CartService {
     async getCartById(cid) {
-        return await cartDao.getCartById(cid);
+        const cart = await cartDao.getCartById(cid);
+
+        if (!cart) return null;
+
+        const cartObj = cart.toObject?.() || cart;
+        const uniquePids = cartObj.products.map(p => p.pid);
+
+        const productDocs = await ProductModel.find({ pid: { $in: uniquePids } }).lean();
+        const productMap = new Map(productDocs.map(p => [p.pid, p]));
+
+        const enrichedProducts = cartObj.products.map(item => {
+            const details = productMap.get(item.pid);
+            return {
+                pid: item.pid,
+                quantity: item.quantity,
+                title: details?.title ?? null,
+                imageURL: details?.imageURL ?? null,
+                category: details?.category ?? null,
+                price: details?.price ?? null,
+                stock: details?.stock ?? null,
+                pieces: details?.pieces ?? null,
+                description: details?.description ?? null,
+                code: details?.code ?? null
+            };
+        });
+
+        return new CartDTO({ cid: cartObj.cid, products: enrichedProducts });
     }
 
     async getCartByIdMongoose(cid) {
-        return await Cart.findOne({ cid })
-            .populate({
-                path: "products.pid",
-                model: ProductModel,
-                select: "title handle imageURL description price category stock pieces"
-            })
-            .lean();
+        return await Cart.findOne({ cid });
     }
 
     async createCart() {
@@ -24,11 +45,13 @@ class CartService {
     }
 
     async addProductToCart(cid, pid) {
-        return await cartDao.addProductToCart(cid, pid);
+        await cartDao.addProductToCart(cid, pid);
+        return await this.getCartById(cid); // Enrich and return
     }
 
     async removeProductFromCart(cid, pid) {
-        return await cartDao.deleteProductFromCart(cid, pid);
+        await cartDao.deleteProductFromCart(cid, pid);
+        return await this.getCartById(cid);
     }
 
     async clearCart(cid) {
@@ -53,7 +76,7 @@ class CartService {
 
         productInCart.quantity = parseInt(quantity, 10);
         await cart.save();
-        return cart;
+        return await this.getCartById(cid);
     }
 
     async purchaseCart(cid) {

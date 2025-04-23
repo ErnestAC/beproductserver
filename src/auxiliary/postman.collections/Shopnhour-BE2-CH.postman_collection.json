@@ -350,7 +350,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/carts/5ab6e82f-b289-4dff-8ff5-25dc0f749ee2",
+					"raw": "localhost:8080/api/carts/:cid",
 					"host": [
 						"localhost"
 					],
@@ -358,7 +358,13 @@
 					"path": [
 						"api",
 						"carts",
-						"5ab6e82f-b289-4dff-8ff5-25dc0f749ee2"
+						":cid"
+					],
+					"variable": [
+						{
+							"key": "cid",
+							"value": "2376a7cd-194d-4091-a3ab-8bf123ed58a4"
+						}
 					]
 				}
 			},
@@ -435,7 +441,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/carts/adcf8a94-7411-4973-9f5f-e35fedf32220/product/65114cbf-77d0-4112-bf96-8a5eae4fadaf",
+					"raw": "localhost:8080/api/carts/:cid/product/:pid",
 					"host": [
 						"localhost"
 					],
@@ -443,9 +449,19 @@
 					"path": [
 						"api",
 						"carts",
-						"adcf8a94-7411-4973-9f5f-e35fedf32220",
+						":cid",
 						"product",
-						"65114cbf-77d0-4112-bf96-8a5eae4fadaf"
+						":pid"
+					],
+					"variable": [
+						{
+							"key": "cid",
+							"value": "2376a7cd-194d-4091-a3ab-8bf123ed58a4"
+						},
+						{
+							"key": "pid",
+							"value": "bc9e715b-857d-42a4-966b-3fbd1415eb7a"
+						}
 					]
 				}
 			},
@@ -499,7 +515,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"quantity\": 90}",
+					"raw": "{\"quantity\": 1}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -507,7 +523,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/carts/5ab6e82f-b289-4dff-8ff5-25dc0f749ee2/product/1e76fee0-d5fb-412b-bf05-85735733a566",
+					"raw": "localhost:8080/api/carts/:cid/product/:pid",
 					"host": [
 						"localhost"
 					],
@@ -515,9 +531,19 @@
 					"path": [
 						"api",
 						"carts",
-						"5ab6e82f-b289-4dff-8ff5-25dc0f749ee2",
+						":cid",
 						"product",
-						"1e76fee0-d5fb-412b-bf05-85735733a566"
+						":pid"
+					],
+					"variable": [
+						{
+							"key": "cid",
+							"value": "2376a7cd-194d-4091-a3ab-8bf123ed58a4"
+						},
+						{
+							"key": "pid",
+							"value": "bc9e715b-857d-42a4-966b-3fbd1415eb7a"
+						}
 					]
 				}
 			},
@@ -545,7 +571,7 @@
 					"variable": [
 						{
 							"key": "cid",
-							"value": "5ab6e82f-b289-4dff-8ff5-25dc0f749ee2"
+							"value": "2376a7cd-194d-4091-a3ab-8bf123ed58a4"
 						}
 					]
 				}
@@ -576,11 +602,11 @@
 					"variable": [
 						{
 							"key": "cid",
-							"value": "b2ffb13f-f5c2-4a37-81be-38a2100f81e8"
+							"value": "2376a7cd-194d-4091-a3ab-8bf123ed58a4"
 						},
 						{
 							"key": "pid",
-							"value": "04faba10-442a-49cb-9f79-507dfbaf51f8a"
+							"value": "bc9e715b-857d-42a4-966b-3fbd1415eb7a"
 						}
 					]
 				}
@@ -726,7 +752,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"noemail7@email.com\",\r\n    \"password\": \"sss121\"\r\n}",
+					"raw": "{\r\n    \"email\": \"noemail1@email.com\",\r\n    \"password\": \"sss121\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -837,10 +863,19 @@
 		{
 			"name": "Edit user",
 			"request": {
-				"method": "GET",
+				"method": "PATCH",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstName\": \"UpdatedName\",\r\n  \"lastName\": \"UpdatedLast\",\r\n  \"role\": \"admin\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8080/api/users/68008565bb9a8f78682245f7",
+					"raw": "http://localhost:8080/api/users/:uid",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -849,7 +884,13 @@
 					"path": [
 						"api",
 						"users",
-						"68008565bb9a8f78682245f7"
+						":uid"
+					],
+					"variable": [
+						{
+							"key": "uid",
+							"value": "68008565bb9a8f78682245f7"
+						}
 					]
 				}
 			},

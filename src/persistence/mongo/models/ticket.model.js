@@ -7,7 +7,7 @@ import mongoosePaginate from "mongoose-paginate-v2";
 const ticketCollection = "ticket";
 
 const ticketSchema = new mongoose.Schema({
-    tid: {
+    tid: { // equivalent to "code" in the request, page 2
         type: String,
         default: uuidv4,
         unique: true
