@@ -64,54 +64,37 @@ class CartService {
         const notPurchased = [];
         let total = 0;
 
+        const stillInCart = [];
+
         for (const item of cart.products) {
             const product = await ProductModel.findOne({ pid: item.pid });
 
-            if (!product || product.stock <= 0) {
+            if (!product || product.stock < item.quantity) {
                 notPurchased.push({
-                    ...item.toObject(),
-                    title: product ? product.title : "Unknown",
-                    price: product ? product.price : 0
+                    pid: item.pid,
+                    quantity: item.quantity,
+                    title: product?.title || "Unknown",
+                    price: product?.price || 0
                 });
+
+                stillInCart.push({ pid: item.pid, quantity: item.quantity });
                 continue;
             }
 
-            if (product.stock >= item.quantity) {
-                product.stock -= item.quantity;
-                await product.save();
+            product.stock -= item.quantity;
+            await product.save();
 
-                purchased.push({
-                    ...item.toObject(),
-                    title: product.title,
-                    price: product.price
-                });
-                total += product.price * item.quantity;
-            } else {
-                purchased.push({
-                    ...item.toObject(),
-                    quantity: product.stock,
-                    title: product.title,
-                    price: product.price
-                });
+            purchased.push({
+                pid: item.pid,
+                quantity: item.quantity,
+                title: product.title,
+                price: product.price
+            });
 
-                total += product.price * product.stock;
-
-                notPurchased.push({
-                    ...item.toObject(),
-                    quantity: item.quantity - product.stock,
-                    title: product.title,
-                    price: product.price
-                });
-
-                product.stock = 0;
-                await product.save();
-            }
+            total += product.price * item.quantity;
         }
 
-        cart.products = notPurchased.map(item => ({
-            pid: item.pid,
-            quantity: item.quantity
-        }));
+        cart.products = stillInCart;
         await cart.save();
 
         return { purchased, notPurchased, total };

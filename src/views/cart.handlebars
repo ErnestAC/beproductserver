@@ -5,6 +5,8 @@
     <title>Cart</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="dark" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 <body>
     <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">
@@ -131,16 +133,25 @@
                         Authorization: `Bearer ${token}`
                     }
                 });
+
+                const result = await res.json();
+
                 if (res.ok) {
-                    const result = await res.json();
-                    if (result.token) localStorage.setItem("token", result.token);
-                    showToast(result.message || "Purchase completed!");
+                    if (result.token) {
+                        localStorage.setItem("token", result.token);
+                    }
+
+                    const boughtCount = result.ticket.purchased?.length || 0;
+                    const failedCount = result.ticket.notPurchased?.length || 0;
+
+                    const msg = `Purchase completed. ${boughtCount} product(s) bought.${failedCount > 0 ? ` ${failedCount} item(s) didn’t have enough stock and remain in your cart.` : ""}`;
+                    showToast(msg, true);
+
                     setTimeout(() => {
                         location.reload();
                     }, 3000);
                 } else {
-                    const error = await res.json();
-                    showToast(error.message || "Failed to complete purchase.", false);
+                    showToast(result.message || "Failed to complete purchase.", false);
                     purchaseButton.disabled = false;
                 }
             } catch (err) {

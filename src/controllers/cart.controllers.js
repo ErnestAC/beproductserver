@@ -157,8 +157,7 @@ class CartControllers {
                 purchased,
                 notPurchased
             });
-            sendSuccessResponse(res, { ticket }, req.user);
-            return ticket
+            sendSuccessResponse(res, { ticket }, req.user); // I'm returning the token too as I need it for the rolling session refresh in the GUI
         } catch (error) {
             errorLog(error);
             sendErrorResponse(res);

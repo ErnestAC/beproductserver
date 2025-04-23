@@ -23,8 +23,8 @@ router.post("/:cid/product/:pid", jwtAuth, requireOwner("cid"), cartController.a
 // Cart owner: Update quantity of a product in a cart
 router.patch("/:cid/product/:pid", jwtAuth, requireOwner("cid"), validateRequest(cartQuantitySchema), cartController.updateProductInCart);
 
-// Admin only: Delete a cart
-router.delete("/:cid", jwtAuth, requireRole("admin"), cartController.deleteCart); // Admins can delete carts to replace a cart for a user manually.
+// Cart owner only can delete cart contents
+router.delete("/:cid", jwtAuth, requireOwner("cid"), cartController.deleteCart);
 
 // Cart owner: Remove a product from a cart
 router.delete("/:cid/products/:pid", jwtAuth, requireOwner("cid"), cartController.deleteProductFromCart);
