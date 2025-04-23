@@ -9,89 +9,96 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 <body>
-    
-    <section class="section make-it-normal">
-        <div class="">
 
-            <div class="columns is-multiline section">
-                <div class="column is-12">
-                    <div class="box make-it-rounded make-it-light-back make-it-normal make-it-left">
-                        <br>
-                        <p class="section">
-                            <img src="/static/shopnhour_blue.png" class="small-logo-image">
-                            <br><br>
-                            El proyecto consiste en un backend para una tienda ficticia llamada <b>'Shopnhour'</b> que vende modelos de trenes. 
-                            Integra una base de datos (MongoDB) sobre Node.js y Express para montar un servicio de backend que 
-                            provee un catálogo de productos, gestión de carritos de compras y generación de tickets. 
-                            Se utiliza autenticación mediante JWT, diferenciando usuarios comunes y administradores.
-                        </p>
-                        <br>
-                    </div>
-                </div>
-                
-                <div class="column is-6">
-                    <p class="card-title-container make-it-white make-it-rounded-top make-it-dark-back">> Navegación y uso</p>
-                    <div class="section make-it-semi-back make-it-dark make-it-normal make-it-rounded-bottom">
-                        <ul>
-                            <li><b>/</b> - Página principal (esta página).</li>
-                            <li><b>/products</b> - Catálogo completo de productos.</li>
-                            <li><b>/carts</b> - Vista estática de todos los carritos (requiere autenticación).</li>
-                            <li><b>/carts/:cid</b> - Vista detallada de un carrito específico (requiere autenticación).</li>
-                            <li><b>/realtime/products</b> - Vista en tiempo real de productos (actualización WebSocket).</li>
-                            <li><b>/realtime/carts</b> - Vista en tiempo real de carritos (sin detalles de producto).</li>
-                            <li><b>/forms/add-product</b> - Formulario para agregar productos.</li>
-                            <li><b>/forms/delete-product</b> - Formulario para eliminar productos.</li>
-                            <li><b>/login</b> - Página de inicio de sesión.</li>
-                            <li><b>/register</b> - Registro de nuevos usuarios.</li>
-                            <li><b>/current</b> - Vista de usuario autenticado.</li>
-                            <li><b>/admin</b> - Panel de administración (requiere rol `admin`).</li>
-                            <li><b>/guest-cart</b> - Carrito accesible sin iniciar sesión.</li>
-                            <li><b>/tickets</b> - Vista de tickets generados (solo administradores).</li>
-                        </ul>
-                    </div>
-                </div>
+<section class="section make-it-normal">
+    <div class="">
 
-                <div class="column is-6 make-it-white">
-                    <p class="card-title-container make-it-white make-it-rounded-top make-it-dark-back">> Rutas API</p>
-                    <div class="make-it-dark make-it-small make-it-rounded-bottom make-it-semi-back section">
-                        <p><b>GET /api/products</b> - Obtiene todos los productos (paginado, ordenado, filtrado).</p>
-                        <p><b>GET /api/products/:pid</b> - Devuelve un producto por su `pid`.</p>
-                        <p><b>POST /api/products</b> - Crea un nuevo producto.</p>
-                        <p><b>PUT /api/products/:pid</b> - Actualiza un producto existente.</p>
-                        <p><b>DELETE /api/products/:pid</b> - Elimina o desactiva un producto (`killFlag`).</p>
-
-                        <hr>
-
-                        <p><b>GET /api/carts</b> - Obtiene todos los carritos (admin/owner).</p>
-                        <p><b>POST /api/carts</b> - Crea un nuevo carrito.</p>
-                        <p><b>GET /api/carts/:cid</b> - Obtiene el contenido de un carrito.</p>
-                        <p><b>POST /api/carts/:cid/product/:pid</b> - Agrega un producto al carrito.</p>
-                        <p><b>PATCH /api/carts/:cid/product/:pid</b> - Actualiza la cantidad de un producto.</p>
-                        <p><b>DELETE /api/carts/:cid/product/:pid</b> - Elimina un producto del carrito.</p>
-                        <p><b>DELETE /api/carts/:cid</b> - Elimina todos los productos del carrito.</p>
-                        <p><b>POST /api/carts/:cid/purchase</b> - Procesa una compra y genera un ticket.</p>
-
-                        <hr>
-
-                        <p><b>GET /api/tickets</b> - Devuelve todos los tickets (solo admin).</p>
-                        <p><b>GET /api/tickets/:tid</b> - Devuelve un ticket específico por `tid`.</p>
-
-                        <hr>
-
-                        <p><b>POST /api/auth/login</b> - Login de usuario.</p>
-                        <p><b>POST /api/auth/register</b> - Registro de nuevo usuario.</p>
-                        <p><b>GET /api/auth/logout</b> - Logout de sesión.</p>
-                        <p><b>GET /api/sessions/current</b> - Información del usuario autenticado.</p>
-                    </div>
-                </div>
-
-                <div class="column is-12 make-it-semi make-it-center section">
+        <div class="columns is-multiline section">
+            <div class="column is-12">
+                <div class="box make-it-rounded make-it-light-back make-it-normal make-it-left">
                     <br>
-                    <p>Ernesto AC - <b>Proyecto de Programación Backend II: Desarrollo Avanzado de Backend, Comisión 70470</b></p>
+                    <p class="section">
+                        <img src="/static/shopnhour_blue.png" class="small-logo-image">
+                        <br><br>
+                        El proyecto consiste en un backend para una tienda ficticia llamada <b>'Shopnhour'</b> que vende modelos de trenes. 
+                        Integra una base de datos (MongoDB) sobre Node.js y Express para montar un servicio de backend que 
+                        provee un catálogo de productos, gestión de carritos de compras, generación de tickets y administración de usuarios.
+                        Se utiliza autenticación mediante JWT con renovación automática de token y diferenciación de roles (`user`, `premium`, `admin`).
+                    </p>
+                    <br>
                 </div>
             </div>
+
+            <div class="column is-6">
+                <p class="card-title-container make-it-white make-it-rounded-top make-it-dark-back">> Navegación y uso</p>
+                <div class="section make-it-semi-back make-it-dark make-it-normal make-it-rounded-bottom">
+                    <ul>
+                        <li><b>/</b> - Página principal (esta página).</li>
+                        <li><b>/products</b> - Catálogo completo de productos.</li>
+                        <li><b>/carts</b> - Vista estática de todos los carritos (requiere autenticación).</li>
+                        <li><b>/carts/:cid</b> - Vista detallada de un carrito específico (requiere autenticación).</li>
+                        <li><b>/guest-cart</b> - Carrito accesible sin iniciar sesión (usuario invitado).</li>
+                        <li><b>/realtime/products</b> - Vista en tiempo real de productos (actualización con WebSocket).</li>
+                        <li><b>/realtime/carts</b> - Vista en tiempo real de carritos (sin detalles de producto).</li>
+                        <li><b>/forms/add-product</b> - Formulario para agregar productos (solo admin).</li>
+                        <li><b>/forms/delete-product</b> - Formulario para eliminar productos (solo admin).</li>
+                        <li><b>/forms/edit-user</b> - Formulario para editar usuarios (solo admin).</li>
+                        <li><b>/login</b> - Página de inicio de sesión.</li>
+                        <li><b>/register</b> - Página de registro de nuevos usuarios.</li>
+                        <li><b>/current</b> - Vista del usuario autenticado.</li>
+                        <li><b>/admin</b> - Panel de administración (requiere rol `admin`).</li>
+                        <li><b>/tickets</b> - Vista de tickets generados (solo administradores).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="column is-6 make-it-white">
+                <p class="card-title-container make-it-white make-it-rounded-top make-it-dark-back">> Rutas API</p>
+                <div class="make-it-dark make-it-small make-it-rounded-bottom make-it-semi-back section">
+                    <p><b>GET /api/products</b> - Obtiene todos los productos (paginado, ordenado, filtrado).</p>
+                    <p><b>GET /api/products/:pid</b> - Devuelve un producto por su `pid`.</p>
+                    <p><b>POST /api/products</b> - Crea un nuevo producto.</p>
+                    <p><b>PUT /api/products/:pid</b> - Actualiza un producto existente.</p>
+                    <p><b>DELETE /api/products/:pid</b> - Elimina o desactiva un producto (`killFlag`).</p>
+
+                    <hr>
+
+                    <p><b>GET /api/carts</b> - Obtiene todos los carritos (admin o propietario).</p>
+                    <p><b>POST /api/carts</b> - Crea un nuevo carrito.</p>
+                    <p><b>GET /api/carts/:cid</b> - Obtiene el contenido de un carrito.</p>
+                    <p><b>POST /api/carts/:cid/product/:pid</b> - Agrega un producto al carrito.</p>
+                    <p><b>PATCH /api/carts/:cid/product/:pid</b> - Actualiza la cantidad de un producto.</p>
+                    <p><b>DELETE /api/carts/:cid/product/:pid</b> - Elimina un producto del carrito.</p>
+                    <p><b>DELETE /api/carts/:cid</b> - Vacía todo el carrito.</p>
+                    <p><b>POST /api/carts/:cid/purchase</b> - Procesa la compra de un carrito, generando un ticket.</p>
+
+                    <hr>
+
+                    <p><b>GET /api/tickets</b> - Devuelve todos los tickets (solo admin).</p>
+                    <p><b>GET /api/tickets/:tid</b> - Devuelve un ticket específico por su `tid`.</p>
+
+                    <hr>
+
+                    <p><b>GET /api/users</b> - Devuelve todos los usuarios (solo admin).</p>
+                    <p><b>GET /api/users/:uid</b> - Devuelve un usuario por ID (solo admin).</p>
+                    <p><b>PATCH /api/users/:uid</b> - Actualiza nombre, apellido o rol del usuario (solo admin).</p>
+
+                    <hr>
+
+                    <p><b>POST /api/auth/login</b> - Login de usuario con credenciales.</p>
+                    <p><b>POST /api/auth/register</b> - Registro de nuevo usuario.</p>
+                    <p><b>GET /api/auth/logout</b> - Logout de la sesión activa.</p>
+                    <p><b>GET /api/sessions/current</b> - Información del usuario autenticado.</p>
+                </div>
+            </div>
+
+            <div class="column is-12 make-it-semi make-it-center section">
+                <br>
+                <p>Ernesto AC - <b>Proyecto de Programación Backend II: Desarrollo Avanzado de Backend, Comisión 70470</b></p>
+            </div>
         </div>
-    </section>
+    </div>
+</section>
 
 </body>
 </html>

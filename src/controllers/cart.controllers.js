@@ -11,7 +11,7 @@ import { CartDTO } from "../dto/cart.dto.js";
 import { sendSuccessResponse, sendErrorResponse } from "../utils/response.util.js"; // <-- USE HERE
 
 class CartControllers {
-    async getCartById(req, res) {
+/*     async getCartById(req, res) {
         const { cid } = req.params;
         try {
             const cart = await cartService.getCartById(cid);
@@ -24,7 +24,24 @@ class CartControllers {
             errorLog(err);
             sendErrorResponse(res);
         }
+    } */
+
+    async getCartById(req, res) {
+        const { cid } = req.params;
+        try {
+            const cart = await cartService.getCartById(cid);
+            if (!cart) {
+                return sendErrorResponse(res, "Cart not found", 404);
+            }
+    
+            // No DTO wrapping – the data is already enriched in cartService
+            sendSuccessResponse(res, { payload: cart }, req.user);
+        } catch (err) {
+            errorLog(err);
+            sendErrorResponse(res);
+        }
     }
+        
 
     async createCart(req = request, res = response) {
         try {
@@ -157,8 +174,7 @@ class CartControllers {
                 purchased,
                 notPurchased
             });
-
-            sendSuccessResponse(res, { ticket }, req.user);
+            sendSuccessResponse(res, { ticket }, req.user); // I'm returning the token too as I need it for the rolling session refresh in the GUI
         } catch (error) {
             errorLog(error);
             sendErrorResponse(res);

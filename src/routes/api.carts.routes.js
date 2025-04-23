@@ -15,24 +15,24 @@ const jwtAuth = passport.authenticate("jwt", { session: false });
 router.get("/", jwtAuth, requireAdminOrOwner(), cartController.getAllCarts);
 
 // Admin or cart owner: Retrieve a specific cart
-router.get("/:cid", jwtAuth, requireAdminOrOwner("cid"), cartController.getCartById);
+router.get("/:cid", jwtAuth, requireAdminOrOwner("cid"), cartController.getCartById); // I'm allowing admins to see only the carts, they can't modify anymore based on input from tutor.
 
-// Admin or cart owner: Add a product to a cart
-router.post("/:cid/product/:pid", jwtAuth, requireAdminOrOwner("cid"), cartController.addProductToCart);
+// Cart owner: Add a product to a cart
+router.post("/:cid/product/:pid", jwtAuth, requireOwner("cid"), cartController.addProductToCart);
 
-// Admin or cart owner: Update quantity of a product in a cart
-router.patch("/:cid/product/:pid", jwtAuth, requireAdminOrOwner("cid"), validateRequest(cartQuantitySchema), cartController.updateProductInCart);
+// Cart owner: Update quantity of a product in a cart
+router.patch("/:cid/product/:pid", jwtAuth, requireOwner("cid"), validateRequest(cartQuantitySchema), cartController.updateProductInCart);
 
-// Admin or cart owner: Delete a cart
-router.delete("/:cid", jwtAuth, requireAdminOrOwner("cid"), cartController.deleteCart);
+// Cart owner only can delete cart contents
+router.delete("/:cid", jwtAuth, requireOwner("cid"), cartController.deleteCart);
 
-// Admin or cart owner: Remove a product from a cart
-router.delete("/:cid/products/:pid", jwtAuth, requireAdminOrOwner("cid"), cartController.deleteProductFromCart);
+// Cart owner: Remove a product from a cart
+router.delete("/:cid/products/:pid", jwtAuth, requireOwner("cid"), cartController.deleteProductFromCart);
 
-// Admin user: Create a new cart
-router.post("/", jwtAuth, requireRole("admin"), validateRequest(cartSchema), cartController.createCart);
+// Admin only: Create a new cart manually
+router.post("/", jwtAuth, requireRole("admin"), validateRequest(cartSchema), cartController.createCart); // Admins can create carts
 
-// Use POST method for purchase - admin is not allowed to purchase!
+// Use POST method for purchase - Admin is not allowed to purchase!
 router.post("/:cid/purchase", jwtAuth, requireOwner("cid"), requireRole("user"), cartController.purchaseCart);
 
 export default router;

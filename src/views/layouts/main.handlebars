@@ -52,10 +52,17 @@
 
                 <div>
                     {{#if user}}
-                        <a href="/carts/{{user.cartId}}" class="navbar-item make-it-dark make-it-7-wide grid-container-2c-by-1r" id="cart-link">
-                            <span id="cart-count" class="cart-count make-it-dark-back make-it-small make-it-white">0</span>
-                            <span> Cart</span>
-                        </a>
+                        {{#if (eq user.role "admin")}}
+                            <a href="/admin" class="navbar-item make-it-dark make-it-7-wide grid-container-2c-by-1r">
+                                <i class="fas fa-server small-section"></i>
+                                <span>Admin</span>
+                            </a>
+                        {{else}}
+                            <a href="/carts/{{user.cartId}}" class="navbar-item make-it-dark make-it-7-wide grid-container-2c-by-1r" id="cart-link">
+                                <span id="cart-count" class="cart-count make-it-dark-back make-it-small make-it-white">0</span>
+                                <span> Cart</span>
+                            </a>
+                        {{/if}}
                     {{else}}
                         <a href="/guest-cart" class="navbar-item make-it-dark make-it-7-wide grid-container-2c-by-1r" id="cart-link">
                             <span id="cart-count" class="cart-count make-it-dark-back make-it-small make-it-white">0</span>
@@ -84,42 +91,41 @@
     <script>
         const isLoggedIn = {{#if user}}true{{else}}false{{/if}};
         const userCartId = {{#if user}}"{{user.cartId}}"{{else}}null{{/if}};
+        const userRole = {{#if user}}"{{user.role}}"{{else}}null{{/if}};
 
         document.addEventListener("DOMContentLoaded", async () => {
-            const cartCountElement = document.getElementById("cart-count");
+            if (userRole !== "admin") {
+                const cartCountElement = document.getElementById("cart-count");
+                if (isLoggedIn && userCartId) {
+                    try {
+                        const token = localStorage.getItem("token");
+                        const res = await fetch(`/api/carts/${userCartId}`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        });
 
-            if (isLoggedIn && userCartId) {
-                try {
-                    const token = localStorage.getItem("token");
-                    const res = await fetch(`/api/carts/${userCartId}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
+                        if (res.ok) {
+                            const result = await res.json();
+                            if (result.token) {
+                                localStorage.setItem("token", result.token);
+                            }
+
+                            const cart = result.payload;
+                            let totalQuantity = 0;
+                            if (cart && cart.products && Array.isArray(cart.products)) {
+                                totalQuantity = cart.products.reduce((sum, item) => sum + item.quantity, 0);
+                            }
+                            cartCountElement.textContent = totalQuantity;
                         }
-                    });
-
-                    if (res.ok) {
-                        const result = await res.json();
-
-                        // Refresh token if provided
-                        if (result.token) {
-                            localStorage.setItem("token", result.token);
-                        }
-
-                        const cart = result.payload;
-                        let totalQuantity = 0;
-                        if (cart && cart.products && Array.isArray(cart.products)) {
-                            totalQuantity = cart.products.reduce((sum, item) => sum + item.quantity, 0);
-                        }
-                        cartCountElement.textContent = totalQuantity;
+                    } catch (err) {
+                        console.error("Error fetching cart count", err);
                     }
-                } catch (err) {
-                    console.error("Error fetching cart count", err);
+                } else {
+                    const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+                    const totalQuantity = guestCart.reduce((sum, item) => sum + item.quantity, 0);
+                    cartCountElement.textContent = totalQuantity;
                 }
-            } else {
-                // Guest cart
-                const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
-                const totalQuantity = guestCart.reduce((sum, item) => sum + item.quantity, 0);
-                cartCountElement.textContent = totalQuantity;
             }
         });
     </script>
