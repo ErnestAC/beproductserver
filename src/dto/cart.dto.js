@@ -4,7 +4,7 @@ export class CartDTO {
     constructor(cart) {
         this.cid = cart.cid;
         this.products = cart.products.map(item => ({
-            pid: item.pid,
+            pid: item.pid?.toString?.() ?? item.pid,  // make sure pid is string
             title: item.title || null,
             imageURL: item.imageURL || null,
             category: item.category || null,

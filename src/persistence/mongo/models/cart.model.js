@@ -1,6 +1,6 @@
-// cart.model.js
+// src/persistence/mongo/models/cart.model.js
 
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
 
 const cartSchema = new Schema(
@@ -12,7 +12,8 @@ const cartSchema = new Schema(
         products: [
             {
                 pid: {
-                    type: String,  // Change from ObjectId to String
+                    type: Types.ObjectId,       // use MongoDB ObjectId
+                    ref: "products",            // reference the products collection
                     required: true,
                 },
                 quantity: {
@@ -25,7 +26,6 @@ const cartSchema = new Schema(
     { timestamps: true }
 );
 
-// Add pagination plugin
 cartSchema.plugin(mongoosePaginate);
 
 export const Cart = model("Cart", cartSchema);

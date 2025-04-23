@@ -1,4 +1,3 @@
-// server.js
 import express from "express";
 import { engine } from "express-handlebars";
 import { Server } from "socket.io";
@@ -11,6 +10,8 @@ import cookieParser from "cookie-parser";
 import { jwtViewAuth } from "./middlewares/auth.middleware.js";
 import { __dirname } from "./utils/fileHandler.utils.js";
 import os from "os";
+import methodOverride from "method-override";
+import Handlebars from "handlebars";
 
 import ProductsRoute from "./routes/api.products.routes.js";
 import CartsRoute from "./routes/api.carts.routes.js";
@@ -20,12 +21,11 @@ import FormsRoute from "./routes/forms.routes.js";
 import UsersRoute from "./routes/api.users.routes.js";
 import RealtimeViews from "./routes/realtimeDisplay.routes.js";
 import authRoutes from "./routes/sessions.routes.js";
-import methodOverride from "method-override";
 
 import { productDao } from "./persistence/mongo/dao/product.dao.js";
 import { cartDao } from "./persistence/mongo/dao/cart.dao.js";
-
-import Handlebars from "handlebars";
+import { ProductModel } from "./persistence/mongo/models/product.model.js";
+import { Cart } from "./persistence/mongo/models/cart.model.js";
 
 dotenv.config();
 
@@ -38,7 +38,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(jwtViewAuth);
-app.use(methodOverride("_method")); // for UI delete requests
+app.use(methodOverride("_method"));
 
 // Static files
 app.use("/static", express.static(path.join(__dirname, "../public")));
@@ -80,7 +80,7 @@ Handlebars.registerHelper("stringify", function (context) {
     return JSON.stringify(context);
 });
 
-// Real-time handlers
+// Real-time emitters
 export const notifyProductChange = async () => {
     try {
         const products = await productDao.getAllProducts({ limit: 50, sort: "price", sortDirection: -1 });
@@ -92,13 +92,33 @@ export const notifyProductChange = async () => {
 
 export const notifyCartChange = async () => {
     try {
-        const carts = await cartDao.getAllCarts();
-        io.emit("updateCarts", carts);
+        const carts = await Cart.find().populate({
+            path: "products.pid",
+            model: ProductModel
+        }).lean();
+
+        const enrichedCarts = carts.map(cart => ({
+            ...cart,
+            products: cart.products.map(item => {
+                const product = item.pid || {};
+                return {
+                    _id: product._id?.toString() || null,
+                    pid: product._id?.toString() || null,
+                    title: product.title || 'Unknown',
+                    price: product.price || 0,
+                    imageURL: product.imageURL || '',
+                    quantity: item.quantity || 1
+                };
+            })
+        }));
+
+        io.emit("updateCarts", enrichedCarts);
     } catch (err) {
         console.error("Error notifying cart change:", err);
     }
 };
 
+// Socket.IO
 io.on("connection", async (socket) => {
     console.log("Client connected:", socket.id);
 
@@ -110,8 +130,27 @@ io.on("connection", async (socket) => {
     }
 
     try {
-        const carts = await cartDao.getAllCarts();
-        socket.emit("updateCarts", carts);
+        const carts = await Cart.find().populate({
+            path: "products.pid",
+            model: ProductModel
+        }).lean();
+
+        const enrichedCarts = carts.map(cart => ({
+            ...cart,
+            products: cart.products.map(item => {
+                const product = item.pid || {};
+                return {
+                    _id: product._id?.toString() || null,
+                    pid: product._id?.toString() || null,
+                    title: product.title || 'Unknown',
+                    price: product.price || 0,
+                    imageURL: product.imageURL || '',
+                    quantity: item.quantity || 1
+                };
+            })
+        }));
+
+        socket.emit("updateCarts", enrichedCarts);
     } catch (err) {
         console.error("Error sending cart list:", err);
     }
@@ -127,8 +166,27 @@ io.on("connection", async (socket) => {
 
     socket.on("requestCarts", async () => {
         try {
-            const carts = await cartDao.getAllCarts();
-            socket.emit("updateCarts", carts);
+            const carts = await Cart.find().populate({
+                path: "products.pid",
+                model: ProductModel
+            }).lean();
+
+            const enrichedCarts = carts.map(cart => ({
+                ...cart,
+                products: cart.products.map(item => {
+                    const product = item.pid || {};
+                    return {
+                        _id: product._id?.toString() || null,
+                        pid: product._id?.toString() || null,
+                        title: product.title || 'Unknown',
+                        price: product.price || 0,
+                        imageURL: product.imageURL || '',
+                        quantity: item.quantity || 1
+                    };
+                })
+            }));
+
+            socket.emit("updateCarts", enrichedCarts);
         } catch (err) {
             console.error("Error fetching carts:", err);
         }

@@ -21,13 +21,12 @@
             const cartList = document.getElementById('cartList');
             const cartCount = document.getElementById('cartCount');
             
-
             const start = (currentPage - 1) * itemsPerPage;
             const end = start + itemsPerPage;
             const paginatedCarts = carts.slice(start, end);
 
             cartList.innerHTML = `
-                <div class="make-it-rounded-top  make-it-normal">
+                <div class="make-it-rounded-top make-it-normal">
                     <div class="columns is-multiline">
                         ${paginatedCarts.map(cart => `
                             <div class="card section make-it-white-back column is-12">
@@ -35,6 +34,7 @@
                                 <table class="table make-it-dark make-it-small is-hoverable is-fullwidth">
                                     <thead>
                                         <tr class="make-it-semi-back make-it-rounded">
+                                            <th>Preview</th>
                                             <th>PID</th>
                                             <th>Quantity</th>
                                             <th>Title</th>
@@ -44,10 +44,13 @@
                                     <tbody>
                                         ${cart.products.map(product => `
                                             <tr>
-                                                <td>${product.pid}</td>
-                                                <td>${product.quantity}</td>
+                                                <td>
+                                                    <img src="${product.imageURL || '/static/default.png'}" alt="${product.title || 'No title'}" width="32">
+                                                </td>
+                                                <td>${product.pid || 'Unknown'}</td>
+                                                <td>${product.quantity || 1}</td>
                                                 <td>${product.title || 'Unknown'}</td>
-                                                <td>${product.price ? `$${product.price}` : 'N/A'}</td>
+                                                <td>${typeof product.price !== "undefined" ? `$${product.price}` : 'N/A'}</td>
                                             </tr>
                                         `).join('')}
                                     </tbody>
@@ -59,7 +62,6 @@
             `;
 
             cartCount.textContent = `Displaying ${paginatedCarts.length} cart(s) | Page ${currentPage}`;
-        
         });
 
         function changePage(step) {
@@ -109,8 +111,6 @@
             <div id="cartCount" class="make-it-dark small-section make-it-small make-it-center"></div>
             <button class="button section make-it-small" onclick="changePage(1)">Next</button>
         </div>
-
-        
     </div>
 </body>
 </html>

@@ -14,6 +14,12 @@
 
     <section class="section">
         <form id="deleteForm">
+            <div class="mb-4">
+                <label class="checkbox">
+                    <input type="checkbox" id="selectAllCheckbox" />
+                    Select All
+                </label>
+            </div>
             <div id="productList"></div>
             <div class="buttons mt-4">
                 <button class="button is-danger" type="submit">Delete Selected</button>
@@ -59,10 +65,11 @@
 
             data.payload.forEach(product => {
                 const box = document.createElement("div");
-                box.className = "box is-flex is-align-items-center";
+                box.className = "box is-flex is-align-items-center product-box";
+                box.setAttribute("data-id", product._id);
 
                 box.innerHTML = `
-                    <input type="checkbox" name="selectedPIDs" value="${product.pid}" class="mr-3" />
+                    <input type="checkbox" name="selectedIds" value="${product._id}" class="mr-3 product-checkbox" />
                     <img src="${product.imageURL}" alt="${product.title}" width="50" class="mr-3">
                     <strong>${product.title}</strong> — <span class="ml-2">Price: $${product.price}</span>
                 `;
@@ -85,22 +92,30 @@
             fetchProducts(currentPage);
         });
 
-        document.getElementById("deleteForm").addEventListener("submit", async function(event) {
+        document.getElementById("selectAllCheckbox").addEventListener("change", function () {
+            const checkboxes = document.querySelectorAll(".product-checkbox");
+            checkboxes.forEach(cb => cb.checked = this.checked);
+        });
+
+        document.getElementById("deleteForm").addEventListener("submit", async function (event) {
             event.preventDefault();
 
-            const selected = [...document.querySelectorAll("input[name='selectedPIDs']:checked")].map(cb => cb.value);
+            const selected = [...document.querySelectorAll("input[name='selectedIds']:checked")].map(cb => cb.value);
 
             if (selected.length === 0) {
                 document.getElementById("resultMessage").textContent = "Please select at least one product to delete.";
                 return;
             }
 
+            const confirmed = confirm(`Are you sure you want to delete ${selected.length} product(s)?`);
+            if (!confirmed) return;
+
             const token = localStorage.getItem("token");
             let successCount = 0;
 
-            for (const pid of selected) {
+            for (const id of selected) {
                 try {
-                    const res = await fetch(`/api/products/${pid}`, {
+                    const res = await fetch(`/api/products/${id}`, {
                         method: "DELETE",
                         headers: {
                             "Content-Type": "application/json",
@@ -112,14 +127,17 @@
                     const result = await res.json();
                     saveTokenIfProvided(result);
 
-                    if (res.ok) successCount++;
+                    if (res.ok) {
+                        successCount++;
+                        const box = document.querySelector(`.product-box[data-id="${id}"]`);
+                        if (box) box.remove(); // Remove deleted product visually
+                    }
                 } catch (err) {
-                    console.error(`Error deleting product ${pid}:`, err);
+                    console.error(`Error deleting product ${id}:`, err);
                 }
             }
 
             document.getElementById("resultMessage").textContent = `${successCount} product(s) deleted.`;
-            fetchProducts(currentPage);
         });
 
         fetchProducts(currentPage);

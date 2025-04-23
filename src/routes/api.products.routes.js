@@ -1,5 +1,3 @@
-//api.products.routes.js
-
 import { Router } from "express";
 import { uploader } from "../utils/fileHandler.utils.js";
 import passport from "../config/passport/passport.config.js";
@@ -15,7 +13,7 @@ const jwtAuth = passport.authenticate("jwt", { session: false });
 router.post(
     "/",
     jwtAuth,
-    requireAdminOrOwner(), // Only role === 'admin'
+    requireAdminOrOwner(), // Only admins
     uploader.single("file"),
     validateRequest(createProductSchema),
     productsController.addProduct
@@ -24,13 +22,13 @@ router.post(
 // Authenticated users: Get all products
 router.get("/", jwtAuth, productsController.getAllProducts);
 
-// Authenticated users: Get a specific product
-router.get("/:pid", jwtAuth, productsController.getProductById);
+// Authenticated users: Get a specific product by MongoDB _id
+router.get("/:id", jwtAuth, productsController.getProductById);
 
-// Admin only: Update a product
-router.put("/:pid", jwtAuth, requireAdminOrOwner(), productsController.updateProduct);
+// Admin only: Update a product by _id
+router.put("/:id", jwtAuth, requireAdminOrOwner(), productsController.updateProduct);
 
-// Admin only: Delete a product
-router.delete("/:pid", jwtAuth, requireAdminOrOwner(), productsController.deleteProduct);
+// Admin only: Delete a product by _id
+router.delete("/:id", jwtAuth, requireAdminOrOwner(), productsController.deleteProduct);
 
 export default router;

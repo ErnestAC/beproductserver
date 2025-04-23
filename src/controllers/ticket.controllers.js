@@ -14,7 +14,7 @@ class TicketController {
 
             const tickets = await ticketService.getAllTickets({ page, limit, sort, sortOrder });
 
-            res.json({ status: "success", payload: tickets }); // ❌ No token refresh
+            res.json({ status: "success", payload: tickets }); //  No token refresh
         } catch (err) {
             errorLog(err, req);
             res.status(500).json({ status: "error", message: "Failed to retrieve tickets" });
@@ -29,7 +29,7 @@ class TicketController {
                 return res.status(404).json({ status: "error", message: `Ticket ${tid} not found` });
             }
 
-            res.json({ status: "success", payload: ticket }); // ❌ No token refresh
+            res.json({ status: "success", payload: ticket }); //  No token refresh
         } catch (err) {
             errorLog(err, req);
             res.status(500).json({ status: "error", message: "Failed to retrieve ticket" });
@@ -44,7 +44,7 @@ class TicketController {
                 return res.status(404).json({ status: "error", message: `Ticket ${tid} not found` });
             }
 
-            const newToken = generateToken(req.user); // ✅ Refresh token on DELETE
+            const newToken = generateToken(req.user); 
             res.json({ status: "success", message: `Ticket ${tid} deleted`, token: newToken });
         } catch (err) {
             errorLog(err, req);
