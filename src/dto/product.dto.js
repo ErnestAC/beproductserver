@@ -2,7 +2,8 @@
 
 export class ProductDTO {
     constructor(product) {
-        this.pid = product.pid;
+        this._id = product._id?.toString(); // Ensure _id is available for Handlebars & frontend
+        this.pid = product._id?.toString() || product.pid; // legacy compatibility if still used elsewhere
         this.title = product.title;
         this.imageURL = product.imageURL;
         this.category = product.category;

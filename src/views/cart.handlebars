@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="dark" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 <body>
     <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">
@@ -67,7 +67,7 @@
         {{/if}}
     </section>
 
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="/js/showToast.js"></script>
 
     <script>
@@ -83,12 +83,13 @@
                         Authorization: `Bearer ${token}`
                     }
                 });
+                const result = await res.json();
                 if (res.ok) {
-                    const result = await res.json();
                     if (result.token) localStorage.setItem("token", result.token);
+                    showToast(`Removed ${pid} from cart`);
                     location.reload();
                 } else {
-                    showToast("Failed to remove item from cart.", false);
+                    showToast(result.message || "Failed to remove item from cart.", false);
                 }
             } catch (err) {
                 console.error("Remove error:", err);
@@ -106,12 +107,13 @@
                         Authorization: `Bearer ${token}`
                     }
                 });
+                const result = await res.json();
                 if (res.ok) {
-                    const result = await res.json();
                     if (result.token) localStorage.setItem("token", result.token);
+                    showToast("Cart emptied.");
                     location.reload();
                 } else {
-                    showToast("Failed to empty cart.", false);
+                    showToast(result.message || "Failed to empty cart.", false);
                 }
             } catch (err) {
                 console.error("Empty error:", err);
@@ -122,7 +124,6 @@
         async function purchaseCart(cid) {
             const purchaseButton = document.getElementById("purchaseButton");
             if (!confirm("Proceed to purchase?")) return;
-
             purchaseButton.disabled = true;
 
             try {
@@ -133,23 +134,14 @@
                         Authorization: `Bearer ${token}`
                     }
                 });
-
                 const result = await res.json();
-
                 if (res.ok) {
-                    if (result.token) {
-                        localStorage.setItem("token", result.token);
-                    }
-
+                    if (result.token) localStorage.setItem("token", result.token);
                     const boughtCount = result.ticket.purchased?.length || 0;
                     const failedCount = result.ticket.notPurchased?.length || 0;
-
-                    const msg = `Purchase completed. ${boughtCount} product(s) bought.${failedCount > 0 ? ` ${failedCount} item(s) didn’t have enough stock and remain in your cart.` : ""}`;
-                    showToast(msg, true);
-
-                    setTimeout(() => {
-                        location.reload();
-                    }, 3000);
+                    const msg = `Purchase complete: ${boughtCount} item(s) bought${failedCount ? `, ${failedCount} could not be fulfilled.` : "."}`;
+                    showToast(msg);
+                    setTimeout(() => location.reload(), 3000);
                 } else {
                     showToast(result.message || "Failed to complete purchase.", false);
                     purchaseButton.disabled = false;

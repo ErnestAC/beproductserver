@@ -1,36 +1,35 @@
-// product.model.js
+// src/persistence/mongo/models/product.model.js
 
-import { Schema, model } from "mongoose";
+import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
 
-const productCollection = "products";
-
-const productSchema = new Schema(
-    {
-    title: String,
-    handle: String,
-    imageURL: String, // Store the full URL of the uploaded image
-    description: String,
-    stock: Number,
-    code: String,
-    pid: {
-        type: String,
-        unique: true,
-    },
-    price: Number,
-    category: String,
-    pieces: Number,
-    active: Boolean,
-    lighting: Boolean,
-    wheelArrangement: String,
-    thumbs: [String],
-    },
-    { timestamps: true }
+const productSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true },
+    handle: { type: String },
+    imageURL: { type: String },
+    description: { type: String },
+    stock: { type: Number, default: 0 },
+    price: { type: Number, required: true },
+    category: { type: String },
+    pieces: { type: Number },
+    code: { type: String },
+    motorizable: { type: Boolean, default: false },
+    lighting: { type: Boolean, default: false },
+    wheelArrangement: { type: String },
+    active: { type: Boolean, default: true },
+  },
+  { timestamps: true }
 );
+
+// Virtual pid field for compatibility with old structure
+productSchema.virtual("pid").get(function () {
+  return this._id.toString();
+});
+
+productSchema.set("toObject", { virtuals: true });
+productSchema.set("toJSON", { virtuals: true });
 
 productSchema.plugin(mongoosePaginate);
 
-productSchema.index({ price: 1 });
-productSchema.index({ stock: 1 });
-
-export const ProductModel = model(productCollection, productSchema);
+export const ProductModel = mongoose.model("products", productSchema);

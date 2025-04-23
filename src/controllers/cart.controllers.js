@@ -8,40 +8,22 @@ import { cartService } from "../services/cart.services.js";
 import { errorLog } from "../utils/errorLog.util.js";
 import { ticketService } from "../services/ticket.services.js";
 import { CartDTO } from "../dto/cart.dto.js";
-import { sendSuccessResponse, sendErrorResponse } from "../utils/response.util.js"; // <-- USE HERE
+import { sendSuccessResponse, sendErrorResponse } from "../utils/response.util.js";
 
 class CartControllers {
-/*     async getCartById(req, res) {
-        const { cid } = req.params;
-        try {
-            const cart = await cartService.getCartById(cid);
-            if (!cart) {
-                return sendErrorResponse(res, "Cart not found", 404);
-            }
-            const dto = new CartDTO(cart);
-            sendSuccessResponse(res, { payload: dto }, req.user);
-        } catch (err) {
-            errorLog(err);
-            sendErrorResponse(res);
-        }
-    } */
-
     async getCartById(req, res) {
         const { cid } = req.params;
         try {
-            const cart = await cartService.getCartById(cid);
+            const cart = await cartService.getCartByIdMongoose(cid);
             if (!cart) {
                 return sendErrorResponse(res, "Cart not found", 404);
             }
-    
-            // No DTO wrapping – the data is already enriched in cartService
             sendSuccessResponse(res, { payload: cart }, req.user);
         } catch (err) {
             errorLog(err);
             sendErrorResponse(res);
         }
     }
-        
 
     async createCart(req = request, res = response) {
         try {
@@ -122,7 +104,7 @@ class CartControllers {
             const carts = await Cart.find()
                 .sort({ [sort]: sortOrder })
                 .populate({
-                    path: "products.pid",
+                    path: "products.pid", // Now works because pid is ObjectId ref
                     model: ProductModel,
                     select: "title handle imageURL description price category stock pieces"
                 })
@@ -159,9 +141,7 @@ class CartControllers {
     async purchaseCart(req = request, res = response) {
         try {
             const { cid } = req.params;
-
             const cart = await cartService.getCartById(cid);
-
             if (!cart) {
                 return sendErrorResponse(res, `Cart ${cid} not found`, 404);
             }
@@ -174,7 +154,8 @@ class CartControllers {
                 purchased,
                 notPurchased
             });
-            sendSuccessResponse(res, { ticket }, req.user); // I'm returning the token too as I need it for the rolling session refresh in the GUI
+
+            sendSuccessResponse(res, { ticket }, req.user);
         } catch (error) {
             errorLog(error);
             sendErrorResponse(res);

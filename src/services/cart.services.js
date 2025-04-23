@@ -4,23 +4,25 @@ import { cartDao } from "../persistence/mongo/dao/cart.dao.js";
 import { ProductModel } from "../persistence/mongo/models/product.model.js";
 import { Cart } from "../persistence/mongo/models/cart.model.js";
 import { CartDTO } from "../dto/cart.dto.js";
+import { Types } from "mongoose";
 
 class CartService {
     async getCartById(cid) {
         const cart = await cartDao.getCartById(cid);
-
         if (!cart) return null;
 
         const cartObj = cart.toObject?.() || cart;
-        const uniquePids = cartObj.products.map(p => p.pid);
+        const productIds = cartObj.products.map(p => p.pid);
+        const productDocs = await ProductModel.find({ _id: { $in: productIds } }).lean();
 
-        const productDocs = await ProductModel.find({ pid: { $in: uniquePids } }).lean();
-        const productMap = new Map(productDocs.map(p => [p.pid, p]));
+        const productMap = new Map(productDocs.map(p => [p._id.toString(), p]));
 
         const enrichedProducts = cartObj.products.map(item => {
-            const details = productMap.get(item.pid);
+            const pidStr = item?.pid?.toString?.();
+            const details = productMap.get(pidStr);
+        
             return {
-                pid: item.pid,
+                pid: pidStr || null,
                 quantity: item.quantity,
                 title: details?.title ?? null,
                 imageURL: details?.imageURL ?? null,
@@ -37,7 +39,20 @@ class CartService {
     }
 
     async getCartByIdMongoose(cid) {
-        return await Cart.findOne({ cid });
+        const cart = await Cart.findOne({ cid }).lean();
+        if (!cart) return null;
+
+        const productIds = cart.products.map(p => p.pid);
+        const products = await ProductModel.find({ _id: { $in: productIds } }).lean();
+
+        const productMap = new Map(products.map(p => [p._id.toString(), p]));
+
+        cart.products = cart.products.map(item => ({
+            ...item,
+            ...(productMap.get(item.pid.toString()) || {})
+        }));
+
+        return cart;
     }
 
     async createCart() {
@@ -46,7 +61,7 @@ class CartService {
 
     async addProductToCart(cid, pid) {
         await cartDao.addProductToCart(cid, pid);
-        return await this.getCartById(cid); // Enrich and return
+        return await this.getCartById(cid);
     }
 
     async removeProductFromCart(cid, pid) {
@@ -71,11 +86,12 @@ class CartService {
         const cart = await cartDao.getCartByIdMongoose(cid);
         if (!cart) throw new Error("Cart not found");
 
-        const productInCart = cart.products.find(item => item.pid === pid);
+        const productInCart = cart.products.find(item => item.pid.toString() === pid);
         if (!productInCart) throw new Error("Product not found in cart");
 
         productInCart.quantity = parseInt(quantity, 10);
         await cart.save();
+
         return await this.getCartById(cid);
     }
 
@@ -90,17 +106,25 @@ class CartService {
         const stillInCart = [];
 
         for (const item of cart.products) {
-            const product = await ProductModel.findOne({ pid: item.pid });
+            const product = await ProductModel.findById(item.pid);
 
             if (!product || product.stock < item.quantity) {
-                notPurchased.push({
-                    pid: item.pid,
-                    quantity: item.quantity,
-                    title: product?.title || "Unknown",
-                    price: product?.price || 0
-                });
-
-                stillInCart.push({ pid: item.pid, quantity: item.quantity });
+                if (!product) {
+                    notPurchased.push({
+                        pid: item.pid.toString(),
+                        quantity: item.quantity,
+                        title: "Unknown",
+                        price: 0
+                    });
+                } else {
+                    notPurchased.push({
+                        pid: product._id.toString(),
+                        quantity: item.quantity,
+                        title: product.title,
+                        price: product.price
+                    });
+                }
+                                stillInCart.push({ pid: item.pid, quantity: item.quantity });
                 continue;
             }
 
@@ -108,7 +132,7 @@ class CartService {
             await product.save();
 
             purchased.push({
-                pid: item.pid,
+                pid: product._id.toString(),
                 quantity: item.quantity,
                 title: product.title,
                 price: product.price

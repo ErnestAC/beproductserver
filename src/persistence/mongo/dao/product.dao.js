@@ -1,10 +1,8 @@
-// product.dao.js
-
-import { v4 as uuidv4 } from "uuid";
 import { connectDB } from "../connectors/mongo.connector.js";
 import { ProductModel } from "../models/product.model.js";
 import { notifyProductChange } from "../../../server.js";
-import { validateCompletenessOfProduct } from "../../../utils/productCompleteHelper.util.js"
+import { validateCompletenessOfProduct } from "../../../utils/productCompleteHelper.util.js";
+import { Types } from "mongoose";
 
 export class ProductDao {
     async initialize() {
@@ -16,23 +14,17 @@ export class ProductDao {
         }
     }
 
-
-
     async addProduct(newProduct) {
-        
-        console.log()
         if (!validateCompletenessOfProduct(newProduct)) {
             return null;
-        } 
-        const opuuid = uuidv4();
-        newProduct.pid = opuuid;
+        }
+
         newProduct.active = true;
 
         try {
             const product = new ProductModel(newProduct);
             await product.save();
             notifyProductChange();
-            
             return product.toObject();
         } catch (err) {
             console.error("Error saving product:", err);
@@ -40,50 +32,39 @@ export class ProductDao {
         }
     }
 
-    async getAllProducts({
-        limit = 10,
-        skip = 0,
-        sort = "",
-        sortDirection = 1,
-        filterBy = "",
-    }) {
+    async getAllProducts({ limit = 10, skip = 0, sort = "title", sortDirection = 1, filterBy = "" }) {
         const query = { active: true };
-
         const sortCriteria = {};
         sortCriteria[sort] = sortDirection;
 
         try {
-            const products = await ProductModel.find(query)
+            return await ProductModel.find(query)
                 .sort(sortCriteria)
                 .skip(skip)
                 .limit(Number(limit))
                 .lean();
-            return products;
         } catch (err) {
             console.error("Error fetching products:", err);
             return [];
         }
     }
 
-    async getProductById(pid) {
+    async getProductById(id) {
         try {
-            return await ProductModel.findOne({ pid: pid, active: true }).lean();
+            if (!Types.ObjectId.isValid(id)) return null;
+            return await ProductModel.findOne({ _id: id, active: true }).lean();
         } catch (err) {
-            console.error("Error fetching product by PID:", err);
+            console.error("Error fetching product by ID:", err);
             return null;
         }
     }
 
-    async updateProduct(pid, productUpdate) {
-        console.log(pid)
-        if (!Object.keys(productUpdate).length) {
-            console.log(Object.keys(productUpdate).length);
-            return null;
-        }
+    async updateProduct(id, productUpdate) {
+        if (!Types.ObjectId.isValid(id) || !Object.keys(productUpdate).length) return null;
 
         try {
             const updatedProduct = await ProductModel.findOneAndUpdate(
-                { pid: pid, active: true },
+                { _id: id, active: true },
                 productUpdate,
                 { new: true }
             ).lean();
@@ -91,39 +72,38 @@ export class ProductDao {
             if (updatedProduct) {
                 notifyProductChange();
                 return updatedProduct;
-            } else {
-                return null;
             }
+            return null;
         } catch (err) {
             console.error("Error updating product:", err);
             return null;
         }
     }
 
-    async deleteProduct(pid, killFlag = true) {
+    async deleteProduct(id, killFlag = true) {
         try {
-            if (killFlag) {
-                const deleteResult = await ProductModel.deleteOne({ pid: pid });
+            if (!Types.ObjectId.isValid(id)) return null;
 
-                if (deleteResult.deletedCount > 0) {
+            if (killFlag) {
+                const result = await ProductModel.deleteOne({ _id: id });
+
+                if (result.deletedCount > 0) {
                     notifyProductChange();
                     return true;
-                } else {
-                    return null;
                 }
+                return null;
             } else {
-                const updateResult = await ProductModel.findOneAndUpdate(
-                    { pid: pid, active: true },
+                const result = await ProductModel.findOneAndUpdate(
+                    { _id: id, active: true },
                     { active: false },
                     { new: true }
                 );
 
-                if (updateResult) {
+                if (result) {
                     notifyProductChange();
                     return true;
-                } else {
-                    return null;
                 }
+                return null;
             }
         } catch (err) {
             console.error("Error deleting product:", err);
@@ -142,8 +122,7 @@ export class ProductDao {
                     { code: { $regex: filterBy, $options: "i" } },
                     { price: { $regex: filterBy, $options: "i" } },
                     { stock: { $regex: filterBy, $options: "i" } },
-                    { category: { $regex: filterBy, $options: "i" } },
-                    { pid: { $regex: filterBy, $options: "i" } },
+                    { category: { $regex: filterBy, $options: "i" } }
                 ];
             }
 

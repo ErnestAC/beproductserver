@@ -10,24 +10,41 @@
 <body>
     <h2 class="section make-it-left make-it-white-back make-it-dark make-it-rounded-top make-it-normal">Products</h2>
 
-    <section class="">
+    <!-- Pagination Controls -->
+    <section class="section">
         <div class="rt-general-page-footer make-it-semi-back is-centered grid-container-3c-by-1r-special" role="navigation" aria-label="pagination">
-
             <a class="button section make-it-small" 
                 href="?page={{prevPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
-                {{#if (eq currentPage 1)}}disabled{{/if}}>Prev
-            </a>
+                {{#if (eq currentPage 1)}}disabled{{/if}}>Prev</a>
 
             <div class="make-it-dark small-section make-it-small make-it-center">
                 Page {{currentPage}} of {{totalPages}}
             </div>
+
             <a class="button section make-it-small" 
                 href="?page={{nextPage}}&limit={{limit}}&sort={{sort}}&sortOrder={{sortOrder}}" 
-                {{#if (eq currentPage totalPages)}}disabled{{/if}}>Next
-            </a>
+                {{#if (eq currentPage totalPages)}}disabled{{/if}}>Next</a>
+        </div>
+
+        <!-- Limit selector -->
+        <div class="field has-addons make-it-center small-section">
+            <div class="control">
+                <div class="select is-small">
+                    <select id="limit-select">
+                        <option value="6" {{#if (eq limit 6)}}selected{{/if}}>6 per page</option>
+                        <option value="12" {{#if (eq limit 12)}}selected{{/if}}>12 per page</option>
+                        <option value="24" {{#if (eq limit 24)}}selected{{/if}}>24 per page</option>
+                        <option value="48" {{#if (eq limit 48)}}selected{{/if}}>48 per page</option>
+                    </select>
+                </div>
+            </div>
+            <div class="control">
+                <button class="button is-small" onclick="applyLimit()">Apply</button>
+            </div>
         </div>
     </section>
 
+    <!-- Product Cards -->
     <section class="section">
         <div>
             <div class="columns is-multiline is-centered">
@@ -41,10 +58,9 @@
                                 <div class="small-section">
                                     <div class="card-category-badge-prebuilt make-it-left">{{this.category}}</div>
                                     <br>
-                                    <a href="/products/{{this.pid}}" class="make-it-center">
+                                    <a href="/products/{{this._id}}" class="make-it-center">
                                         <img class="small-section make-it-square-image" src="{{this.imageURL}}" alt="{{this.title}}">
                                     </a>
-
                                     <div class="columns make-it-white-back make-it-dark make-it-small small-section">
                                         <div class="column is-6 make-it-left">
                                             <p><b>Price:</b> ${{this.price}}</p>
@@ -53,7 +69,6 @@
                                             <p><b>Code:</b> {{this.code}}</p>
                                         </div>
                                     </div>
-
                                     <div class="columns make-it-center small-section make-it-100percent-wide">
                                         <div class="column is-12">
                                             <button 
@@ -63,7 +78,6 @@
                                             </button>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -75,7 +89,7 @@
         </div>
     </section>
 
-    <!-- Toastify -->
+    <!-- Scripts -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="/js/showToast.js"></script>
 
@@ -91,7 +105,7 @@
             const selectedLimit = document.getElementById('limit-select').value;
             const urlParams = new URLSearchParams(window.location.search);
             urlParams.set('limit', selectedLimit);
-            urlParams.set('page', 1);
+            urlParams.set('page', 1); // reset to first page
             window.location.search = urlParams.toString();
         }
 
@@ -107,7 +121,7 @@
                     if (isLoggedIn && userCartId) {
                         try {
                             const token = localStorage.getItem("token");
-                            const response = await fetch(`/api/carts/${userCartId}/product/${product.pid}`, {
+                            const response = await fetch(`/api/carts/${userCartId}/product/${product._id}`, {
                                 method: "POST",
                                 headers: {
                                     "Content-Type": "application/json",
@@ -120,7 +134,7 @@
 
                             if (response.ok) {
                                 if (result.token) {
-                                    localStorage.setItem("token", result.token); // Rolling token
+                                    localStorage.setItem("token", result.token); // rolling token
                                 }
                                 showToast(`${product.title} added to cart`);
                                 incrementCartCount(1);
@@ -133,13 +147,13 @@
                         }
                     } else {
                         let guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
-                        const existing = guestCart.find(item => item.pid === product.pid);
+                        const existing = guestCart.find(item => item.pid === product._id);
 
                         if (existing) {
                             existing.quantity += 1;
                         } else {
                             guestCart.push({
-                                pid: product.pid,
+                                pid: product._id,
                                 title: product.title,
                                 price: product.price,
                                 quantity: 1

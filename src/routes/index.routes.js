@@ -13,8 +13,6 @@ import { ProductDTO } from "../dto/product.dto.js";
 import { UserDTO } from "../dto/user.dto.js";
 import { errorLog } from "../utils/errorLog.util.js";
 
-
-
 const router = Router();
 const jwtAuth = passport.authenticate("jwt", { session: false });
 
@@ -31,7 +29,6 @@ router.get("/login", requireLoggedOutOrRole(), (req, res) => {
     res.render("login"); 
 });
 
-// Register page route
 router.get("/register", requireLoggedOutOrRole(), (req, res) => {
     res.render("register");
 });
@@ -45,7 +42,6 @@ router.get('/products', async (req, res) => {
 
     try {
         const query = filterBy ? { category: filterBy } : {};
-
         const options = {
             page,
             limit,
@@ -54,7 +50,6 @@ router.get('/products', async (req, res) => {
         };
 
         const result = await ProductModel.paginate(query, options);
-
         const dtoProducts = result.docs.map(p => new ProductDTO(p));
 
         res.render('productsStatic', {
@@ -94,14 +89,12 @@ router.get('/carts', jwtAuth, requireAdminOrOwner(), async (req, res) => {
 
         for (let cart of result.docs) {
             for (let item of cart.products) {
-                const product = await ProductModel.findOne({ pid: item.pid }).lean();
+                const product = await ProductModel.findById(item.pid).lean();
                 if (product) {
                     item.productDetails = product;
                 }
             }
         }
-
-        console.log("Carts data being sent to Handlebars:", JSON.stringify(result.docs, null, 2));
 
         res.render('cartsStatic', {
             carts: result.docs,
@@ -129,9 +122,25 @@ router.get('/carts/:cid', jwtAuth, requireAdminOrOwner(), async (req, res) => {
         if (!cart) {
             return res.status(404).render("cart", { error: "Cart not found" });
         }
+
+        cart.products = cart.products.map(p => {
+            const product = p.pid;
+            return {
+                _id: product._id.toString(),
+                pid: product._id.toString(),
+                title: product.title,
+                imageURL: product.imageURL,
+                code: product.code,
+                description: product.description,
+                pieces: product.pieces,
+                price: product.price,
+                quantity: p.quantity
+            };
+        });
+
         res.render("cart", { cart });
     } catch (err) {
-        errorLog(err)
+        errorLog(err);
         return res.status(500).render("cart", { error: "Failed to load cart" });
     }
 });
@@ -191,14 +200,13 @@ router.get('/tickets', jwtAuth, requireRole("admin"), async (req, res) => {
 router.get('/products/:pid', async (req, res) => {
     try {
         const { pid } = req.params;
-        const product = await ProductModel.findOne({ pid }).lean();
+        const product = await ProductModel.findById(pid).lean();
 
         if (!product) {
             return res.status(404).render("productDetail", { error: "Product not found" });
         }
 
         const dto = new ProductDTO(product);
-
         res.render("productDetail", { product: dto });
     } catch (err) {
         console.error("Error rendering product detail:", err);

@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="dark">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 <body>
     {{#if error}}
@@ -15,7 +15,7 @@
     {{else}}
         <section class="section">
             <div class="columns make-it-center">
-                <div class="column make-it-100percent-wide">
+                <div class="column is-8">
                     <div class="card-title-container make-it-dark-back make-it-left make-it-white">
                         <div>{{product.title}}</div>
                     </div>
@@ -43,12 +43,10 @@
                             </div>
 
                             <div class="make-it-right section">
-                                <button id="addToCartButton" class="button is-success is-small make-it-small" style="margin-top: 0.5rem;">
+                                <button id="addToCartButton" class="button is-success is-small make-it-small">
                                     Add to Cart
                                 </button>
-                                <a href="/products" class="button is-small make-it-small" style="margin-top: 0.5rem;">
-                                    Back
-                                </a>
+                                <a href="/products" class="button is-small make-it-small">Back</a>
                             </div>
                         </div>
                     </div>
@@ -57,40 +55,37 @@
         </section>
     {{/if}}
 
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="/js/showToast.js"></script>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const addToCartButton = document.getElementById("addToCartButton");
-            const userCartId = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).cartId : null;
-            const isLoggedIn = localStorage.getItem("token") !== null;
+            const button = document.getElementById("addToCartButton");
+            const user = JSON.parse(localStorage.getItem("user") || "{}");
+            const userCartId = user.cartId || null;
+            const token = localStorage.getItem("token");
+            const isLoggedIn = !!token;
 
-            addToCartButton.addEventListener("click", async () => {
+            button.addEventListener("click", async () => {
+                const product = {
+                    pid: "{{product.pid}}",
+                    title: "{{product.title}}",
+                    price: {{product.price}}
+                };
+
                 if (!isLoggedIn) {
-                    // Guest cart logic
-                    let guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
-                    const existing = guestCart.find(item => item.pid === "{{product.pid}}");
-
-                    if (existing) {
-                        existing.quantity += 1;
-                    } else {
-                        guestCart.push({
-                            pid: "{{product.pid}}",
-                            title: "{{product.title}}",
-                            price: {{product.price}},
-                            quantity: 1
-                        });
-                    }
+                    const guestCart = JSON.parse(localStorage.getItem("guestCart") || "[]");
+                    const existing = guestCart.find(p => p.pid === product.pid);
+                    if (existing) existing.quantity += 1;
+                    else guestCart.push({ ...product, quantity: 1 });
 
                     localStorage.setItem("guestCart", JSON.stringify(guestCart));
-                    showToast("Added to guest cart");
+                    showToast(`${product.title} added to guest cart`);
                     return;
                 }
 
                 try {
-                    const token = localStorage.getItem("token");
-                    const res = await fetch(`/api/carts/${userCartId}/product/{{product.pid}}`, {
+                    const res = await fetch(`/api/carts/${userCartId}/product/${product.pid}`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -102,17 +97,13 @@
                     const result = await res.json();
 
                     if (res.ok) {
-                        showToast("Added to your cart!");
-
-                        // Refresh token if server sent a new one
-                        if (result.token) {
-                            localStorage.setItem("token", result.token);
-                        }
+                        if (result.token) localStorage.setItem("token", result.token); // rolling
+                        showToast(`${product.title} added to cart`);
                     } else {
                         showToast(result.message || "Failed to add to cart", false);
                     }
                 } catch (err) {
-                    console.error("Error adding to cart:", err);
+                    console.error(err);
                     showToast("Error adding to cart", false);
                 }
             });

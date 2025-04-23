@@ -5,17 +5,17 @@ import { notifyProductChange } from "../server.js";
 import { request, response } from "express";
 import { ProductModel } from "../persistence/mongo/models/product.model.js";
 import { ProductDTO } from "../dto/product.dto.js";
-import { generateToken } from "../utils/token.util.js"; // NEW
+import { generateToken } from "../utils/token.util.js";
 
 class ProductsControllers {
     async deleteProduct(req, res) {
-        const { pid } = req.params;
+        const { id } = req.params;
         const { killFlag } = req.body;
         try {
-            const result = await productService.deleteProduct(pid, killFlag);
+            const result = await productService.deleteProduct(id, killFlag);
             if (result) {
                 notifyProductChange();
-                const newToken = generateToken(req.user); // 🔥 Refresh token on DELETE
+                const newToken = generateToken(req.user);
                 res.status(200).json({ status: "success", message: "Product deleted", token: newToken });
             } else {
                 res.status(400).json({ status: "error", message: "Product not found or could not be deleted" });
@@ -27,14 +27,14 @@ class ProductsControllers {
     }
 
     async updateProduct(req = request, res = response) {
-        const { pid } = req.params;
+        const { id } = req.params;
         const productUpdate = req.body;
         try {
-            const result = await productService.updateProduct(pid, productUpdate);
+            const result = await productService.updateProduct(id, productUpdate);
             if (result) {
                 notifyProductChange();
                 const dto = new ProductDTO(result);
-                const newToken = generateToken(req.user); // 🔥 Refresh token on UPDATE
+                const newToken = generateToken(req.user);
                 res.json({ status: "success", payload: dto, token: newToken });
             } else {
                 res.status(400).json({ status: "error", message: "Invalid product ID or update failed" });
@@ -46,14 +46,14 @@ class ProductsControllers {
     }
 
     async getProductById(req, res) {
-        const { pid } = req.params;
+        const { id } = req.params;
         try {
-            const selectedProduct = await productService.getProductById(pid);
+            const selectedProduct = await productService.getProductById(id);
             if (!selectedProduct) {
-                return res.status(404).json({ status: "error", message: `No product found with ID: ${pid}` });
+                return res.status(404).json({ status: "error", message: `No product found with ID: ${id}` });
             }
             const dto = new ProductDTO(selectedProduct);
-            res.json({ status: "success", payload: dto }); // ❌ No token refresh on simple GET
+            res.json({ status: "success", payload: dto });
         } catch (err) {
             console.error("Error retrieving product by ID:", err);
             res.status(500).json({ status: "error", message: "Server error" });
@@ -69,6 +69,8 @@ class ProductsControllers {
                 limit: parseInt(limit),
                 sort: { [sort]: sortOrder === "desc" ? -1 : 1 },
                 lean: true,
+                virtuals: true,
+                leanWithId: false,
                 customLabels: { docs: "payload" }
             };
 
@@ -97,7 +99,7 @@ class ProductsControllers {
                 nextLink: result.hasNextPage
                     ? `${req.baseUrl}?page=${result.nextPage}&limit=${limit}&sort=${sort}&sortOrder=${sortOrder}${filterKey ? `&filterKey=${filterKey}&filterValue=${filterValue}` : ""}`
                     : null
-            }); // ❌ No token refresh on simple GET
+            });
         } catch (err) {
             console.error("Error retrieving products:", err);
             res.status(500).json({ status: "error", message: "Server error" });
@@ -146,7 +148,7 @@ class ProductsControllers {
             }
 
             const dto = new ProductDTO(product);
-            const newToken = generateToken(req.user); // 🔥 Refresh token on ADD
+            const newToken = generateToken(req.user);
             res.status(201).json({ status: "success", payload: dto, token: newToken });
         } catch (err) {
             console.error("Error creating product:", err);

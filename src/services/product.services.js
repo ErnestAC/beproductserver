@@ -1,6 +1,7 @@
 // product.services.js
 
 import { productDao } from "../persistence/mongo/dao/product.dao.js";
+import { Types } from "mongoose";
 
 class ProductService {
     async addProduct(productData) {
@@ -11,16 +12,19 @@ class ProductService {
         return await productDao.getAllProducts({ limit, skip, sort, sortDirection, filterBy });
     }
 
-    async getProductById(pid) {
-        return await productDao.getProductById(pid);
+    async getProductById(id) {
+        if (!Types.ObjectId.isValid(id)) return null;
+        return await productDao.getProductById(id);
     }
 
-    async updateProduct(pid, updateData) {
-        return await productDao.updateProduct(pid, updateData);
+    async updateProduct(id, updateData) {
+        if (!Types.ObjectId.isValid(id)) return null;
+        return await productDao.updateProduct(id, updateData);
     }
 
-    async deleteProduct(pid, killFlag = true) {
-        return await productDao.deleteProduct(pid, killFlag);
+    async deleteProduct(id, killFlag = true) {
+        if (!Types.ObjectId.isValid(id)) return null;
+        return await productDao.deleteProduct(id, killFlag);
     }
 
     async getTotalProductCount(filterBy) {
