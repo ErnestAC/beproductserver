@@ -157,8 +157,8 @@ class CartControllers {
                 purchased,
                 notPurchased
             });
-
             sendSuccessResponse(res, { ticket }, req.user);
+            return ticket
         } catch (error) {
             errorLog(error);
             sendErrorResponse(res);
